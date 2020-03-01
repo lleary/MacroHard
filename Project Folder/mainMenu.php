@@ -8,7 +8,6 @@
 <?php
 
    function prepare_query_string(){
-		//echo $_SERVER['QUERY_STRING'];
 		$re = [];
 		$query_array = explode("&", $_SERVER["QUERY_STRING"]);
 		foreach ($query_array as $key => $value) {
@@ -22,18 +21,15 @@
 
 <?php 
 	echo "<pre>";
-	/*foreach ($_SERVER as $key => $value) {
-		echo "$key:$value\n";
-	}*/
 
 	$query_array = prepare_query_string();
-	//print_r($query_array);
 
 
 	echo "<p>Welcome to Matheroids, ".$query_array["user"]."</p>";
 	echo"</pre>";
 ?>
-<button>Log out</button>
+
+<button action="logout.php">Log out</button>
 <br />
 <br />
 
@@ -41,6 +37,24 @@
 	<h2>Main Menu</h2>
 	<p>You are on level *</p>
 	<button>Play Game</button>
+</div>
+<br />
+
+ <!-- This needs to be setup so that it only appears if the logged-in account is a teacher. !-->
+<div style="border:3px; border-style:solid; border-color: black; padding: 5px; width: 500px">
+	<h2>Teacher Dashboard</h2>
+	<div style="border:1.5px; border-style:solid; border-color: black; padding: 5px; ">
+		<h2>Create Student Accounts</h2>
+		<form action="check_login.php" method="post" id="form_id">
+				Students First Name:
+				<input type="text" name="username" id="username" placeholder="First Name" />
+				<br/><br/>
+				Students Last Name:
+				<input type="text" name="password" id="password" placeholder="Last Name" /><br/><br/>
+				<input type="submit" name="submit_id" id="create" value="Create Account" />
+			</form>
+
+</div>
 </div>
 
 </body>
