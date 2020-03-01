@@ -1,0 +1,10 @@
+body {
+	background: #FFFFFF;
+}
+
+.gradient {
+	max-width: 250px;
+	padding: 1rem;
+	position: relative;
+
+}
