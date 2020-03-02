@@ -10,10 +10,10 @@
 			<form action="check_login.php" method="post" id="form_id" style="border:2px; border-style:solid; border-color: black; padding: 5px; width: 500px; height: 200px">
 				<h2>Welcome to Matheroids!</h2>
 				First Name:
-				<input type="text" name="username" id="username" placeholder="First Name" />
+				<input type="text" name="firstname" id="firstname" placeholder="First Name" />
 				<br/><br/>
 				Last Name:
-				<input type="text" name="password" id="password" placeholder="Last Name" /><br/><br/>
+				<input type="text" name="lastname" id="lastname" placeholder="Last Name" /><br/><br/>
 				<input type="submit" name="submit_id" id="login" value="Login" />
 			</form>
 		</center>
