@@ -1,6 +1,6 @@
-<?php
+<?php 
 	/******File Handling*******/
-	$key_arr = array("username", "password", "class");
+	$key_arr = array("first", "last", "class", "password");
 	
 
 	/*Write $data to $filename*/
