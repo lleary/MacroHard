@@ -1,5 +1,5 @@
 <?php
-	/******File Handling*******/
+	/******File Handling******/
 	$key_arr = array("username", "password", "class");
 	
 
