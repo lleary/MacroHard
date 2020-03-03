@@ -15,14 +15,15 @@ if($re===1){
 	/*Redirect browser*/
 	header("Location: mainMenu.php/?user=$username");
 
-if($re===3){
+}
+elseif($re===3){
 	echo "teacher accounts not supported yet";
 	/*redirect to login.php after 5 seconds*/
 	header("refresh:5; url=login.php");
 }
 
-}else{
-	echo "Student account not found";
+else{
+	echo "Account not found";
 	echo "\nYou will be redirected to the login page shortly...";
 
 	/*Redirect to login.php after 5 seconds*/
@@ -47,6 +48,7 @@ function checkLogin($firstname, $lastname){
 				return 3;
 			}
 		return 2;
+		}
 	}
 }
 ?>
