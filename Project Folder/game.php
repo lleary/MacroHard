@@ -122,7 +122,10 @@ function updateGameArea() {
         <br/>
     </form>
 
-    <a href="/Project%20Folder/mainMenu.php?user=$firstname"><button>Return to main menu</button></a>
+    <form action="../mainMenu.php/?user=$user">
+        <button type="submit">Return to main menu</button></a>
+    </form>
+
 
 </body>
 </html>

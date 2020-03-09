@@ -16,7 +16,7 @@
 		$re[$temp[0]] = $temp[1]; 
 		}
 		return $re;
-	}
+	} 
 ?>
 
 
@@ -28,11 +28,12 @@
 
 	echo "<p>Welcome to Matheroids, ".$query_array["user"]."</p>";
 	echo"</pre>";
+
 ?>
 
-
-	<a href="/Project%20Folder/login.php"><button>Logout</button></a>
-
+	<form action="../login.php">
+		<button type="submit">Logout</button></a>
+	</form>
 <br />
 <br />
 
@@ -47,7 +48,9 @@
 	?>
 	<br />
 	<br />
-	<a href="/Project%20Folder/game.php"><button>Play Game</button></a>
+	<form action="../game.php/?user=$user">
+		<button type="submit">Play Game</button></a>
+	</form>
 </div>
 <br />
 
