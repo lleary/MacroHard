@@ -13,7 +13,7 @@ $re = checkLogin($firstname, $lastname);
 
 if($re===1){
 	/*Redirect browser*/
-	header("Location: mainMenu.php/?user=$username");
+	header("Location: mainMenu.php/?user=$firstname");
 
 }
 elseif($re===3){

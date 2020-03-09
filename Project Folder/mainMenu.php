@@ -30,9 +30,14 @@
 	echo"</pre>";
 ?>
 
-<button action="logout.php">Log out</button>
+<form>
+	<a href="/login.php"><button href=>Logout</button></a>
+</form>
 <br />
 <br />
+
+
+
 
 <div style="border:3px; border-style:solid; border-color: black; padding: 5px; width: 500px">
 	<h2>Main Menu</h2>
