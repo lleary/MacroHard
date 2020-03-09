@@ -11,10 +11,11 @@ body {
 
 .gameBox {
 	border:3px; 
-	background-color: #000000;
+	background-color: #FFFFFF;
 	border-style:solid; 
 	border-color: black; 
 	padding: 5px; 
 	width: 400px;
 	height: 600px;
 }
+
