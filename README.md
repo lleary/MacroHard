@@ -6,7 +6,7 @@ By MacroHard
 - Create Account
 - Main Menu
 - Addition Game
-- Logout Button
+- ~~Logout Button~~
 
 # Release 2:
 - Subtraction Game

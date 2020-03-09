@@ -30,9 +30,9 @@
 	echo"</pre>";
 ?>
 
-<form>
-	<a href="/login.php"><button href=>Logout</button></a>
-</form>
+
+	<a href="/Project%20Folder/login.php"><button>Logout</button></a>
+
 <br />
 <br />
 
@@ -41,8 +41,13 @@
 
 <div style="border:3px; border-style:solid; border-color: black; padding: 5px; width: 500px">
 	<h2>Main Menu</h2>
-	<p>You are on level *</p>
-	<button>Play Game</button>
+	<!--<p>You are on level *</p>!-->
+	<?php
+		echo "You are on level 1 (Simple Addition)";
+	?>
+	<br />
+	<br />
+	<a href="/Project%20Folder/game.php"><button>Play Game</button></a>
 </div>
 <br />
 
