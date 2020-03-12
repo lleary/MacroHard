@@ -41,23 +41,27 @@ canvas {
 </script> 
 <br />
 
-<script type="text/javascript"> 
-    var score = 0;
-    document.write("Score: "+score);
-</script> 
 
 <script>
 
 var myGamePiece;
+var playing = true;
+var score = 0;
+
+    var spawnTimer = 200; 
 
 function startGame() {
+    addPiece();
+    myGameArea.start();
+}
+
+function addPiece() {
     var min=10; 
     var max=300;  
     var xSpawn = Math.random() * (+max - +min) + +min; 
     xSpawn = Math.floor(xSpawn)
 
     myGamePiece = new component(30, 30, "white", xSpawn, -50);
-    myGameArea.start();
 }
 
 var myGameArea = {
@@ -67,7 +71,7 @@ var myGameArea = {
         this.canvas.height = 600;
         this.context = this.canvas.getContext("2d");
         document.body.insertBefore(this.canvas, document.body.childNodes[0]);
-        this.interval = setInterval(updateGameArea, 20);        
+        this.interval = setInterval(updateGameArea, 15);        
     },
     stop : function() {
         clearInterval(this.interval);
@@ -102,17 +106,44 @@ function component(width, height, color, x, y, type) {
     this.newPos = function() {
         this.gravitySpeed += 0;
         this.x += this.speedX;
-        this.y += this.speedY + this.gravitySpeed;        
+        this.y += this.speedY + this.gravitySpeed;    
+        this.hitBottom();    
+    }
+    this.hitBottom = function() {
+        var rockbottom = myGameArea.canvas.height - this.height;
+        if (this.y > rockbottom) {
+            youLose();
+        }
     }
 }
 
 function updateGameArea() {
-    myGameArea.clear();
-    myGamePiece.newPos();
-    myGamePiece.update();
+    if (playing == true){
+        myGameArea.clear();
+        myGamePiece.newPos();
+        myGamePiece.update();
+        spawnTimer--;
+        if(spawnTimer <=0){
+            spawnTimer = 500;
+            addPiece();
+        }
+    }
 }
 
+function increaseScore(){
+    document.getElementById("score").innerHTML = "Score: "+score;
+}
+
+function youLose(){
+    document.getElementById("score").innerHTML = "You Lose! Loser! You are not smart! You will never accomplish anything.";
+    playing = false;
+}
+
+
+
 </script>
+
+<p id="score">Score: 0</p>
 
 <br />
     <form>
