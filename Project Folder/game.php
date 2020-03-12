@@ -44,7 +44,7 @@ canvas {
 
 <script>
 
-var myGamePiece;
+var myGamePieces = [];
 var playing = true;
 var score = 0;
 
@@ -61,7 +61,8 @@ function addPiece() {
     var xSpawn = Math.random() * (+max - +min) + +min; 
     xSpawn = Math.floor(xSpawn)
 
-    myGamePiece = new component(30, 30, "white", xSpawn, -50);
+    var myGamePiece = new component(30, 30, "white", xSpawn, -50);
+    myGamePieces.push(myGamePiece);
 }
 
 var myGameArea = {
@@ -93,7 +94,7 @@ function component(width, height, color, x, y, type) {
     this.y = y;    
     this.speedX = 0;
     this.speedY = 0;    
-    this.gravity = 0.05;
+    this.gravity = 0.03;
     this.gravitySpeed = 1;
     this.update = function() {
         ctx = myGameArea.context;
@@ -120,11 +121,13 @@ function component(width, height, color, x, y, type) {
 function updateGameArea() {
     if (playing == true){
         myGameArea.clear();
-        myGamePiece.newPos();
-        myGamePiece.update();
+        for(var i = 0; i < myGamePieces.length; i++){
+        myGamePieces[i].newPos();
+        myGamePieces[i].update();
+        }
         spawnTimer--;
         if(spawnTimer <=0){
-            spawnTimer = 500;
+            spawnTimer = 200;
             addPiece();
         }
     }
@@ -135,7 +138,7 @@ function increaseScore(){
 }
 
 function youLose(){
-    document.getElementById("score").innerHTML = "You Lose! Loser! You are not smart! You will never accomplish anything.";
+    document.getElementById("score").innerHTML = "You Lose! Loser! You are not smart! You will never accomplish anything. Santa Claus isn't real";
     playing = false;
 }
 
