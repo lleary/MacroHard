@@ -5,7 +5,7 @@ By MacroHard
 - Login Page
 - Create Account
 - Main Menu
-- Addition Game
+- ~~Addition Game~~
 - ~~Logout Button~~
 
 # Release 2:

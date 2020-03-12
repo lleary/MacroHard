@@ -162,6 +162,7 @@ function checkAnswer(){
             myGamePieces.splice(i, i+1);
             score++;
             console.log("Exploded a Piece");
+            increaseScore();
         }
     }
     document.getElementById("userAnswer").value = "";
