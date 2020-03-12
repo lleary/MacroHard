@@ -98,6 +98,7 @@ function component(width, height, color, x, y, type) {
     //this.problem = color;
     //console.log(mathProblem)
     this.type = type;
+    this.color = color;
     this.width = width;
     this.height = height;
     this.x = x;
@@ -108,7 +109,7 @@ function component(width, height, color, x, y, type) {
     this.gravitySpeed = 1;
     this.update = function() {
         ctx = myGameArea.context;
-        ctx.fillStyle = color;
+        ctx.fillStyle = this.color;
         //ctx.fillRect(this.x, this.y, this.width, this.height);
         ctx.font = "16px Courier New";
         ctx.fillText(this.problem,this.x,this.y);
@@ -129,6 +130,9 @@ function component(width, height, color, x, y, type) {
     this.getAnswer = function(){
         return this.answer;
     }
+    this.updateColor = function(newColor){
+        this.color = newColor;
+    }
 }
 
 function updateGameArea() {
@@ -143,6 +147,7 @@ function updateGameArea() {
             spawnTimer = getRandomNumber(10,300);
             addPiece();
         }
+        myGamePieces[0].updateColor('Aqua');
     }
 }
 
@@ -165,6 +170,7 @@ function checkAnswer(){
             score++;
             console.log("Exploded a Piece");
             increaseScore();
+            
         }
     }
     document.getElementById("userAnswer").value = "";
