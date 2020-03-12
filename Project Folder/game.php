@@ -61,7 +61,8 @@ var myGamePieces = [];
 var playing = true;
 var score = 0;
 
-    var spawnTimer = 200; 
+var spawnMax = 300;
+var spawnTimer = 200; 
 
 function startGame() {
     addPiece();
@@ -103,21 +104,16 @@ function component(width, height, color, x, y, type) {
     this.height = height;
     this.x = x;
     this.y = y;    
-    this.speedX = 0;
     this.speedY = 0;    
-    this.gravity = 0.03;
     this.gravitySpeed = 1;
     this.update = function() {
         ctx = myGameArea.context;
         ctx.fillStyle = this.color;
-        //ctx.fillRect(this.x, this.y, this.width, this.height);
         ctx.font = "16px Courier New";
         ctx.fillText(this.problem,this.x,this.y);
-        //createAdditionProblem();
     }
     this.newPos = function() {
-        this.gravitySpeed += 0;
-        this.x += this.speedX;
+        this.gravitySpeed += 0.00;
         this.y += this.speedY + this.gravitySpeed;    
         this.hitBottom();    
     }
@@ -144,7 +140,7 @@ function updateGameArea() {
         }
         spawnTimer--;
         if(spawnTimer <=0){
-            spawnTimer = getRandomNumber(10,300);
+            spawnTimer = getRandomNumber(10,spawnMax);
             addPiece();
         }
         myGamePieces[0].updateColor('Aqua');
@@ -152,15 +148,19 @@ function updateGameArea() {
 }
 
 function increaseScore(){
+
     document.getElementById("score").innerHTML = "Score: "+score;
+
 }
 
 function youLose(){
-    document.getElementById("score").innerHTML = "You Lose! Failure! You utter baffoon! You are not smart, moron! You will never accomplish anything. Santa Claus isn't real and neither is happiness.";
+    document.getElementById("score").innerHTML = "You Lose! Failure! You utter baffoon! You are not smart, moron! You will never accomplish anything. Santa Claus isn't real and neither is happiness.\n Your final score was: "+score;
+
     playing = false;
 }
 
 function checkAnswer(){
+        if(playing == true){
     var ans = document.getElementById("userAnswer").value;
     console.log("USER ANSWER: "+ans);
 
@@ -168,12 +168,15 @@ function checkAnswer(){
         if(ans == myGamePieces[i].getAnswer()){
             myGamePieces.splice(i, i+1);
             score++;
-            console.log("Exploded a Piece");
+            if (spawnMax >= 80){
+                spawnMax = spawnMax - getRandomNumber(0,20);
+            }
             increaseScore();
-            
+
         }
     }
     document.getElementById("userAnswer").value = "";
+}
 }
 
 </script>
@@ -181,7 +184,7 @@ function checkAnswer(){
 <p id="score">Score: 0</p>
 
 <br />
-    <form onsubmit="checkAnswer(); return false;">
+    <form onsubmit="checkAnswer(); return false;" autocomplete="off">
         Answer:
         <input type="text" name="answer"  id="userAnswer" placeholder="answer" autofocus/>
         <br/>
