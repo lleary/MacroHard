@@ -59,7 +59,7 @@
 	<h2>Teacher Dashboard</h2>
 	<div style="border:1.5px; border-style:solid; border-color: black; padding: 5px; ">
 		<h2>Create Student Accounts</h2>
-		<form action="check_login.php" method="post" id="form_id">
+		<form action="add_student.php" method="post" id="form_id">
 				Students First Name:
 				<input type="text" name="username" id="username" placeholder="First Name" />
 				<br/><br/>
