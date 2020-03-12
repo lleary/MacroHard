@@ -38,6 +38,14 @@ canvas {
             return problem;
         }
         createAdditionProblem();
+
+    function solveAdditionProblem(problem){
+        var num1 = parseInt(problem.slice(0,1));
+        var num2 = parseInt(problem.slice(2,3));
+        var ans = num1+num2;
+        console.log(num1+" + "+num2+"="+ans);
+        return ans;
+    }
 </script> 
 <br />
 
@@ -84,7 +92,7 @@ var myGameArea = {
 
 function component(width, height, color, x, y, type) {
     this.problem = createAdditionProblem();
-
+    this.answer = solveAdditionProblem(this.problem);
     //this.problem = color;
     //console.log(mathProblem)
     this.type = type;
@@ -116,6 +124,9 @@ function component(width, height, color, x, y, type) {
             youLose();
         }
     }
+    this.getAnswer = function(){
+        return this.answer;
+    }
 }
 
 function updateGameArea() {
@@ -138,20 +149,32 @@ function increaseScore(){
 }
 
 function youLose(){
-    document.getElementById("score").innerHTML = "You Lose! Loser! You are not smart! You will never accomplish anything. Santa Claus isn't real";
+    document.getElementById("score").innerHTML = "You Lose! Failure! You utter baffoon! You are not smart, moron! You will never accomplish anything. Santa Claus isn't real and neither is happiness.";
     playing = false;
 }
 
+function checkAnswer(){
+    var ans = document.getElementById("userAnswer").value;
+    console.log("USER ANSWER: "+ans);
 
+    for(var i = 0; i < myGamePieces.length; i++){
+        if(ans == myGamePieces[i].getAnswer()){
+            myGamePieces.splice(i, i+1);
+            score++;
+            console.log("Exploded a Piece");
+        }
+    }
+    document.getElementById("userAnswer").value = "";
+}
 
 </script>
 
 <p id="score">Score: 0</p>
 
 <br />
-    <form>
+    <form onsubmit="checkAnswer(); return false;">
         Answer:
-        <input type="text" name="answer" id="answer" placeholder="answer" autofocus/>
+        <input type="text" name="answer"  id="userAnswer" placeholder="answer" autofocus/>
         <br/>
         <br/>
     </form>
