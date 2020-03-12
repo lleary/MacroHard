@@ -29,10 +29,8 @@ canvas {
     function createAdditionProblem() {
             var min=1; 
             var max=10;  
-            var num1 = Math.random() * (+max - +min) + +min; 
-            num1 = Math.floor(num1)
-            var num2 = Math.random() * (+max - +min) + +min; 
-            num2 = Math.floor(num2)
+            var num1 = getRandomNumber(min, max)
+            var num2 = getRandomNumber(min, max)
             var ans = num1+num2; 
             var problem = num1 +"+"+num2 +"=";
             return problem;
@@ -46,6 +44,13 @@ canvas {
         console.log(num1+" + "+num2+"="+ans);
         return ans;
     }
+
+    function getRandomNumber(min, max){
+        var num = Math.random() * (+max - +min) + +min; 
+        num = Math.floor(num)
+        return num;
+    }
+
 </script> 
 <br />
 
@@ -64,10 +69,7 @@ function startGame() {
 }
 
 function addPiece() {
-    var min=10; 
-    var max=300;  
-    var xSpawn = Math.random() * (+max - +min) + +min; 
-    xSpawn = Math.floor(xSpawn)
+    var xSpawn = getRandomNumber(10,300); 
 
     var myGamePiece = new component(30, 30, "white", xSpawn, -50);
     myGamePieces.push(myGamePiece);
@@ -138,7 +140,7 @@ function updateGameArea() {
         }
         spawnTimer--;
         if(spawnTimer <=0){
-            spawnTimer = 200;
+            spawnTimer = getRandomNumber(10,300);
             addPiece();
         }
     }
