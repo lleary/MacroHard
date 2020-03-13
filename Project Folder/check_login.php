@@ -3,40 +3,42 @@ require_once 'files.php';
 require_once 'config.php';
 echo "<pre>";
 
-
 extract($_POST);
 
+$re = checkLogin($firstname, $lastname, $pw);
 
-//1: can login 2: user does not exist  3: invaild password
-$re = checkLogin($firstname, $lastname);
-//$re = 2; //Please comment this after completing your checkLogin function  
-
-if($re===1){
-	/*Redirect browser*/
+if($re===1){ // Student correct login
+	/*Redirect browser to student menu TODO*/
 	header("Location: mainMenu.php/?user=$firstname");
 
 }
-elseif($re===3){
-	echo "teacher accounts not supported yet";
-	/*redirect to login.php after 5 seconds*/
-	header("refresh:5; url=login.php");
+elseif($re===2){ // Teacher correct login
+	/*Redirect browser to teacher menu TODO*/
+	header("Location: mainMenu.php/?user=$firstname");
 }
+elseif($re===3){ // Teacher incorrect password
+	/*Redirect to teacher login*/
+	echo "Incorrect password";
+	echo "\nYou will be redirected to the login page shortly...\n";
 
-else{
+	header("refresh:5; url=teacher_login.php");
+}
+else{ // Account not found
 	echo "Account not found";
 	echo "\nYou will be redirected to the login page shortly...";
 
-	/*Redirect to login.php after 5 seconds*/
-    header("refresh:5; url=login.php");
+	/*Redirect to welcome.php after 5 seconds*/
+    header("refresh:5; url=welcome.php");
 }
 
 
 /**
-*Returns 1: can login
-*		 2: user does not exist
-		 3: invaild password
-	*/
-function checkLogin($firstname, $lastname){
+ * Returns 1: student successful login
+ *         2: teacher successful login
+ *		   3: teacher password incorrect
+ *		   4: account not found
+ */
+function checkLogin ($firstname, $lastname, $pw){
 	$all_user = get_user_info(USERFILE);
 
 	foreach ($all_user as $user) {
@@ -44,11 +46,18 @@ function checkLogin($firstname, $lastname){
 			if($user["class"]=="student") {
 				return 1;
 			}
-			if($user["class"]=="teacher"){
-				return 3;
+			elseif($user["class"]=="teacher"){
+				if($user["password"]==$pw) {
+					return 2;
+				}
+				else {
+					return 3;
+				}
 			}
-		return 2;
+			return 4;
 		}
 	}
+	return 4;
 }
+
 ?>
