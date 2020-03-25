@@ -192,7 +192,7 @@
         //Tells the player they lose
         function youLose(){
             playing = false;
-            document.getElementById("score").innerHTML = "You Lose! Failure! You utter baffoon! You are not smart, moron! You will never accomplish anything. Santa Claus isn't real and neither is happiness.\n Your final score was: "+score;
+            document.getElementById("score").innerHTML = "Game Over. Try again!\n Your final score was: "+score;
         }
 
         //Checks the users given answer.
