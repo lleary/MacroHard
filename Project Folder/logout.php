@@ -1,4 +1,4 @@
 <?php 
 	echo "Logging Out...";
-	header("Location: login.php");
+	header("Location: welcome.php");
 ?>

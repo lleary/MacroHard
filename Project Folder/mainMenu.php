@@ -31,7 +31,7 @@
 
 ?>
 
-	<form action="../login.php">
+	<form action="../Logout.php">
 		<button type="submit">Logout</button></a>
 	</form>
 <br />
