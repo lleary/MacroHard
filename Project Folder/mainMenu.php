@@ -12,8 +12,8 @@
 		$re = [];
 		$query_array = explode("&", $_SERVER["QUERY_STRING"]);
 		foreach ($query_array as $key => $value) {
-		$temp = explode("=", $value);
-		$re[$temp[0]] = $temp[1]; 
+			$temp = explode("=", $value);
+			$re[$temp[0]] = $temp[1]; 
 		}
 		return $re;
 	} 
@@ -55,21 +55,22 @@
 <br />
 
  <!-- This needs to be setup so that it only appears if the logged-in account is a teacher. !-->
+<?php if($query_array["type"] == "Teacher") : ?>
 <div style="border:3px; border-style:solid; border-color: black; padding: 5px; width: 500px">
 	<h2>Teacher Dashboard</h2>
 	<div style="border:1.5px; border-style:solid; border-color: black; padding: 5px; ">
 		<h2>Create Student Accounts</h2>
 		<form action="add_student.php" method="post" id="form_id">
-				Students First Name:
-				<input type="text" name="username" id="username" placeholder="First Name" />
-				<br/><br/>
-				Students Last Name:
-				<input type="text" name="password" id="password" placeholder="Last Name" /><br/><br/>
-				<input type="submit" name="submit_id" id="create" value="Create Account" />
-			</form>
-
+			Students First Name:
+			<input type="text" name="username" id="username" placeholder="First Name" />
+			<br/><br/>
+			Students Last Name:
+			<input type="text" name="password" id="password" placeholder="Last Name" /><br/><br/>
+			<input type="submit" name="submit_id" id="create" value="Create Account" />
+		</form>
+	</div>
 </div>
-</div>
+<?php endif; ?>
 
 </body>
 </html>

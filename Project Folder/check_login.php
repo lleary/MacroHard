@@ -9,12 +9,12 @@ $re = checkLogin($firstname, $lastname, $pw);
 
 if($re===1){ // Student correct login
 	/*Redirect browser to student menu TODO*/
-	header("Location: mainMenu.php/?user=$firstname");
+	header("Location: mainMenu.php/?user=$firstname&type=Student");
 
 }
 elseif($re===2){ // Teacher correct login
 	/*Redirect browser to teacher menu TODO*/
-	header("Location: mainMenu.php/?user=$firstname");
+	header("Location: mainMenu.php/?user=$firstname&type=Teacher");
 }
 elseif($re===3){ // Teacher incorrect password
 	/*Redirect to teacher login*/
