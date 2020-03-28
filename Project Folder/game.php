@@ -103,7 +103,7 @@
         }
 
         function object(x, y) {
-            this.problem = createAdditionProblem(1, 10);
+            this.problem = createAdditionProblem(0, 10);
 
             this.x = x;
             this.y = y;
@@ -200,10 +200,10 @@
             if(playing == true){
                 var ans = document.getElementById("userAnswer").value;
 
-                for(var i = 0; i < problems.length; i++){
+                //for(var i = 0; i < problems.length; i++){
 
-                    if(ans == problems[i].getAnswer()){
-                        problems.splice(i, i+1);
+                    if(ans == problems[0].getAnswer()){
+                        problems.splice(0, 1);
                         score++;
                         updateScore();
 
@@ -211,9 +211,9 @@
                             spawnMax = spawnMax - getRandomNumber(0,20);
                         }
 
-                        break;
+                        //break;
                     }
-                }
+                //}
                 document.getElementById("userAnswer").value = "";
             }
         }
