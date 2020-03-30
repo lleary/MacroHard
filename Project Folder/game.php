@@ -97,6 +97,8 @@
         var spawnTimer = 200;
         var bossCountdown = 10;
 
+        var wrongSequence = 0;
+
         function startGame() {
             addProblem();
             gameArena.start();
@@ -155,6 +157,7 @@
             //Finds the new location for an equation
             this.newPosition = function() {
                 this.y += this.speed;    
+                this.wrong();
                 this.hitBottom();    
             }
 
@@ -163,6 +166,22 @@
                 var bottom = gameArena.canvas.height - 18;
                 if (this.y > bottom) {
                     youLose();
+                }
+            }
+
+            this.wrong = function() {
+                if (wrongSequence == 1){
+                    this.x += 2;
+                    wrongSequence++;
+                } else if (wrongSequence == 2){
+                    this.x -= 2;
+                    wrongSequence++;
+                } else if (wrongSequence == 3){
+                    this.x -= 2;
+                    wrongSequence++;
+                } else if (wrongSequence == 4){
+                    this.x += 2;
+                    wrongSequence = 0;
                 }
             }
 
@@ -235,6 +254,8 @@
                         }
 
                         //break;
+                    }else{
+                        wrongSequence = 1;
                     }
                 //}
                 document.getElementById("userAnswer").value = "";
