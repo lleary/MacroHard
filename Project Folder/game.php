@@ -28,32 +28,55 @@
 
     <script type="text/javascript">
 
+        var difficulty = localStorage.getItem("difficulty");
+        // 1 = addition only.
+        // 2 = subtraction and addition.
+
         //Generates a random addition problem between min and max. Returns the problem in string form.
-        function createAdditionProblem(min, max) { 
+        function createMathProblem(min, max) { 
+
+            var randomSign = getRandomNumber(0, difficulty);
+
             var num1 = getRandomNumber(min, max);
-            var num2 = getRandomNumber(min, max);
-            var problem = num1 +"+"+num2 +"=";
+            var num2 = getRandomNumber(min, num1);
+
+            if(randomSign == 0){
+                var problem = num1 +"+"+num2 +"=";
+            }else if(randomSign ==1){
+                var problem = num1 +"-"+num2 +"=";
+            }
 
             return problem;
         }
             
         //Solves an addition problem in the form "a+b=". Returns the answer.
-        function solveAdditionProblem(problem){
+        function solveMathProblem(problem){
             var operatorLocation;
             var equalLocation;
+            var operator;
 
             for(var i = 0; i < problem.length; i++){
                 if(problem.charAt(i) == "+"){
                     operatorLocation = i;
+                    operator = "+";
                 } else if (problem.charAt(i) == "="){
                     equalLocation = i;
+                } else if (problem.charAt(i) == "-"){
+                    operatorLocation = i;
+                    operator = "-";
                 }
             }
 
             var num1 = parseInt(problem.slice(0,operatorLocation));
             var num2 = parseInt(problem.slice(operatorLocation+1,equalLocation));
-            var ans = num1+num2;
-            console.log(num1+" + "+num2+"="+ans);
+
+            if(operator == "+"){
+                var ans = num1+num2;
+                console.log(num1+" + "+num2+"="+ans);
+            } else if (operator == "-"){
+                var ans = num1-num2;
+                console.log(num1+" - "+num2+"="+ans);
+            }
 
             return ans;
         }
@@ -103,7 +126,7 @@
         }
 
         function object(x, y) {
-            this.problem = createAdditionProblem(0, 10);
+            this.problem = createMathProblem(0, 10);
 
             this.x = x;
             this.y = y;
@@ -113,13 +136,13 @@
 
             //Checks if it's time to create a boss problem.
             if(bossCountdown == 0){
-                this.problem = createAdditionProblem(5,20);
+                this.problem = createMathProblem(5,20);
                 this.color = "Yellow";
                 this.boss = true;
                 bossCountdown = getRandomNumber(5,15);
             }
 
-            this.answer = solveAdditionProblem(this.problem);
+            this.answer = solveMathProblem(this.problem);
 
             //Deletes and redraws the equation at its new location.
             this.update = function() {

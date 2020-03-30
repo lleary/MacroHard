@@ -38,23 +38,35 @@
 <br />
 
 
+<script>
+	function playAddition(){
+		localStorage.setItem("difficulty",1);
+		console.log("Playing Addition");
+	}
 
+	function playSubtraction(){
+		localStorage.setItem("difficulty",2);
+		console.log("Playing Subtraction");
+	}
+</script>
 
 <div style="border:3px; border-style:solid; border-color: black; padding: 5px; width: 500px">
 	<h2>Main Menu</h2>
 	<!--<p>You are on level *</p>!-->
 	<?php
-		echo "You are on level 1 (Simple Addition)";
+		echo "You are on a level (I have no idea)";
 	?>
 	<br />
 	<br />
-	<form action="../game.php/?user=$user">
-		<button type="submit">Play Game</button></a>
+	<form action="../game.php/?user=$user" onsubmit="playAddition();">
+		<button type="submit">Play Game (Addition)</button></a>
+	</form>
+	<form action="../game.php/?user=$user" onsubmit="playSubtraction();">
+		<button type="submit">Play Game (Substraction)</button></a>
 	</form>
 </div>
 <br />
 
- <!-- This needs to be setup so that it only appears if the logged-in account is a teacher. !-->
 <?php if($query_array["type"] == "Teacher") : ?>
 <div style="border:3px; border-style:solid; border-color: black; padding: 5px; width: 500px">
 	<h2>Teacher Dashboard</h2>
@@ -71,6 +83,24 @@
 	</div>
 </div>
 <?php endif; ?>
+
+<div style="border:3px; border-style:solid; border-color: black; padding: 5px; width: 500px">
+	<h2>Account Settings</h2>
+	<button>Reset Level</button>
+	<br />
+	<div style="border:1.5px; border-style:solid; border-color: black; padding: 5px; ">
+		<h2>Change Name</h2>
+		<form action="add_student.php" method="post" id="form_id">
+			New First Name:
+			<input type="text" name="username" id="username" placeholder="First Name" />
+			<br/><br/>
+			New Last Name:
+			<input type="text" name="password" id="password" placeholder="Last Name" /><br/><br/>
+			<input type="submit" name="submit_id" id="create" value="Change Name" />
+		</form>
+	</div>
+</div>
+
 
 </body>
 </html>
