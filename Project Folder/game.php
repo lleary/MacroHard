@@ -255,7 +255,7 @@
 
                         //break;
                     }else{
-                        wrongSequence = 1;
+                        wrongSequence = 0;
                     }
                 //}
                 document.getElementById("userAnswer").value = "";

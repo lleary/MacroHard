@@ -31,12 +31,12 @@
 
 ?>
 
-	<form action="../Logout.php">
-		<button type="submit">Logout</button></a>
-	</form>
-<br />
-<br />
+<form action="../Logout.php">
+	<button type="submit">Logout</button></a>
+</form>
 
+<br />
+<br />
 
 <script>
 	function playAddition(){

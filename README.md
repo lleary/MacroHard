@@ -1,24 +1,24 @@
 # Matheroids
 By MacroHard
 
-# Release 1:
-- Login Page
-- Create Account
-- Main Menu
+# Release 1
+- ~~Login Page~~
+- ~~Create Account~~
+- ~~Main Menu~~
 - ~~Addition Game~~
 - ~~Logout Button~~
 
-# Release 2:
-- Subtraction Game
+# Release 2
+- ~~Subtraction Game~~
 - Right/Wrong Identifier
 - Account Settings
 
-# Release 3:
+# Release 3
 - Add Problem Option for Teachers
 - Leaderboard
 - Identifying Digit Game
 
-# Instruction:
+# Instruction
 
 The Mad River School District has decided to provide its elementary school students with the opportunity to practice and improve their Math skills. To fulfill this need, the school district applied for a grant to pay for any necessary software, hardware, as well as training and recently received notification it was awarded the grant! The exciting news is that the funding for the grant is largely non-discretionary, with the goal of developing software using technology that best helps elementary-aged school kids learn spelling. The school district currently has a computer lab in each school, running a collection of Windows PCs and well as Macs. However, the nature of the grant will allow the school district to upgrade the machines – or purchase tablets – per the software requirements. 
 
