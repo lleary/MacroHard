@@ -4,7 +4,36 @@
 	<meta charset="utf-8">
 	<title>Matheroids</title>
 	<link rel="stylesheet" type="text/css"href="stylesheet.css">
-	</head>
+	<style>
+		body{
+			background-color: #FFFFFF;
+			font-family:Courier New;
+			letter-spacing: 0.5px;
+		}
+		div {
+			color:#000000;
+		}
+		h1{
+			color:#000000;
+		}
+		#mainMenu{
+			color:#22D2A0;
+			display:block;
+			padding: 15px;
+			
+		}
+		#accountSettings{
+			color:#FF5555;
+			padding: 15px;
+			display:block;
+		}
+		#teacherDashboard{
+			color:#FFD913;
+			padding: 15px;
+			display:block;
+		}
+	</style>
+</head>
 <body>
 <?php
 
@@ -26,7 +55,7 @@
 	$query_array = prepare_query_string();
 
 
-	echo "<p>Welcome to Matheroids, ".$query_array["user"]."</p>";
+	echo "<h1>Welcome to Matheroids, ".$query_array["user"]."</h1>";
 	echo"</pre>";
 
 ?>
@@ -50,14 +79,9 @@
 	}
 </script>
 
-<div style="border:3px; border-style:solid; border-color: black; padding: 5px; width: 500px">
-	<h2>Main Menu</h2>
-	<!--<p>You are on level *</p>!-->
-	<?php
-		echo "You are on a level (I have no idea)";
-	?>
-	<br />
-	<br />
+<div id="mainMenu" style="border:3px; border-style:solid; border-color: #22D2A0; padding: 5px; width: 500px">
+	<h2>MAIN MENU</h2>
+	<p style="color:#000000;">You are on level *</p>
 	<form action="../game.php/?user=$user" onsubmit="playAddition();">
 		<button type="submit">Play Game (Addition)</button></a>
 	</form>
@@ -68,9 +92,9 @@
 <br />
 
 <?php if($query_array["type"] == "Teacher") : ?>
-<div style="border:3px; border-style:solid; border-color: black; padding: 5px; width: 500px">
-	<h2>Teacher Dashboard</h2>
-	<div style="border:1.5px; border-style:solid; border-color: black; padding: 5px; ">
+<div id="teacherDashboard" style="border:3px; border-style:solid; border-color: #FFD913; padding: 5px; width: 500px">
+	<h2>TEACHER DASHBOARD</h2>
+	<div style="border:3px; border-style:solid; border-color: #FFD913; padding: 5px; ">
 		<h2>Create Student Accounts</h2>
 		<form action="add_student.php" method="post" id="form_id">
 			Students First Name:
@@ -83,12 +107,13 @@
 	</div>
 </div>
 <?php endif; ?>
+<br />
 
-<div style="border:3px; border-style:solid; border-color: black; padding: 5px; width: 500px">
-	<h2>Account Settings</h2>
+<div id = "accountSettings" style="border:3px; border-style:solid; border-color: #FF5555; padding: 5px; width: 500px">
+	<h2>ACCOUNT SETTINGS</h2>
 	<button>Reset Level</button>
 	<br />
-	<div style="border:1.5px; border-style:solid; border-color: black; padding: 5px; ">
+	<div style="border:3px; border-style:solid; border-color: #FF5555; padding: 5px; ">
 		<h2>Change Name</h2>
 		<form action="add_student.php" method="post" id="form_id">
 			New First Name:
