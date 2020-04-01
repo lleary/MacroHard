@@ -28,6 +28,7 @@
 
 	echo "<p>Welcome to Matheroids, ".$query_array["user"]."</p>";
 	echo"</pre>";
+	$user = $query_array["user"];
 
 ?>
 
