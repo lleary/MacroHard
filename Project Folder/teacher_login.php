@@ -14,7 +14,7 @@
 				Last Name:
 				<input type="text" name="lastname" id="lastname" placeholder="Last Name" /><br/><br/>
 				Password:
-				<input type="text" name="pw" id="pw" placeholder="Password" /><br/><br/>
+				<input type="Password" name="pw" id="pw" placeholder="Password" /><br/><br/>
 				<input type="submit" name="submit_id" id="login" value="Login" />
 			</form>
 		</center>
