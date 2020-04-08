@@ -134,12 +134,14 @@
             this.y = y;
             this.speed = 1;
             this.color = 'White';
+            this.font = "16px Courier New";
             this.boss = false;
 
             //Checks if it's time to create a boss problem.
             if(bossCountdown == 0){
                 this.problem = createMathProblem(5,20);
-                this.color = "Yellow";
+                //this.color = "Yellow";
+                this.font = "22px Courier New";
                 this.boss = true;
                 bossCountdown = getRandomNumber(5,15);
             }
@@ -150,7 +152,7 @@
             this.update = function() {
                 ctx = gameArena.context;
                 ctx.fillStyle = this.color;
-                ctx.font = "16px Courier New";
+                ctx.font = this.font;
                 ctx.fillText(this.problem,this.x,this.y);
             }
 
@@ -221,7 +223,8 @@
                 if((problems.length >= 1)&&(problems[0].getBossStatus() == false)){
                     problems[0].updateColor('Aqua');
                 }else{
-                    problems[0].updateColor('Orange');
+                    //problems[0].updateColor('Orange');
+                    problems[0].updateColor('Aqua');
                 }
             }
         }
