@@ -68,28 +68,76 @@
 <br />
 
 <script>
-	function playAddition(){
-		localStorage.setItem("difficulty",1);
-		console.log("Playing Addition");
+	var level = 1;
+
+	function playGame(difficulty){
+		localStorage.setItem("difficulty",difficulty);
+
+		if(difficulty = 1){
+			console.log("Playing Addition");
+		}else if(difficulty = 2){
+			console.log("Playing Subtraction");
+		}else{
+			console.log("ERROR: Unspecified Difficulty");
+		}
 	}
 
-	function playSubtraction(){
-		localStorage.setItem("difficulty",2);
-		console.log("Playing Subtraction");
+	function updateLevel(){
+		document.getElementById("levelText").innerHTML = "You are on level "+level;
+		disableLevels();
 	}
+
+	function increaseLevel(){
+		if(level < 7){
+			level += 1;
+		}
+		updateLevel();
+	}
+
+	function decreaseLevel(){
+		if(level >0){
+			level -= 1;
+		}
+		updateLevel();
+	}
+
+	function resetLevel(){
+		level = 1;
+		updateLevel();
+	}
+
+	function disableLevels(){
+		console.log("Attempted to enable levels.");
+		var buttons = ["level1Button","level2Button","level3Button","level4Button","level5Button","level6Button","level7Button"];
+
+		for(var i = 0; i < level; i++){
+			document.getElementById(buttons[i]).disabled = false;
+		}
+		for(var j = level; j < 7; j++){
+			document.getElementById(buttons[j]).disabled = true;
+		}
+	}
+
 </script>
 
 <div id="mainMenu" style="border:3px; border-style:solid; border-color: #22D2A0; padding: 5px; width: 500px">
 	<h2>MAIN MENU</h2>
-	<p style="color:#000000;">You are on level *</p>
-	<form action="../game.php/?user=$user" onsubmit="playAddition();">
-		<button type="submit">Play Game (Addition)</button></a>
-	</form>
-	<form action="../game.php/?user=$user" onsubmit="playSubtraction();">
-		<button type="submit">Play Game (Substraction)</button></a>
+	<p style="color:#000000;" id="levelText">You are on level *</p>
+	<form action="../game.php/?user=$user" >
+		<button type="submit" onsubmit="playGame(1);" id="level1Button" disabled>Play Game (Addition)</button>
+		<button type="submit" onsubmit="playGame(2);" id="level2Button" disabled>Play Game (Subtract)</button>
+		<button type="submit" onsubmit="playGame(3);" id="level3Button" disabled>Play Game (Level 3)</button>
+		<button type="submit" onsubmit="playGame(4);" id="level4Button" disabled>Play Game (Level 4)</button>
+		<button type="submit" onsubmit="playGame(5);" id="level5Button" disabled>Play Game (Level 5)</button>
+		<button type="submit" onsubmit="playGame(6);" id="level6Button" disabled>Play Game (Level 6)</button>
+		<button type="submit" onsubmit="playGame(7);" id="level7Button" disabled>Play Game (Level 7)</button>
 	</form>
 </div>
 <br />
+
+<script>
+	updateLevel()
+</script>
 
 <?php if($query_array["type"] == "Teacher") : ?>
 <div id="teacherDashboard" style="border:3px; border-style:solid; border-color: #FFD913; padding: 5px; width: 500px">
@@ -111,7 +159,19 @@
 
 <div id = "accountSettings" style="border:3px; border-style:solid; border-color: #FF5555; padding: 5px; width: 500px">
 	<h2>ACCOUNT SETTINGS</h2>
-	<button>Reset Level</button>
+
+	<form onsubmit="resetLevel(); return false;">
+		<button>Reset Level</button>
+	</form>
+
+	<form onsubmit="increaseLevel(); return false;">
+		<button>Increase Level</button>
+	</form>
+
+	<form onsubmit="decreaseLevel(); return false;">
+		<button>Decrease Level</button>
+	</form>
+
 	<br />
 	<div style="border:3px; border-style:solid; border-color: #FF5555; padding: 5px; ">
 		<h2>Change Name</h2>
