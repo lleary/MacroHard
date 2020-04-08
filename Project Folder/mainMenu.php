@@ -125,7 +125,7 @@
 	<p style="color:#000000;" id="levelText">You are on level *</p>
 	<form action="../game.php/?user=$user" >
 		<button type="submit" onsubmit="playGame(1);" id="level1Button" disabled>Play Game (Addition)</button>
-		<button type="submit" onsubmit="playGame(2);" id="level2Button" disabled>Play Game (Subtract)</button>
+		<button type="submit" onsubmit="playGame(2);" id="level2Button" disabled>Play Game (Subtraction)</button>
 		<button type="submit" onsubmit="playGame(3);" id="level3Button" disabled>Play Game (Level 3)</button>
 		<button type="submit" onsubmit="playGame(4);" id="level4Button" disabled>Play Game (Level 4)</button>
 		<button type="submit" onsubmit="playGame(5);" id="level5Button" disabled>Play Game (Level 5)</button>
