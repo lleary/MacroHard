@@ -1,5 +1,5 @@
 <?php
-session_start();
+    session_start();
 ?>
 <!DOCTYPE html>
 <html>
@@ -14,18 +14,6 @@ session_start();
 </head>
 
 <body onload="startGame()">
-
-    <?php
-        function prepare_query_string(){
-            $re = [];
-            $query_array = explode("&", $_SERVER["QUERY_STRING"]);
-            foreach ($query_array as $key => $value) {
-            $temp = explode("=", $value);
-            $re[$temp[0]] = $temp[1]; 
-            }
-            return $re;
-        }
-    ?>
 
     <br />
 

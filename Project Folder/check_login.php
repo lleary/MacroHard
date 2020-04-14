@@ -1,4 +1,8 @@
 <?php
+	session_start();
+?>
+
+<?php
 require_once 'files.php';
 require_once 'config.php';
 echo "<pre>";
@@ -9,12 +13,16 @@ $re = checkLogin($firstname, $lastname, $pw);
 
 if($re===1){ // Student correct login
 	/*Redirect browser to student menu TODO*/
-	header("Location: mainMenu.php/?user=$firstname&type=Student");
+	$_SESSION['user'] = $firstname;
+	$_SESSION['type'] = "Student";
+	header("Location: mainMenu.php/");
 
 }
 elseif($re===2){ // Teacher correct login
 	/*Redirect browser to teacher menu TODO*/
-	header("Location: mainMenu.php/?user=$firstname&type=Teacher");
+	$_SESSION['user'] = $firstname;
+	$_SESSION['type'] = "Teacher";
+	header("Location: mainMenu.php/");
 }
 elseif($re===3){ // Teacher incorrect password
 	/*Redirect to teacher login*/
