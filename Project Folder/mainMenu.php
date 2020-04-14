@@ -58,8 +58,8 @@
 <script>
 	var level = 1;
 
-	function playGame(difficulty){
-		localStorage.setItem("difficulty",difficulty);
+	function setDifficulty(difficulty){
+		localStorage.setItem("difficulty", difficulty);
 
 		if(difficulty = 1){
 			console.log("Playing Addition");
@@ -113,13 +113,13 @@
 	<h2>MAIN MENU</h2>
 	<p style="color:#000000;" id="levelText">You are on level *</p>
 	<form action="../game.php/" >
-		<button type="submit" onsubmit="playGame(1);" id="level1Button" disabled>Play Game (Addition)</button>
-		<button type="submit" onsubmit="playGame(2);" id="level2Button" disabled>Play Game (Subtraction)</button>
-		<button type="submit" onsubmit="playGame(3);" id="level3Button" disabled>Play Game (Level 3)</button>
-		<button type="submit" onsubmit="playGame(4);" id="level4Button" disabled>Play Game (Level 4)</button>
-		<button type="submit" onsubmit="playGame(5);" id="level5Button" disabled>Play Game (Level 5)</button>
-		<button type="submit" onsubmit="playGame(6);" id="level6Button" disabled>Play Game (Level 6)</button>
-		<button type="submit" onsubmit="playGame(7);" id="level7Button" disabled>Play Game (Level 7)</button>
+		<button type="submit" onsubmit="setDifficulty(1);" id="level1Button" disabled>Play Game (Addition)</button>
+		<button type="submit" onsubmit="setDifficulty(2);" id="level2Button" disabled>Play Game (Subtraction)</button>
+		<button type="submit" onsubmit="setDifficulty(3);" id="level3Button" disabled>Play Game (Level 3)</button>
+		<button type="submit" onsubmit="setDifficulty(4);" id="level4Button" disabled>Play Game (Level 4)</button>
+		<button type="submit" onsubmit="setDifficulty(5);" id="level5Button" disabled>Play Game (Level 5)</button>
+		<button type="submit" onsubmit="setDifficulty(6);" id="level6Button" disabled>Play Game (Level 6)</button>
+		<button type="submit" onsubmit="setDifficulty(7);" id="level7Button" disabled>Play Game (Level 7)</button>
 	</form>
 </div>
 <br />

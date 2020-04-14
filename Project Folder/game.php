@@ -27,6 +27,7 @@
         function createMathProblem(min, max) { 
 
             var randomSign = getRandomNumber(0, difficulty);
+            
 
             var num1 = getRandomNumber(min, max);
             var num2 = getRandomNumber(min, num1);
