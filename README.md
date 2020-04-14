@@ -10,8 +10,9 @@ By MacroHard
 
 # Release 2
 - ~~Subtraction Game~~
-- Right/Wrong Identifier
-- Account Settings
+- ~~Right/Wrong Identifier~~
+- ~~Account Settings~~
+- ~~Level System~~
 
 # Release 3
 - Add Problem Option for Teachers

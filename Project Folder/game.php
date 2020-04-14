@@ -33,7 +33,7 @@
 
             if(randomSign == 0){
                 var problem = num1 +"+"+num2 +"=";
-            }else if(randomSign ==1){
+            }else if(randomSign >= 1){
                 var problem = num1 +"-"+num2 +"=";
             }
 
