@@ -28,13 +28,12 @@
 
             var randomSign = getRandomNumber(0, difficulty);
 
-
             var num1 = getRandomNumber(min, max);
             var num2 = getRandomNumber(min, num1);
 
-            if(difficulty == 1){
+            if(randomSign == 0){
                 var problem = num1 +"+"+num2 +"=";
-            }else if(difficulty >= 2){
+            }else if(randomSign ==1){
                 var problem = num1 +"-"+num2 +"=";
             }
 
