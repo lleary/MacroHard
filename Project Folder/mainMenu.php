@@ -1,5 +1,5 @@
 <?php
-session_start();
+	session_start();
 ?>
 <!DOCTYPE html>
 <html>
@@ -38,27 +38,12 @@ session_start();
 	</style>
 </head>
 <body>
-<?php
-
-   function prepare_query_string(){
-		$re = [];
-		$query_array = explode("&", $_SERVER["QUERY_STRING"]);
-		foreach ($query_array as $key => $value) {
-			$temp = explode("=", $value);
-			$re[$temp[0]] = $temp[1]; 
-		}
-		return $re;
-	} 
-?>
 
 
 <?php 
 	echo "<pre>";
 
-	$query_array = prepare_query_string();
-
-
-	echo "<h1>Welcome to Matheroids, ".$query_array["user"]."</h1>";
+	echo "<h1>Welcome to Matheroids, ".$_SESSION["user"]."</h1>";
 	echo"</pre>";
 
 ?>
@@ -109,6 +94,7 @@ session_start();
 		updateLevel();
 	}
 
+	// disables buttons for levels the user does not have access to yet
 	function disableLevels(){
 		console.log("Attempted to enable levels.");
 		var buttons = ["level1Button","level2Button","level3Button","level4Button","level5Button","level6Button","level7Button"];
@@ -126,7 +112,7 @@ session_start();
 <div id="mainMenu" style="border:3px; border-style:solid; border-color: #22D2A0; padding: 5px; width: 500px">
 	<h2>MAIN MENU</h2>
 	<p style="color:#000000;" id="levelText">You are on level *</p>
-	<form action="../game.php/?user=$user" >
+	<form action="../game.php/" >
 		<button type="submit" onsubmit="playGame(1);" id="level1Button" disabled>Play Game (Addition)</button>
 		<button type="submit" onsubmit="playGame(2);" id="level2Button" disabled>Play Game (Subtraction)</button>
 		<button type="submit" onsubmit="playGame(3);" id="level3Button" disabled>Play Game (Level 3)</button>
@@ -142,7 +128,7 @@ session_start();
 	updateLevel()
 </script>
 
-<?php if($query_array["type"] == "Teacher") : ?>
+<?php if($_SESSION["type"] == "Teacher") : ?>
 	<div id="teacherDashboard" style="border:3px; border-style:solid; border-color: #FFD913; padding: 5px; width: 500px">
 		<h2>TEACHER DASHBOARD</h2>
 		<div style="border:3px; border-style:solid; border-color: #FFD913; padding: 5px; ">
