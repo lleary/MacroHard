@@ -20,6 +20,7 @@
     <script type="text/javascript">
 
         var difficulty = localStorage.getItem("difficulty");
+        console.log("Difficulty is "+difficulty);
         // 1 = addition only.
         // 2 = subtraction and addition.
 

@@ -60,15 +60,7 @@
 
 	function setDifficulty(difficulty){
 		localStorage.setItem("difficulty", difficulty);
-
-		if(difficulty = 1){
-			console.log("Playing Addition");
-		}else if(difficulty = 2){
-			console.log("Playing Subtraction");
-		}else{
-			console.log("ERROR: Unspecified Difficulty");
-		}
-		window.location.replace("http://localhost/Project%20Folder/game.php/");
+		console.log("Difficulty set to " + difficulty);
 	}
 
 	function updateLevel(){
@@ -84,7 +76,7 @@
 	}
 
 	function decreaseLevel(){
-		if(level >0){
+		if(level >1){
 			level -= 1;
 		}
 		updateLevel();
