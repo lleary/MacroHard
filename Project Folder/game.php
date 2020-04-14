@@ -130,7 +130,7 @@
 
             //Checks if it's time to create a boss problem.
             if(bossCountdown == 0){
-                this.problem = createMathProblem(5,20);
+                this.problem = createMathProblem(10,20);
                 //this.color = "Yellow";
                 this.font = "22px Courier New";
                 this.boss = true;
