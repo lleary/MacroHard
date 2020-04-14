@@ -68,6 +68,7 @@
 		}else{
 			console.log("ERROR: Unspecified Difficulty");
 		}
+		window.location.replace("http://localhost/Project%20Folder/game.php/");
 	}
 
 	function updateLevel(){
