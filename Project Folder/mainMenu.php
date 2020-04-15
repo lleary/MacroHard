@@ -3,6 +3,7 @@ session_start();
   if (!isset($_SESSION['user']))
    {
       header("location: welcome.php");
+      die();
    }
 ?>
 
@@ -53,7 +54,7 @@ session_start();
 
 ?>
 
-<form action="../Logout.php">
+<form action="./Logout.php">
 	<button type="submit">Logout</button></a>
 </form>
 
@@ -112,25 +113,25 @@ session_start();
 
 	<p style="color:#000000;" id="levelText">You are on level *</p>
 
-	<form onsubmit="setDifficulty(1)" action="../game.php">
+	<form onsubmit="setDifficulty(1)" action="./game.php">
 		<button type="submit" id="level1Button" disabled>Play Game (Addition)</button>
 	</form>
-	<form onsubmit="setDifficulty(2)" action="../game.php">
+	<form onsubmit="setDifficulty(2)" action="./game.php">
 		<button type="submit" id="level2Button" disabled>Play Game (Subtraction)</button>
 	</form>
-	<form onsubmit="setDifficulty(3)" action="../game.php">
+	<form onsubmit="setDifficulty(3)" action="./game.php">
 		<button type="submit" id="level3Button" disabled>Play Game (Addition & Subtraction)</button>
 	</form>
-	<form onsubmit="setDifficulty(4)" action="../game.php">
+	<form onsubmit="setDifficulty(4)" action="./game.php">
 		<button type="submit" id="level4Button" disabled>Play Game (Level 4)</button>
 	</form>
-	<form onsubmit="setDifficulty(5)" action="../game.php">
+	<form onsubmit="setDifficulty(5)" action="./game.php">
 		<button type="submit" id="level5Button" disabled>Play Game (Level 5)</button>
 	</form>
-	<form onsubmit="setDifficulty(6)" action="../game.php">
+	<form onsubmit="setDifficulty(6)" action="./game.php">
 		<button type="submit" id="level6Button" disabled>Play Game (Level 6)</button>
 	</form>
-	<form onsubmit="setDifficulty(7)" action="../game.php">
+	<form onsubmit="setDifficulty(7)" action="./game.php">
 		<button type="submit" id="level7Button" disabled>Play Game (Level 7)</button>
 	</form>
 		
