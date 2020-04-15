@@ -55,7 +55,7 @@ function checkLogin ($firstname, $lastname, $pw){
 				return 1;
 			}
 			elseif($user["class"]=="teacher"){
-				if($user["password"]==$pw) {
+				if(password_verify($pw, $user["password"])) {
 					return 2;
 				}
 				else {
