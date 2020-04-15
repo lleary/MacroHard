@@ -3,6 +3,7 @@ session_start();
   if (!isset($_SESSION['user']))
    {
       header("location: welcome.php");
+      die();
    }
 ?>
 
@@ -279,7 +280,7 @@ session_start();
 
     <br />
 
-    <form action="../Project Folder/mainMenu.php/" >
+    <form action="./mainMenu.php" >
         <button type="submit">Return to main menu</button>
     </form>
 
