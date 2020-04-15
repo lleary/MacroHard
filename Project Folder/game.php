@@ -27,14 +27,20 @@
         //Generates a random addition problem between min and max. Returns the problem in string form.
         function createMathProblem(min, max) { 
 
-            var randomSign = getRandomNumber(0, difficulty);
+            if(difficulty == 1){
+                var randomSign = 1;
+            }else if(difficulty == 2){
+                var randomSign = 2
+            } else {
+                var randomSign = getRandomNumber(1, 3);
+            }
 
             var num1 = getRandomNumber(min, max);
             var num2 = getRandomNumber(min, num1);
 
-            if(randomSign == 0){
+            if(randomSign == 1){
                 var problem = num1 +"+"+num2 +"=";
-            }else if(randomSign ==1){
+            }else if(randomSign == 2){
                 var problem = num1 +"-"+num2 +"=";
             }
 
@@ -87,7 +93,7 @@
 
         var spawnMax = 300;
         var spawnTimer = 200;
-        var bossCountdown = 10;
+        var bossCountdown = 10 - difficulty;
 
         var wrongSequence = 0;
 
@@ -130,12 +136,12 @@
             this.boss = false;
 
             //Checks if it's time to create a boss problem.
-            if(bossCountdown == 0){
+            if(bossCountdown <= 0){
                 this.problem = createMathProblem(10,20);
                 //this.color = "Yellow";
                 this.font = "22px Courier New";
                 this.boss = true;
-                bossCountdown = getRandomNumber(5,15);
+                bossCountdown = getRandomNumber(5,15) - difficulty;
             }
 
             this.answer = solveMathProblem(this.problem);
@@ -268,7 +274,7 @@
 
     <br />
 
-    <form action="../mainMenu.php/?user=$user" >
+    <form action="../Project Folder/mainMenu.php/" >
         <button type="submit">Return to main menu</button>
     </form>
 

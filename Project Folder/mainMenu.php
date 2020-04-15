@@ -104,16 +104,31 @@
 
 <div id="mainMenu" style="border:3px; border-style:solid; border-color: #22D2A0; padding: 5px; width: 500px">
 	<h2>MAIN MENU</h2>
+
 	<p style="color:#000000;" id="levelText">You are on level *</p>
-	<form action="../game.php/" >
-		<button type="submit" onsubmit="setDifficulty(1);" id="level1Button" disabled>Play Game (Addition)</button>
-		<button type="submit" onsubmit="setDifficulty(2);" id="level2Button" disabled>Play Game (Subtraction)</button>
-		<button type="submit" onsubmit="setDifficulty(3);" id="level3Button" disabled>Play Game (Level 3)</button>
-		<button type="submit" onsubmit="setDifficulty(4);" id="level4Button" disabled>Play Game (Level 4)</button>
-		<button type="submit" onsubmit="setDifficulty(5);" id="level5Button" disabled>Play Game (Level 5)</button>
-		<button type="submit" onsubmit="setDifficulty(6);" id="level6Button" disabled>Play Game (Level 6)</button>
-		<button type="submit" onsubmit="setDifficulty(7);" id="level7Button" disabled>Play Game (Level 7)</button>
+
+	<form onsubmit="setDifficulty(1)" action="../game.php">
+		<button type="submit" id="level1Button" disabled>Play Game (Addition)</button>
 	</form>
+	<form onsubmit="setDifficulty(2)" action="../game.php">
+		<button type="submit" id="level2Button" disabled>Play Game (Subtraction)</button>
+	</form>
+	<form onsubmit="setDifficulty(3)" action="../game.php">
+		<button type="submit" id="level3Button" disabled>Play Game (Addition & Subtraction)</button>
+	</form>
+	<form onsubmit="setDifficulty(4)" action="../game.php">
+		<button type="submit" id="level4Button" disabled>Play Game (Level 4)</button>
+	</form>
+	<form onsubmit="setDifficulty(5)" action="../game.php">
+		<button type="submit" id="level5Button" disabled>Play Game (Level 5)</button>
+	</form>
+	<form onsubmit="setDifficulty(6)" action="../game.php">
+		<button type="submit" id="level6Button" disabled>Play Game (Level 6)</button>
+	</form>
+	<form onsubmit="setDifficulty(7)" action="../game.php">
+		<button type="submit" id="level7Button" disabled>Play Game (Level 7)</button>
+	</form>
+		
 </div>
 <br />
 
