@@ -27,6 +27,7 @@ session_start();
 
         var difficulty = localStorage.getItem("difficulty");
         console.log("Difficulty is "+difficulty);
+        // 0 = digit identification
         // 1 = addition only.
         // 2 = subtraction and addition.
 
@@ -132,7 +133,11 @@ session_start();
         }
 
         function object(x, y) {
-            this.problem = createMathProblem(0, 10);
+            if(difficulty != 0){
+                this.problem = createMathProblem(0, 10);
+            }else{
+                this.problem = getRandomNumber(100, 1000);
+            }
 
             this.x = x;
             this.y = y;
@@ -142,7 +147,7 @@ session_start();
             this.boss = false;
 
             //Checks if it's time to create a boss problem.
-            if(bossCountdown <= 0){
+            if((bossCountdown <= 0)&&(difficulty !=0)){
                 this.problem = createMathProblem(10,20);
                 //this.color = "Yellow";
                 this.font = "22px Courier New";
@@ -150,7 +155,12 @@ session_start();
                 bossCountdown = getRandomNumber(5,15) - difficulty;
             }
 
-            this.answer = solveMathProblem(this.problem);
+            if(difficulty != 0){
+                this.answer = solveMathProblem(this.problem);
+            }else{
+                this.answer = getRandomNumber(0,3);
+                console.log(this.answer);
+            }
 
             //Deletes and redraws the equation at its new location.
             this.update = function() {
@@ -196,6 +206,14 @@ session_start();
                 return this.answer;
             }
 
+            this.getProblem = function(){
+                return this.problem;
+            }
+
+            this.setProblem = function(newProblem){
+                this.problem = newProblem;
+            }
+
             //Updates the color of an equation
             this.updateColor = function(newColor){
                 this.color = newColor;
@@ -224,11 +242,22 @@ session_start();
                     addProblem();
                 }
 
-                if((problems.length >= 1)&&(problems[0].getBossStatus() == false)){
-                    problems[0].updateColor('Aqua');
+                if(difficulty !=0){
+                    if((problems.length >= 1)&&(problems[0].getBossStatus() == false)){
+                        problems[0].updateColor('Aqua');
+                    }else{
+                        //problems[0].updateColor('Orange');
+                        problems[0].updateColor('Aqua');
+                    }
                 }else{
-                    //problems[0].updateColor('Orange');
-                    problems[0].updateColor('Aqua');
+                    /*highlightProblem = problems[0].getProblem() +"";
+                    for(var i = 0; i <= 2; i++){
+                        if(i == problems[0].getAnswer()){
+                            var digit = '*' +highlightProblem.substring(i, i+1)+'*';
+                            var newProblem = ""+highlightProblem.substring(0, i) + digit + highlightProblem.substring(i+1, highlightProblem.length);
+                        }
+                    }
+                    problems[0].setProblem(newProblem);*/
                 }
             }
         }
@@ -245,12 +274,16 @@ session_start();
         }
 
         //Checks the users given answer.
-        function checkAnswer(){
+        function checkAnswer(answer){
             if(playing == true){
-                var ans = document.getElementById("userAnswer").value;
+                if(difficulty != 0){
+                    var ans = document.getElementById("userAnswer").value;
+                }else{
+                    var ans = answer;
+                }
 
                 //for(var i = 0; i < problems.length; i++){
-
+                if(problems.length >= 1){
                     if(ans == problems[0].getAnswer()){
                         problems.splice(0, 1);
                         score++;
@@ -264,6 +297,7 @@ session_start();
                     }else{
                         wrongSequence = 0;
                     }
+                }
                 //}
                 document.getElementById("userAnswer").value = "";
             }
@@ -273,9 +307,16 @@ session_start();
 
     <p id="score">Score: 0</p>
 
-    <form onsubmit="checkAnswer(); return false;" autocomplete="off">
+    <form id="answerForm" onsubmit="checkAnswer(-1); return false;" autocomplete="off" style="visibility: visible;">
         Answer:
         <input type="text" name="answer"  id="userAnswer" placeholder="answer" autofocus/>
+    </form>
+
+    <form id="digitAnswerForm" onsubmit="checkAnswer(); return false;" autocomplete="off" style="visibility: hidden;">
+        Answer:
+        <button type="submit" onclick="checkAnswer(0); return false;">Ones</button>
+        <button type="submit" onclick="checkAnswer(1); return false;">Tens</button>
+        <button type="submit" onclick="checkAnswer(2); return false;">Hundreds</button>
     </form>
 
     <br />
@@ -283,6 +324,23 @@ session_start();
     <form action="./mainMenu.php" >
         <button type="submit">Return to main menu</button>
     </form>
+
+    <script type="text/javascript">
+        function showDigitGame(){
+            console.log("*1");
+            if(difficulty == 0){
+                console.log("*2");
+                var normalAnswerForm = document.getElementById('answerForm');
+                normalAnswerForm.style.visibility = 'hidden';
+
+                var digitAnswerForm = document.getElementById('digitAnswerForm');
+                digitAnswerForm.style.visibility = 'visible';
+                console.log("*3");
+            }
+        }
+
+        showDigitGame();
+    </script>
 
 </body>
 </html>

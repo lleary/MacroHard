@@ -134,6 +134,9 @@ session_start();
 	<form onsubmit="setDifficulty(7)" action="./game.php">
 		<button type="submit" id="level7Button" disabled>Play Game (Level 7)</button>
 	</form>
+	<form onsubmit="setDifficulty(0)" action="./game.php">
+		<button type="submit" id="level0Button">Play Game (Digit Identification)</button>
+	</form>
 		
 </div>
 <br />
