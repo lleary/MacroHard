@@ -86,7 +86,7 @@ session_start();
             return ans;
         }
 
-        //Generates a random numbers between a given a min/max. Returns the number.
+        // Returns a random integer number x: min <= x < max
         function getRandomNumber(min, max){
             var num = Math.random() * (+max - +min) + +min; 
             num = Math.floor(num)
