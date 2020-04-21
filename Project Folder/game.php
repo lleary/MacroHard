@@ -21,12 +21,29 @@ session_start();
 
 <body onload="startGame()">
 
-    <br />
+    <br/>
+
+    <p id="score">Score: 0<br/></p>
+    <span id="prompt"></span>
+    <span id="digitPrompt"></span>
+    <span id="digitPromptPt2"></span>
+    <p></p> <!-- for some reason <br/> doesn't work here -->
 
     <script type="text/javascript">
 
         var difficulty = localStorage.getItem("difficulty");
         console.log("Difficulty is "+difficulty);
+
+        var indexToPlace = ["ones", "tens", "hundreds", "thousands"];
+        // our game doesn't use thousands place right now but later we might want to
+        // this can be expanded for bigger numbers, maybe as a way of leveling up in digit identification
+
+        // for the digit identification mode, a prompt is necessary
+        if(difficulty == 0){
+            document.getElementById("prompt").innerHTML = "Enter the digit in the ";
+            document.getElementById("digitPromptPt2").innerHTML = " place";
+        }
+
         // 0 = digit identification
         // 1 = addition only.
         // 2 = subtraction and addition.
@@ -86,7 +103,7 @@ session_start();
             return ans;
         }
 
-        // Returns a random integer number x: min <= x < max
+        // Returns a random integer number x: [min,max)
         function getRandomNumber(min, max){
             var num = Math.random() * (+max - +min) + +min; 
             num = Math.floor(num)
@@ -104,6 +121,13 @@ session_start();
 
         var wrongSequence = 0;
 
+        // this will be used to make the digit identification game less cheatable
+        // for every wrong answer in a row the user will lose a point
+        // this will make the cheat method of typing in each digit of each number
+        // for the digit identification game useless
+        // There will be a grace number of 1 for the digit game, and 2 for other modes
+        var wrongInARow = 0;
+
         function startGame() {
             addProblem();
             gameArena.start();
@@ -118,6 +142,7 @@ session_start();
             bossCountdown--;
         }
 
+        // Jack should comment this
         var gameArena = {
             canvas : document.createElement("canvas"),
             start : function() {
@@ -132,6 +157,7 @@ session_start();
             }
         }
 
+        // an object representing each problem and all it's properties
         function object(x, y) {
             if(difficulty != 0){
                 this.problem = createMathProblem(0, 10);
@@ -155,10 +181,26 @@ session_start();
                 bossCountdown = getRandomNumber(5,15) - difficulty;
             }
 
+            // set answer for an arithmetic problem
             if(difficulty != 0){
                 this.answer = solveMathProblem(this.problem);
-            }else{
-                this.answer = getRandomNumber(0,3);
+            }
+            // set answer for a digit identification problem
+            else{
+                // for digit identification, the answer is going to be one of the digits
+                // we can extract each digit from the problem with a modulus function and floored division
+                // equation for the Ks digit of n:
+                // floor(n / K) % 10
+                // ex: floor(1234 / 100) % 10 = floor(12.34) % 10 = 12 % 10 = 2; 2 is the 100s place of 1234
+                ones = this.problem % 10; // could be Math.floor(this.problem / 1) % 10, same thing
+                tens = Math.floor(this.problem / 10) % 10;
+                hundreds = Math.floor(this.problem / 100) % 10;
+                placeValues = [ones, tens, hundreds];
+
+                // rnd will be 0, 1, or 2
+                rnd = getRandomNumber(0,3);
+                this.answerIdx = rnd;
+                this.answer = placeValues[rnd];
                 console.log(this.answer);
             }
 
@@ -201,7 +243,7 @@ session_start();
                 }
             }
 
-            //Returns the answer of the equation.
+            //Returns an integer which is the answer to the problem
             this.getAnswer = function(){
                 return this.answer;
             }
@@ -219,13 +261,13 @@ session_start();
                 this.color = newColor;
             }
 
-            //Returns wether or not the problem is a boss.
+            //Returns whether or not the problem is a boss.
             this.getBossStatus = function(){
                 return this.boss;
             }
         }
 
-        //Reutns every tick.
+        //Runs every tick.
         function updateGameArea() {
             if (playing == true){
 
@@ -242,22 +284,14 @@ session_start();
                     addProblem();
                 }
 
-                if(difficulty !=0){
-                    if((problems.length >= 1)&&(problems[0].getBossStatus() == false)){
-                        problems[0].updateColor('Aqua');
-                    }else{
-                        //problems[0].updateColor('Orange');
-                        problems[0].updateColor('Aqua');
-                    }
-                }else{
-                    /*highlightProblem = problems[0].getProblem() +"";
-                    for(var i = 0; i <= 2; i++){
-                        if(i == problems[0].getAnswer()){
-                            var digit = '*' +highlightProblem.substring(i, i+1)+'*';
-                            var newProblem = ""+highlightProblem.substring(0, i) + digit + highlightProblem.substring(i+1, highlightProblem.length);
-                        }
-                    }
-                    problems[0].setProblem(newProblem);*/
+                // make the problem at hand aqua, but no need if it already is
+                if(problems[0].color != 'Aqua'){
+                    problems[0].updateColor('Aqua');
+                }
+
+                // for digit identification, update which place you are asking for
+                if(difficulty == 0){
+                    document.getElementById("digitPrompt").innerHTML = indexToPlace[problems[0].answerIdx];
                 }
             }
         }
@@ -270,21 +304,16 @@ session_start();
         //Tells the player they lose
         function youLose(){
             playing = false;
-            document.getElementById("score").innerHTML = "Game Over. Try again!\n Your final score was: "+score;
+            document.getElementById("score").innerHTML = "Game Over.\n Your final score was: "+score;
         }
 
         //Checks the users given answer.
-        function checkAnswer(answer){
+        function checkAnswer(){
             if(playing == true){
-                if(difficulty != 0){
-                    var ans = document.getElementById("userAnswer").value;
-                }else{
-                    var ans = answer;
-                }
+                var userAns = document.getElementById("userAnswer").value;
 
-                //for(var i = 0; i < problems.length; i++){
                 if(problems.length >= 1){
-                    if(ans == problems[0].getAnswer()){
+                    if(userAns == problems[0].getAnswer()){
                         problems.splice(0, 1);
                         score++;
                         updateScore();
@@ -293,30 +322,38 @@ session_start();
                             spawnMax = spawnMax - getRandomNumber(0,20);
                         }
 
-                        //break;
-                    }else{
+                        wrongInARow = 0;
+                    }
+                    else{
                         wrongSequence = 0;
+                        wrongInARow++;
+                        // for the digit identification gamemode, penalize consecutive wrong answers
+                        // with a grace number of 1
+                        if(difficulty == 0 && wrongInARow > 1){
+                            score--;
+                            updateScore();
+                        }
+                        // for arithmetic, penalize consecutive wrong answers with a grace number of 2
+                        else if(wrongInARow > 2){
+                            score--;
+                            updateScore();
+                        }
+                    }
+
+                    if(score < 0){
+                        score = 0;
+                        youLose();
                     }
                 }
-                //}
                 document.getElementById("userAnswer").value = "";
             }
         }
 
     </script>
 
-    <p id="score">Score: 0</p>
-
-    <form id="answerForm" onsubmit="checkAnswer(-1); return false;" autocomplete="off" style="visibility: visible;">
+    <form id="answerForm" onsubmit="checkAnswer(); return false;" autocomplete="off" style="visibility: visible;">
         Answer:
         <input type="text" name="answer"  id="userAnswer" placeholder="answer" autofocus/>
-    </form>
-
-    <form id="digitAnswerForm" onsubmit="checkAnswer(); return false;" autocomplete="off" style="visibility: hidden;">
-        Answer:
-        <button type="submit" onclick="checkAnswer(0); return false;">Ones</button>
-        <button type="submit" onclick="checkAnswer(1); return false;">Tens</button>
-        <button type="submit" onclick="checkAnswer(2); return false;">Hundreds</button>
     </form>
 
     <br />
@@ -324,23 +361,6 @@ session_start();
     <form action="./mainMenu.php" >
         <button type="submit">Return to main menu</button>
     </form>
-
-    <script type="text/javascript">
-        function showDigitGame(){
-            console.log("*1");
-            if(difficulty == 0){
-                console.log("*2");
-                var normalAnswerForm = document.getElementById('answerForm');
-                normalAnswerForm.style.visibility = 'hidden';
-
-                var digitAnswerForm = document.getElementById('digitAnswerForm');
-                digitAnswerForm.style.visibility = 'visible';
-                console.log("*3");
-            }
-        }
-
-        showDigitGame();
-    </script>
 
 </body>
 </html>
