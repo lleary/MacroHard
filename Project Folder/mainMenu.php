@@ -5,6 +5,10 @@ session_start();
       header("location: welcome.php");
       die();
    }
+
+	include 'check_level.php';
+
+
 ?>
 
 <!DOCTYPE html>
@@ -42,6 +46,8 @@ session_start();
 			display:block;
 		}
 	</style>
+
+
 </head>
 <body>
 
@@ -61,8 +67,12 @@ session_start();
 <br />
 <br />
 
+
+
 <script>
 	var level = 1;
+	var level = <?php echo $_SESSION['level'] ?>; 
+	console.log(level);
 
 	function setDifficulty(difficulty){
 		localStorage.setItem("difficulty", difficulty);
