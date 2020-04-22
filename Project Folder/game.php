@@ -33,8 +33,7 @@ session_start();
         console.log("Difficulty is "+difficulty);
 
         var indexToPlace = ["ones", "tens", "hundreds", "thousands"];
-        // our game doesn't use thousands place right now but later we might want to
-        // this can be expanded for bigger numbers, maybe as a way of leveling up in digit identification
+        // boss problems can use the thousands place
 
         // for the digit identification mode, a prompt is necessary
         if(difficulty == 0){
@@ -143,7 +142,7 @@ session_start();
         var gameArena = {
             canvas : document.createElement("canvas"),
             start : function() {
-                this.canvas.width = 400;
+                this.canvas.width = 420; // it needs to be wider than 400 to fit digit ID boss problems
                 this.canvas.height = 600;
                 this.context = this.canvas.getContext("2d");
                 document.body.insertBefore(this.canvas, document.body.childNodes[0]);
@@ -178,12 +177,21 @@ session_start();
             this.boss = false;
 
             //Checks if it's time to create a boss problem.
-            if((bossCountdown <= 0)&&(difficulty !=0)){
-                this.problem = createMathProblem(10,20);
-                //this.color = "Yellow";
-                this.font = "22px Courier New";
-                this.boss = true;
-                bossCountdown = getRandomNumber(5,15) - difficulty;
+            if(bossCountdown <= 0){
+                if(difficulty != 0){
+                    this.problem = createMathProblem(10,20);
+                    //this.color = "Yellow";
+                    this.font = "22px Courier New";
+                    this.boss = true;
+                    bossCountdown = getRandomNumber(5,15) - difficulty;
+                }
+                else{
+                    this.problem = new digitProblem(getRandomNumber(1000, 10000));
+                    //this.color = "Yellow";
+                    this.font = "22px Courier New";
+                    this.boss = true;
+                    bossCountdown = getRandomNumber(5,15) - difficulty;
+                }
             }
 
             // set answer for an arithmetic problem
@@ -197,13 +205,16 @@ session_start();
                 // equation for the Ks digit of n:
                 // floor(n / K) % 10
                 // ex: floor(1234 / 100) % 10 = floor(12.34) % 10 = 12 % 10 = 2; 2 is the 100s place of 1234
-                ones = this.problem.num % 10; // could be Math.floor(this.problem / 1) % 10, same thing
+                ones = Math.floor(this.problem.num / 1) % 10;
                 tens = Math.floor(this.problem.num / 10) % 10;
                 hundreds = Math.floor(this.problem.num / 100) % 10;
-                placeValues = [ones, tens, hundreds];
+                thousands = Math.floor(this.problem.num / 1000) % 10;
+                placeValues = [ones, tens, hundreds, thousands];
 
-                // rnd will be 0, 1, or 2
-                rnd = getRandomNumber(0,3);
+                numStr = "" + this.problem.num;
+
+                // rnd will be 0, 1, or 2; 3 is an option only for boss problems, whose length is 4
+                rnd = getRandomNumber(0,numStr.length);
                 this.answer = placeValues[rnd];
                 this.problem.str = this.problem.num + ": " + indexToPlace[rnd];
                 console.log(this.answer);
