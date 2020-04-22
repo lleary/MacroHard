@@ -25,8 +25,6 @@ session_start();
 
     <p id="score">Score: 0<br/></p>
     <span id="prompt"></span>
-    <span id="digitPrompt"></span>
-    <span id="digitPromptPt2"></span>
     <p></p> <!-- for some reason <br/> doesn't work here -->
 
     <script type="text/javascript">
@@ -40,8 +38,7 @@ session_start();
 
         // for the digit identification mode, a prompt is necessary
         if(difficulty == 0){
-            document.getElementById("prompt").innerHTML = "Enter the digit in the ";
-            document.getElementById("digitPromptPt2").innerHTML = " place";
+            document.getElementById("prompt").innerHTML = "Enter the digit in the stated place";
         }
 
         // 0 = digit identification
@@ -157,12 +154,20 @@ session_start();
             }
         }
 
+        // a class for digit id problems
+        function digitProblem(numberInput){
+            this.num = numberInput;
+            this.str = "error: dig_str_uninit";
+        }
+
         // an object representing each problem and all it's properties
         function object(x, y) {
             if(difficulty != 0){
                 this.problem = createMathProblem(0, 10);
+                this.type = "arith";
             }else{
-                this.problem = getRandomNumber(100, 1000);
+                this.problem = new digitProblem(getRandomNumber(100, 1000));
+                this.type = "digID";
             }
 
             this.x = x;
@@ -192,15 +197,15 @@ session_start();
                 // equation for the Ks digit of n:
                 // floor(n / K) % 10
                 // ex: floor(1234 / 100) % 10 = floor(12.34) % 10 = 12 % 10 = 2; 2 is the 100s place of 1234
-                ones = this.problem % 10; // could be Math.floor(this.problem / 1) % 10, same thing
-                tens = Math.floor(this.problem / 10) % 10;
-                hundreds = Math.floor(this.problem / 100) % 10;
+                ones = this.problem.num % 10; // could be Math.floor(this.problem / 1) % 10, same thing
+                tens = Math.floor(this.problem.num / 10) % 10;
+                hundreds = Math.floor(this.problem.num / 100) % 10;
                 placeValues = [ones, tens, hundreds];
 
                 // rnd will be 0, 1, or 2
                 rnd = getRandomNumber(0,3);
-                this.answerIdx = rnd;
                 this.answer = placeValues[rnd];
+                this.problem.str = this.problem.num + ": " + indexToPlace[rnd];
                 console.log(this.answer);
             }
 
@@ -209,7 +214,12 @@ session_start();
                 ctx = gameArena.context;
                 ctx.fillStyle = this.color;
                 ctx.font = this.font;
-                ctx.fillText(this.problem,this.x,this.y);
+                if(this.type == "arith"){
+                    ctx.fillText(this.problem,this.x,this.y);
+                }
+                else{
+                    ctx.fillText(this.problem.str,this.x,this.y);
+                }
             }
 
             //Finds the new location for an equation
@@ -287,11 +297,6 @@ session_start();
                 // make the problem at hand aqua, but no need if it already is
                 if(problems[0].color != 'Aqua'){
                     problems[0].updateColor('Aqua');
-                }
-
-                // for digit identification, update which place you are asking for
-                if(difficulty == 0){
-                    document.getElementById("digitPrompt").innerHTML = indexToPlace[problems[0].answerIdx];
                 }
             }
         }
