@@ -14,6 +14,7 @@ $re = checkLogin($firstname, $lastname, $pw);
 if($re===1){ // Student correct login
 	/*Redirect browser to student menu TODO*/
 	$_SESSION['user'] = $firstname;
+	$_SESSION['lastname'] = $lastname;
 	$_SESSION['type'] = "Student";
 	header("Location: mainMenu.php");
 
@@ -21,6 +22,7 @@ if($re===1){ // Student correct login
 elseif($re===2){ // Teacher correct login
 	/*Redirect browser to teacher menu TODO*/
 	$_SESSION['user'] = $firstname;
+	$_SESSION['lastname'] = $lastname;
 	$_SESSION['type'] = "Teacher";
 	header("Location: mainMenu.php");
 }
