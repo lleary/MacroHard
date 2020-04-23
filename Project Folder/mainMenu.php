@@ -7,8 +7,7 @@ session_start();
    }
 
 	include 'check_level.php';
-
-
+	include 'update_level.php';
 ?>
 
 <!DOCTYPE html>
@@ -20,7 +19,7 @@ session_start();
 	<style>
 		body{
 			background-color: #FFFFFF;
-			font-family:Courier New;
+			font-family:sans-serif;
 			letter-spacing: 0.5px;
 		}
 		div {
@@ -28,6 +27,7 @@ session_start();
 		}
 		h1{
 			color:#000000;
+			font-family:sans-serif;
 		}
 		#mainMenu{
 			color:#22D2A0;
@@ -82,12 +82,22 @@ session_start();
 	function updateLevel(){
 		document.getElementById("levelText").innerHTML = "You are on level "+level;
 		disableLevels();
+		<?php
+			//updateLevel ($_SESSION["user"], $_SESSION["lastname"], $_SESSION["level"]);
+		?>
 	}
+
 
 	function increaseLevel(){
 		if(level < 7){
 			level += 1;
 		}
+
+		<?php
+			$_SESSION["level"]++;
+		?>
+		console.log("new level is: "+<?php echo $_SESSION['level'] ?>);
+
 		updateLevel();
 	}
 
