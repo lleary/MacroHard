@@ -5,7 +5,7 @@
 
 	/*Write $data to $filename*/
 	function save_data($filename, $data){
-		$str = join(" ", $data)."\n";
+		$str = "\n".join(" ", $data);
 
 		//$myfile = fopen("DB/$filename", "w") or die("Failed to create files");
 		/*Append data to $filename*/
