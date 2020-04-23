@@ -14,6 +14,7 @@ session_start();
     <title>Matheroids</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link rel="stylesheet" type="text/css"href="stylesheet.css">
+    <canvas id="sandbox"></canvas>
     <style>
         canvas {border:1px solid #a9a9a9; background-color: #000000}
     </style>
@@ -28,6 +29,18 @@ session_start();
     <p></p> <!-- for some reason <br/> doesn't work here -->
 
     <script type="text/javascript">
+        const myCanvas = document.getElementById("sandbox");
+        myCanvas.width = 400;
+        myCanvas.height = 600;
+        const ctx = myCanvas.getContext("2d");
+        var bgImage = new Image(400,600);
+        bgImage.src = 'stars_v1.jpg';
+        ctx.drawImage(bgImage,0,0);
+        var astImage1 = new Image();
+        astImage1.src = 'asteroid_2_v2_default.png';
+        var astImage2 = new Image();
+        astImage2.src = 'asteroid_2_v2_red.png';
+
 
         var difficulty = localStorage.getItem("difficulty");
         console.log("Difficulty is "+difficulty);
@@ -59,9 +72,9 @@ session_start();
             var num2 = getRandomNumber(min, num1);
 
             if(randomSign == 1){
-                var problem = num1 +"+"+num2 +"=";
+                var problem = num1 +"+"+num2;
             }else if(randomSign == 2){
-                var problem = num1 +"-"+num2 +"=";
+                var problem = num1 +"-"+num2;
             }
 
             return problem;
@@ -107,6 +120,7 @@ session_start();
             return num;
         }
 
+        var matheroids = [];
         var problems = [];
         var playing = true;
         var score = 0;
@@ -117,6 +131,8 @@ session_start();
 
         var wrongSequence = 0;
 
+        var gameInterval;
+
         // this will be used to make the digit identification game less cheatable
         // for every wrong answer in a row the user will lose a point
         // this will make the cheat method of typing in each digit of each number
@@ -126,31 +142,22 @@ session_start();
 
         function startGame() {
             addProblem();
-            gameArena.start();
+            document.body.insertBefore(myCanvas, document.body.childNodes[0]);
+            gameInterval = setInterval(updateGameArea, 15);
         }
 
         //Adds a problem to the array of problems.
         function addProblem() {
-            var xSpawn = getRandomNumber(10,300); 
-
-            var myGamePiece = new object(xSpawn, -50);
-            problems.push(myGamePiece);
-            bossCountdown--;
-        }
-
-        // Jack should comment this
-        var gameArena = {
-            canvas : document.createElement("canvas"),
-            start : function() {
-                this.canvas.width = 420; // it needs to be wider than 400 to fit digit ID boss problems
-                this.canvas.height = 600;
-                this.context = this.canvas.getContext("2d");
-                document.body.insertBefore(this.canvas, document.body.childNodes[0]);
-                this.interval = setInterval(updateGameArea, 15);        
-            },
-            clear : function() {
-                this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            var xSpawn;
+            if(difficulty != 0){
+                xSpawn = getRandomNumber(50,300); 
+            }else{
+                xSpawn = getRandomNumber(50,250);
             }
+
+            var myGamePiece = new matheroid(xSpawn, -50, 20, 'grey');
+            matheroids.push(myGamePiece);
+            bossCountdown--;
         }
 
         // a class for digit id problems
@@ -159,21 +166,79 @@ session_start();
             this.str = "error: dig_str_uninit";
         }
 
-        // an object representing each problem and all it's properties
-        function object(x, y) {
-            if(difficulty != 0){
-                this.problem = createMathProblem(0, 10);
-                this.type = "arith";
-            }else{
-                this.problem = new digitProblem(getRandomNumber(100, 1000));
-                this.type = "digID";
+        // an object represeting an entire matheroid
+        function matheroid(xCoord, yCoord, r, c){
+            this.object = new object(xCoord, yCoord);
+            this.x = xCoord;
+            this.y = yCoord;
+            this.radius = r;
+            if(this.object.boss){
+                this.radius = r * 2;
+            }
+            this.astColor = c;
+            this.objColor = object.color;
+            this.image = astImage1;
+
+            this.update = function(){
+                if(this.object.boss){
+                    ctx.drawImage(this.image, this.x - 50, this.y - 50, 100, 100);
+                }else{
+                    if(difficulty != 0){
+                        ctx.drawImage(this.image, this.x - 25, this.y - 25, 50, 50);
+                    }
+                    else{
+                        ctx.drawImage(this.image, this.x - 30, this.y - 30, 60, 60);
+                    }
+                }
+
+                // update the math problem inside
+                this.object.update();
             }
 
+            this.newPosition = function(){
+                this.object.newPosition();
+                this.x = this.object.x;
+                this.y = this.object.y;
+
+            }
+
+            //Returns an integer which is the answer to the problem
+            this.getAnswer = function(){
+                return this.object.answer;
+            }
+
+            this.getProblem = function(){
+                return this.object.problem;
+            }
+
+            this.setProblem = function(newProblem){
+                this.object.problem = newProblem;
+            }
+
+            //Updates the color of an equation
+            this.updateColor = function(newColor){
+                this.object.color = newColor;
+            }
+
+            //Returns whether or not the problem is a boss.
+            this.getBossStatus = function(){
+                return this.object.boss;
+            }
+        }
+
+        // an object representing each problem
+        function object(x, y) {
             this.x = x;
             this.y = y;
+            if(difficulty != 0){
+                this.problem = createMathProblem(0, 10);
+            }else{
+                this.problem = new digitProblem(getRandomNumber(100, 1000));
+            }
+
             this.speed = 1;
             this.color = 'White';
-            this.font = "16px Courier New";
+            this.font = "bold 18px Courier New";
             this.boss = false;
 
             //Checks if it's time to create a boss problem.
@@ -181,14 +246,13 @@ session_start();
                 if(difficulty != 0){
                     this.problem = createMathProblem(10,20);
                     //this.color = "Yellow";
-                    this.font = "22px Courier New";
+                    this.font = "bold 24px Courier New";
                     this.boss = true;
                     bossCountdown = getRandomNumber(5,15) - difficulty;
                 }
                 else{
                     this.problem = new digitProblem(getRandomNumber(1000, 10000));
-                    //this.color = "Yellow";
-                    this.font = "22px Courier New";
+                    this.font = "bold 24px Courier New";
                     this.boss = true;
                     bossCountdown = getRandomNumber(5,15) - difficulty;
                 }
@@ -216,20 +280,23 @@ session_start();
                 // rnd will be 0, 1, or 2; 3 is an option only for boss problems, whose length is 4
                 rnd = getRandomNumber(0,numStr.length);
                 this.answer = placeValues[rnd];
-                this.problem.str = this.problem.num + ": " + indexToPlace[rnd];
+                this.problem.str = indexToPlace[rnd];
                 console.log(this.answer);
             }
 
             //Deletes and redraws the equation at its new location.
             this.update = function() {
-                ctx = gameArena.context;
                 ctx.fillStyle = this.color;
                 ctx.font = this.font;
-                if(this.type == "arith"){
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+
+                if(difficulty != 0){
                     ctx.fillText(this.problem,this.x,this.y);
                 }
                 else{
-                    ctx.fillText(this.problem.str,this.x,this.y);
+                    ctx.fillText(this.problem.num, this.x, this.y - 8);
+                    ctx.fillText(this.problem.str, this.x, this.y + 10);
                 }
             }
 
@@ -242,7 +309,7 @@ session_start();
 
             //Checks to see if the equation has hit the bottom.
             this.hitBottom = function() {
-                var bottom = gameArena.canvas.height - 18;
+                var bottom = myCanvas.height - 18;
                 if (this.y > bottom) {
                     youLose();
                 }
@@ -292,12 +359,16 @@ session_start();
         function updateGameArea() {
             if (playing == true){
 
-                gameArena.clear();
+                ctx.clearRect(0, 0, myCanvas.width, myCanvas.height);
                 spawnTimer--;
 
-                for(var i = 0; i < problems.length; i++){
-                problems[i].newPosition();
-                problems[i].update();
+                // redraw background
+                ctx.drawImage(bgImage,0,0);
+
+                // this needs to count down so the 0th problem is drawn last, and is thus on top
+                for(var i = matheroids.length - 1; i >= 0; i--){
+                    matheroids[i].newPosition();
+                    matheroids[i].update();
                 }
 
                 if(spawnTimer <= 0){
@@ -305,10 +376,9 @@ session_start();
                     addProblem();
                 }
 
-                // make the problem at hand aqua, but no need if it already is
-                if(problems[0].color != 'Aqua'){
-                    problems[0].updateColor('Aqua');
-                }
+
+                matheroids[0].image = astImage2;
+                matheroids[0].updateColor('Aqua');
             }
         }
 
@@ -328,10 +398,15 @@ session_start();
             if(playing == true){
                 var userAns = document.getElementById("userAnswer").value;
 
-                if(problems.length >= 1){
-                    if(userAns == problems[0].getAnswer()){
-                        problems.splice(0, 1);
+                if(matheroids.length >= 1){
+                    if(userAns == matheroids[0].getAnswer()){
                         score++;
+                        // add another 2 to get a total of 3 points for a boss problem
+                        if(matheroids[0].getBossStatus()){
+                            score++;
+                            score++;
+                        }
+                        matheroids.splice(0, 1);
                         updateScore();
 
                         if (spawnMax >= 80){
