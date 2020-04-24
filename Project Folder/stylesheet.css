@@ -1,20 +1,27 @@
-body {
+body{
 	background-color: #FFFFFF;
+	font-family:sans-serif;
+	letter-spacing: 0.5px;
 }
-
-.gradient {
-	max-width: 250px;
-	padding: 1rem;
-	position: relative;
+div {
+	color:#000000;
 }
-
-.gameBox {
-	border:3px; 
-	background-color: #FFFFFF;
-	border-style:solid; 
-	border-color: black; 
-	padding: 5px; 
-	width: 400px;
-	height: 600px;
+h1{
+	color:#000000;
+	font-family:sans-serif;
 }
-
+#mainMenu{
+	color:#22D2A0;
+	display:block;
+	padding: 15px;	
+}
+#accountSettings{
+	color:#FF5555;
+	padding: 15px;
+	display:block;
+}
+#teacherDashboard{
+	color:#FFD913;
+	padding: 15px;
+	display:block;
+}

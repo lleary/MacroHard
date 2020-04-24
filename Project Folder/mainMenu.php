@@ -17,34 +17,11 @@ session_start();
 	<title>Matheroids</title>
 	<link rel="stylesheet" type="text/css"href="stylesheet.css">
 	<style>
-		body{
-			background-color: #FFFFFF;
-			font-family:sans-serif;
-			letter-spacing: 0.5px;
-		}
-		div {
-			color:#000000;
-		}
-		h1{
-			color:#000000;
-			font-family:sans-serif;
-		}
-		#mainMenu{
-			color:#22D2A0;
-			display:block;
-			padding: 15px;
-			
-		}
-		#accountSettings{
-			color:#FF5555;
-			padding: 15px;
-			display:block;
-		}
-		#teacherDashboard{
-			color:#FFD913;
-			padding: 15px;
-			display:block;
-		}
+
+	<?php
+		include 'stylesheet.css';
+	?>
+
 	</style>
 
 
