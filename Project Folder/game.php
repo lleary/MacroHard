@@ -34,7 +34,7 @@ session_start();
         myCanvas.height = 600;
         const ctx = myCanvas.getContext("2d");
         var bgImage = new Image(400,600);
-        bgImage.src = 'stars_v1.jpg';
+        bgImage.src = 'stars_v2.jpg';
         ctx.drawImage(bgImage,0,0);
         var astImage1 = new Image();
         astImage1.src = 'asteroid_2_v2_default.png';
