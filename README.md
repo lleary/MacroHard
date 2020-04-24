@@ -17,7 +17,7 @@ By MacroHard
 # Release 3
 - Add Problem Option for Teachers
 - Leaderboard
-- Identifying Digit Game
+- ~~Identifying Digit Game~~
 
 # Instruction
 
