@@ -16,7 +16,18 @@ session_start();
     <link rel="stylesheet" type="text/css"href="stylesheet.css">
     <canvas id="sandbox"></canvas>
     <style>
-        canvas {border:1px solid #a9a9a9; background-color: #000000}
+        canvas {
+            border:1px solid #a9a9a9;
+            background-color: #000000;
+        }
+        body{
+            background-color: #44444B;
+        }
+        form {
+            text-align: center;
+            margin: 0 auto;
+            display: block;
+        }
     </style>
 </head>
 
@@ -24,7 +35,7 @@ session_start();
 
     <br/>
 
-    <p id="score">Score: 0<br/></p>
+    <p style="color:white; text-align:center;" id="score">Score: 0<br/></p>
     <span id="prompt"></span>
     <p></p> <!-- for some reason <br/> doesn't work here -->
 
@@ -144,6 +155,17 @@ session_start();
             addProblem();
             document.body.insertBefore(myCanvas, document.body.childNodes[0]);
             gameInterval = setInterval(updateGameArea, 15);
+        }
+
+        function resetGame(){
+            matheroids = [];
+            playing = true;
+            score = 0;
+            spawnMax = 300;
+            spawnTimer = 200;
+            bossCountdown = 10 - difficulty;
+            wrongInARow = 0;
+            startGame();
         }
 
         //Adds a problem to the array of problems.
@@ -442,15 +464,19 @@ session_start();
 
     </script>
 
-    <form id="answerForm" onsubmit="checkAnswer(); return false;" autocomplete="off" style="visibility: visible;">
+    <form id="answerForm" onsubmit="checkAnswer(); return false;" autocomplete="off" style="visibility: visible; color:white;">
         Answer:
         <input type="text" name="answer"  id="userAnswer" placeholder="answer" autofocus/>
     </form>
 
     <br />
 
+    <form id="reset" onsumbit="resetGame(); return false;">
+        <button>Reset Game</button>
+    </form>
+
     <form action="./mainMenu.php" >
-        <button type="submit">Return to main menu</button>
+        <button type="submit">Main menu</button>
     </form>
 
 </body>
