@@ -10,6 +10,11 @@ h1{
 	color:#000000;
 	font-family:sans-serif;
 }
+canvas{
+	padding: 0;
+	margin: auto;
+	display: block;
+}
 #mainMenu{
 	color:#22D2A0;
 	display:block;
