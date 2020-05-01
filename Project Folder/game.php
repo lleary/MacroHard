@@ -144,6 +144,20 @@ session_start();
 
         var gameInterval;
 
+        // laserFrames is how many frames the laser will be onscreen for
+        var laserFrames = 10; // this MUST be > 0
+        var laserCountdown = -1;
+        var laserTargetX;
+        var laserTargetY;
+        var laserReflects = false;
+        var laserColor = "#FF0033";
+
+        var damageFrames = 25;
+        var damageCountdown = -1;
+        var damageX;
+        var damageY;
+        var damageColor = "#FF0000";
+
         // this will be used to make the digit identification game less cheatable
         // for every wrong answer in a row the user will lose a point
         // this will make the cheat method of typing in each digit of each number
@@ -154,18 +168,24 @@ session_start();
         function startGame() {
             addProblem();
             document.body.insertBefore(myCanvas, document.body.childNodes[0]);
-            gameInterval = setInterval(updateGameArea, 15);
+            setInterval(updateGameArea, 15);
         }
 
         function resetGame(){
+            console.log("game was reset");
             matheroids = [];
+            console.log("matheroids length = " + matheroids.length);
             playing = true;
             score = 0;
             spawnMax = 300;
             spawnTimer = 200;
             bossCountdown = 10 - difficulty;
             wrongInARow = 0;
-            startGame();
+            document.getElementById("answerForm").focus();
+            document.getElementById("answerForm").select();
+            addProblem();
+            document.body.insertBefore(myCanvas, document.body.childNodes[0]);
+            updateScore();
         }
 
         //Adds a problem to the array of problems.
@@ -177,7 +197,7 @@ session_start();
                 xSpawn = getRandomNumber(50,250);
             }
 
-            var myGamePiece = new matheroid(xSpawn, -50, 20, 'grey');
+            var myGamePiece = new matheroid(xSpawn, -50);
             matheroids.push(myGamePiece);
             bossCountdown--;
         }
@@ -189,15 +209,10 @@ session_start();
         }
 
         // an object represeting an entire matheroid
-        function matheroid(xCoord, yCoord, r, c){
+        function matheroid(xCoord, yCoord){
             this.object = new object(xCoord, yCoord);
             this.x = xCoord;
             this.y = yCoord;
-            this.radius = r;
-            if(this.object.boss){
-                this.radius = r * 2;
-            }
-            this.astColor = c;
             this.objColor = object.color;
             this.image = astImage1;
 
@@ -398,6 +413,18 @@ session_start();
                     addProblem();
                 }
 
+                if(laserCountdown >= 0){
+                    updateLaser();
+                    laserCountdown--;
+                    if(!laserReflects && laserCountdown == laserFrames - 3){
+                        matheroids.splice(0, 1);
+                    }
+                }
+
+                if(damageCountdown >= 0 && laserReflects){
+                    updateDamage();
+                    damageCountdown--;
+                }
 
                 matheroids[0].image = astImage2;
                 matheroids[0].updateColor('Aqua');
@@ -412,7 +439,7 @@ session_start();
         //Tells the player they lose
         function youLose(){
             playing = false;
-            document.getElementById("score").innerHTML = "Game Over.\n Your final score was: "+score;
+            document.getElementById("score").innerHTML = "Game Over.\n Your final score was: " + score;
         }
 
         //Checks the users given answer.
@@ -425,10 +452,9 @@ session_start();
                         score++;
                         // add another 2 to get a total of 3 points for a boss problem
                         if(matheroids[0].getBossStatus()){
-                            score++;
-                            score++;
+                            score++; score++;
                         }
-                        matheroids.splice(0, 1);
+
                         updateScore();
 
                         if (spawnMax >= 80){
@@ -436,6 +462,8 @@ session_start();
                         }
 
                         wrongInARow = 0;
+
+                        return true;
                     }
                     else{
                         wrongSequence = 0;
@@ -451,28 +479,97 @@ session_start();
                             score--;
                             updateScore();
                         }
-                    }
 
-                    if(score < 0){
-                        score = 0;
-                        youLose();
+                        // automatic loss if score drops below zero
+                        if(score < 0){
+                            score = 0;
+                            youLose();
+                        }
+
+                        return false;
                     }
                 }
-                document.getElementById("userAnswer").value = "";
             }
+        }
+
+        function updateDamage(){
+            ctx.globalAlpha = damageCountdown / damageFrames;
+            ctx.lineWidth = 30;
+            ctx.strokeStyle = "#FF0000"; // this should always be red, regardless of the laser color
+            ctx.moveTo(damageX, damageY);
+            ctx.beginPath();
+            var tmpRadius = 4 * (damageFrames - damageCountdown);
+            ctx.arc(damageX, damageY, tmpRadius, 0, Math.PI, true);
+            ctx.stroke();
+
+            ctx.globalAlpha = 1;
+        }
+
+        function updateLaser(){
+            ctx.globalAlpha = laserCountdown / laserFrames;
+
+            ctx.beginPath();
+            ctx.lineWidth = 14;
+            ctx.strokeStyle = laserColor;
+            ctx.moveTo(200, 600); // center of the bottom of the canvas
+            ctx.lineTo(laserTargetX, laserTargetY + 15);
+            ctx.stroke();
+
+            ctx.lineWidth = 7;
+            ctx.strokeStyle = "#FFFFFF"; // always white regardless of laser color
+            ctx.moveTo(200, 600); // center of the bottom of the canvas
+            ctx.lineTo(laserTargetX, laserTargetY + 15);
+            ctx.stroke();
+
+            if(laserReflects){
+                damageX = 200 + ((laserTargetX - 200) / 1.5);
+                damageY = 600;
+
+                ctx.lineWidth = 14;
+                ctx.strokeStyle = laserColor;
+                ctx.moveTo(laserTargetX, laserTargetY + 15); // center of the bottom of the canvas
+                ctx.lineTo(damageX, damageY);
+                ctx.stroke();
+
+                ctx.lineWidth = 7;
+                ctx.strokeStyle = "#FFFFFF"; // always white regardless of laser color
+                ctx.moveTo(laserTargetX, laserTargetY + 15); // center of the bottom of the canvas
+                ctx.lineTo(damageX, damageY);
+                ctx.stroke();
+            }
+
+            ctx.globalAlpha = 1;
+        }
+
+        function shoot(){
+            // set the target coordinates of the laser
+            laserTargetX = matheroids[0].x;
+            laserTargetY = matheroids[0].y;
+            laserCountdown = laserFrames;
+
+            damageCountdown = damageFrames;
+
+            if(checkAnswer()){
+                laserReflects = false;
+            }
+            else{
+                laserReflects = true;
+            }
+
+            document.getElementById("userAnswer").value = "";
         }
 
     </script>
 
-    <form id="answerForm" onsubmit="checkAnswer(); return false;" autocomplete="off" style="visibility: visible; color:white;">
+    <form id="answerForm" onsubmit="shoot(); return false;" autocomplete="off" style="visibility: visible; color:white;">
         Answer:
         <input type="text" name="answer"  id="userAnswer" placeholder="answer" autofocus/>
     </form>
 
     <br />
 
-    <form id="reset" onsumbit="resetGame(); return false;">
-        <button>Reset Game</button>
+    <form id="reset" onsubmit="resetGame(); return false;">
+        <button>Reset</button>
     </form>
 
     <form action="./mainMenu.php" >
