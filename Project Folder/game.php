@@ -1,7 +1,5 @@
-<?php 
-session_start();
-  if (!isset($_SESSION['user']))
-   {
+<?php session_start();
+  if (!isset($_SESSION['user'])){
       header("location: welcome.php");
       die();
    }
@@ -18,7 +16,7 @@ session_start();
     <style>
         canvas {
             border:1px solid #a9a9a9;
-            background-color: #000000;
+            background-image: url("assets/stars_v2.jpg");
         }
         body{
             background-color: #44444B;
@@ -33,31 +31,75 @@ session_start();
 
 <body onload="startGame()">
 
-    <br/>
-
     <p style="color:white; text-align:center;" id="score">Score: 0<br/></p>
     <span id="prompt"></span>
     <p></p> <!-- for some reason <br/> doesn't work here -->
+
+    <form id="answerForm" onsubmit="shoot(); return false;" autocomplete="off" style="visibility: visible; color:white;">
+        Answer:
+        <input type="text" name="answer"  id="userAnswer" placeholder="answer" autofocus/>
+    </form>
+
+    <br />
+
+    <div style="text-align: center">
+        <button type="button" onclick="resetGame()">Reset</button>
+    </div>
+
+    <form action="./mainMenu.php" >
+        <button type="submit">Main menu</button>
+    </form>
 
     <script type="text/javascript">
         const myCanvas = document.getElementById("sandbox");
         myCanvas.width = 400;
         myCanvas.height = 600;
         const ctx = myCanvas.getContext("2d");
-        var bgImage = new Image(400,600);
-        bgImage.src = 'assets/stars_v2.jpg';
-        ctx.drawImage(bgImage,0,0);
         var astImage1 = new Image();
         astImage1.src = 'assets/asteroid_2_v2_default.png';
         var astImage2 = new Image();
         astImage2.src = 'assets/asteroid_2_v2_red.png';
 
-
         var difficulty = localStorage.getItem("difficulty");
-        console.log("Difficulty is "+difficulty);
+        console.log("Difficulty is " + difficulty);
 
         var indexToPlace = ["ones", "tens", "hundreds", "thousands"];
-        // boss problems can use the thousands place
+
+        var gameInterval;
+
+        var matheroids = [];
+        var problems = [];
+        var playing = true;
+        var score = 0;
+
+        var spawnMax = 500;
+        var spawnTimer = 200;
+        var bossCountdown = 10 - difficulty;
+
+        var wrongSequence = 0;
+
+        // laserFrames is how many frames the laser will be onscreen for
+        var laserFrames = 10; // this MUST be > 0
+        var laserCountdown = -1;
+        var laserTargetX;
+        var laserTargetY;
+        var laserReflects = false;
+        var laserColor = "#FF0033";
+
+        var damageFrames = 25;
+        var damageCountdown = -1;
+        var damageX;
+        var damageY;
+        var damageColor = "#FF0000";
+
+        var explosions = [];
+
+        // this will be used to make the digit identification game less cheatable
+        // for every wrong answer in a row the user will lose a point
+        // this will make the cheat method of typing in each digit of each number
+        // for the digit identification game useless
+        // There will be a grace number of 1 for the digit game, and 2 for other modes
+        var wrongInARow = 0;
 
         // for the digit identification mode, a prompt is necessary
         if(difficulty == 0){
@@ -131,60 +173,47 @@ session_start();
             return num;
         }
 
-        var matheroids = [];
-        var problems = [];
-        var playing = true;
-        var score = 0;
-
-        var spawnMax = 300;
-        var spawnTimer = 200;
-        var bossCountdown = 10 - difficulty;
-
-        var wrongSequence = 0;
-
-        var gameInterval;
-
-        // laserFrames is how many frames the laser will be onscreen for
-        var laserFrames = 10; // this MUST be > 0
-        var laserCountdown = -1;
-        var laserTargetX;
-        var laserTargetY;
-        var laserReflects = false;
-        var laserColor = "#FF0033";
-
-        var damageFrames = 25;
-        var damageCountdown = -1;
-        var damageX;
-        var damageY;
-        var damageColor = "#FF0000";
-
-        // this will be used to make the digit identification game less cheatable
-        // for every wrong answer in a row the user will lose a point
-        // this will make the cheat method of typing in each digit of each number
-        // for the digit identification game useless
-        // There will be a grace number of 1 for the digit game, and 2 for other modes
-        var wrongInARow = 0;
-
         function startGame() {
             addProblem();
             document.body.insertBefore(myCanvas, document.body.childNodes[0]);
-            setInterval(updateGameArea, 15);
+            gameInterval = setInterval(updateGameArea, 15);
         }
 
         function resetGame(){
-            console.log("game was reset");
             matheroids = [];
-            console.log("matheroids length = " + matheroids.length);
+            problems = [];
             playing = true;
             score = 0;
+
             spawnMax = 300;
             spawnTimer = 200;
             bossCountdown = 10 - difficulty;
+
+            wrongSequence = 0;
+
+            laserFrames = 10; // this MUST be > 0
+            laserCountdown = -1;
+            laserTargetX = 0;
+            laserTargetY = 0;
+            laserReflects = false;
+            laserColor = "#FF0033";
+
+            damageFrames = 25;
+            damageCountdown = -1;
+            damageX = 0;
+            damageY = 0;
+            damageColor = "#FF0000";
+
+            explosions = [];
+
             wrongInARow = 0;
-            document.getElementById("answerForm").focus();
-            document.getElementById("answerForm").select();
-            addProblem();
-            document.body.insertBefore(myCanvas, document.body.childNodes[0]);
+
+            answerForm.userAnswer.focus();
+            
+            clearInterval(gameInterval);
+
+            startGame();
+
             updateScore();
         }
 
@@ -339,8 +368,7 @@ session_start();
 
             //Finds the new location for an equation
             this.newPosition = function() {
-                this.y += this.speed;    
-                this.wrong();
+                this.y += this.speed;
                 this.hitBottom();    
             }
 
@@ -349,22 +377,6 @@ session_start();
                 var bottom = myCanvas.height - 18;
                 if (this.y > bottom) {
                     youLose();
-                }
-            }
-
-            this.wrong = function() {
-                if (wrongSequence == 1){
-                    this.x += 2;
-                    wrongSequence++;
-                } else if (wrongSequence == 2){
-                    this.x -= 2;
-                    wrongSequence++;
-                } else if (wrongSequence == 3){
-                    this.x -= 2;
-                    wrongSequence++;
-                } else if (wrongSequence == 4){
-                    this.x += 2;
-                    wrongSequence = 0;
                 }
             }
 
@@ -392,15 +404,12 @@ session_start();
             }
         }
 
-        //Runs every tick.
+        // runs every tick (15ms)
         function updateGameArea() {
             if (playing == true){
 
                 ctx.clearRect(0, 0, myCanvas.width, myCanvas.height);
                 spawnTimer--;
-
-                // redraw background
-                ctx.drawImage(bgImage,0,0);
 
                 // this needs to count down so the 0th problem is drawn last, and is thus on top
                 for(var i = matheroids.length - 1; i >= 0; i--){
@@ -409,16 +418,13 @@ session_start();
                 }
 
                 if(spawnTimer <= 0){
-                    spawnTimer = getRandomNumber(10,spawnMax);
+                    spawnTimer = getRandomNumber(15,spawnMax);
                     addProblem();
                 }
 
                 if(laserCountdown >= 0){
                     updateLaser();
                     laserCountdown--;
-                    if(!laserReflects && laserCountdown == laserFrames - 3){
-                        matheroids.splice(0, 1);
-                    }
                 }
 
                 if(damageCountdown >= 0 && laserReflects){
@@ -426,8 +432,14 @@ session_start();
                     damageCountdown--;
                 }
 
-                matheroids[0].image = astImage2;
-                matheroids[0].updateColor('Aqua');
+                if(explosions.length > 0){
+                    updateExplosions();
+                }
+
+                if(matheroids.length > 0){
+                    matheroids[0].image = astImage2;
+                    matheroids[0].updateColor('Aqua');
+                }
             }
         }
 
@@ -505,7 +517,45 @@ session_start();
             ctx.globalAlpha = 1;
         }
 
+        function explosion(xCoord, yCoord, boss, dead){
+            this.x = xCoord;
+            this.y = yCoord;
+            this.frames = 86;
+            this.countdown = 86;
+            this.isBoss = boss;
+            if(dead){
+                this.countdown = -1;
+            }
+        }
+
+        function updateExplosions(){
+            for(var i = 0; i < explosions.length; i++){
+                var tmpImage = new Image();
+                
+                if(!explosions[i].isBoss){
+                    tmpImage.src = "assets/explosion/frame_" + Math.ceil((explosions[i].frames - explosions[i].countdown) / 2) + ".png";
+                    ctx.drawImage(tmpImage, explosions[i].x - 320, explosions[i].y - 180, 640, 360);
+
+                    // extra countdown tick because the small explosions are faster
+                    explosions[i].countdown--;
+                }
+                else{
+                    // boss explosions are twice as big and take twice as long to happen
+                    tmpImage.src = "assets/explosion/frame_" + Math.ceil((explosions[i].frames - explosions[i].countdown) / 2) + ".png";
+                    ctx.drawImage(tmpImage, explosions[i].x - 640, explosions[i].y - 320, 1280, 720);
+                }
+
+                explosions[i].countdown--;
+
+                if(explosions[i].countdown < 0){
+                    explosions.splice(i,1);
+                }
+            }
+        }
+
         function updateLaser(){
+            console.log("updating laser. explosions count = " + explosions.length);
+
             ctx.globalAlpha = laserCountdown / laserFrames;
 
             ctx.beginPath();
@@ -513,12 +563,14 @@ session_start();
             ctx.strokeStyle = laserColor;
             ctx.moveTo(200, 600); // center of the bottom of the canvas
             ctx.lineTo(laserTargetX, laserTargetY + 15);
+            // ctx.filter = 'blur(2px)'; // this makes the laser look better but can make the program lag one you get past around 60 points
             ctx.stroke();
 
             ctx.lineWidth = 7;
             ctx.strokeStyle = "#FFFFFF"; // always white regardless of laser color
             ctx.moveTo(200, 600); // center of the bottom of the canvas
             ctx.lineTo(laserTargetX, laserTargetY + 15);
+            //ctx.filter = 'blur(0px)';
             ctx.stroke();
 
             if(laserReflects){
@@ -542,6 +594,8 @@ session_start();
         }
 
         function shoot(){
+            console.log("shooting...");
+
             // set the target coordinates of the laser
             laserTargetX = matheroids[0].x;
             laserTargetY = matheroids[0].y;
@@ -550,31 +604,21 @@ session_start();
             damageCountdown = damageFrames;
 
             if(checkAnswer()){
+                console.log("pushing new explosion...");
+                explosions.push(new explosion(laserTargetX,laserTargetY,matheroids[0].getBossStatus()));
+                console.log("new explosion pushed. explosions length = " + explosions.length);
                 laserReflects = false;
+                matheroids.splice(0, 1);
             }
             else{
                 laserReflects = true;
             }
 
             document.getElementById("userAnswer").value = "";
+            console.log("shooting complete.");
         }
 
     </script>
-
-    <form id="answerForm" onsubmit="shoot(); return false;" autocomplete="off" style="visibility: visible; color:white;">
-        Answer:
-        <input type="text" name="answer"  id="userAnswer" placeholder="answer" autofocus/>
-    </form>
-
-    <br />
-
-    <form id="reset" onsubmit="resetGame(); return false;">
-        <button>Reset</button>
-    </form>
-
-    <form action="./mainMenu.php" >
-        <button type="submit">Main menu</button>
-    </form>
 
 </body>
 </html>
