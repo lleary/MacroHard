@@ -72,7 +72,8 @@
         var playing = true;
         var score = 0;
 
-        var spawnMax = 500;
+        var initSpawnMax = 500;
+        var spawnMax = initSpawnMax;
         var spawnTimer = 200;
         var bossCountdown = 10 - difficulty;
 
@@ -185,7 +186,7 @@
             playing = true;
             score = 0;
 
-            spawnMax = 300;
+            spawnMax = initSpawnMax;
             spawnTimer = 200;
             bossCountdown = 10 - difficulty;
 
@@ -594,6 +595,7 @@
         }
 
         function shoot(){
+            console.log("spawnMax = " + spawnMax);
             console.log("shooting...");
 
             // set the target coordinates of the laser
