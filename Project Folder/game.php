@@ -60,6 +60,13 @@
         var astImage2 = new Image();
         astImage2.src = 'assets/asteroid_2_v2_red.png';
 
+        var explosionFrames = [];
+
+        for(var idx = 0; idx < 44; idx++){
+            explosionFrames.push(new Image());
+            explosionFrames[idx].src = "assets/explosion/frame_" + idx + ".png";
+        }
+
         var difficulty = localStorage.getItem("difficulty");
         console.log("Difficulty is " + difficulty);
 
@@ -157,10 +164,10 @@
 
             if(operator == "+"){
                 var ans = num1+num2;
-                console.log(num1+" + "+num2+"="+ans);
+                // console.log(num1+" + "+num2+"="+ans);
             } else if (operator == "-"){
                 var ans = num1-num2;
-                console.log(num1+" - "+num2+"="+ans);
+                // console.log(num1+" - "+num2+"="+ans);
             }
 
             return ans;
@@ -531,19 +538,20 @@
 
         function updateExplosions(){
             for(var i = 0; i < explosions.length; i++){
-                var tmpImage = new Image();
-                
+                var tmpIdx = 0;
                 if(!explosions[i].isBoss){
-                    tmpImage.src = "assets/explosion/frame_" + Math.ceil((explosions[i].frames - explosions[i].countdown) / 2) + ".png";
-                    ctx.drawImage(tmpImage, explosions[i].x - 320, explosions[i].y - 180, 640, 360);
+                    tmpIdx = Math.ceil((explosions[i].frames - explosions[i].countdown) / 2);
+                    
+                    ctx.drawImage(explosionFrames[tmpIdx], explosions[i].x - 320, explosions[i].y - 180, 640, 360);
 
                     // extra countdown tick because the small explosions are faster
                     explosions[i].countdown--;
                 }
                 else{
                     // boss explosions are twice as big and take twice as long to happen
-                    tmpImage.src = "assets/explosion/frame_" + Math.ceil((explosions[i].frames - explosions[i].countdown) / 2) + ".png";
-                    ctx.drawImage(tmpImage, explosions[i].x - 640, explosions[i].y - 320, 1280, 720);
+                    tmpIdx = Math.ceil((explosions[i].frames - explosions[i].countdown) / 2);
+
+                    ctx.drawImage(explosionFrames[tmpIdx], explosions[i].x - 640, explosions[i].y - 320, 1280, 720);
                 }
 
                 explosions[i].countdown--;
@@ -555,7 +563,7 @@
         }
 
         function updateLaser(){
-            console.log("updating laser. explosions count = " + explosions.length);
+            // console.log("updating laser. explosions count = " + explosions.length);
 
             ctx.globalAlpha = laserCountdown / laserFrames;
 
@@ -595,8 +603,10 @@
         }
 
         function shoot(){
-            console.log("spawnMax = " + spawnMax);
-            console.log("shooting...");
+            if(matheroids.length < 1){
+                return;
+            }
+            // console.log("shooting...");
 
             // set the target coordinates of the laser
             laserTargetX = matheroids[0].x;
@@ -606,9 +616,14 @@
             damageCountdown = damageFrames;
 
             if(checkAnswer()){
-                console.log("pushing new explosion...");
+                // console.log("pushing new explosion...");
                 explosions.push(new explosion(laserTargetX,laserTargetY,matheroids[0].getBossStatus()));
-                console.log("new explosion pushed. explosions length = " + explosions.length);
+                // console.log("new explosion pushed. explosions length = " + explosions.length);
+                // console.log("explosions[0].countdown = " + explosions[0].countdown);
+                // console.log("explosions[0].frames = " + explosions[0].frames);
+                // console.log("explosions[0].isBoss = " + explosions[0].isBoss);
+                // console.log("explosions[0].x = " + explosions[0].x);
+                // console.log("explosions[0].y = " + explosions[0].y);
                 laserReflects = false;
                 matheroids.splice(0, 1);
             }
@@ -617,7 +632,7 @@
             }
 
             document.getElementById("userAnswer").value = "";
-            console.log("shooting complete.");
+            // console.log("shooting complete.");
         }
 
     </script>
