@@ -32,7 +32,7 @@
 <body onload="startGame()">
 
     <p style="color:white; text-align:center;" id="score">Score: 0<br/></p>
-    <span id="prompt"></span>
+    <span style="color:white; text-align:center; display:block;" id="prompt"></span>
     <p></p> <!-- for some reason <br/> doesn't work here -->
 
     <form id="answerForm" onsubmit="shoot(); return false;" autocomplete="off" style="visibility: visible; color:white;">
@@ -67,8 +67,8 @@
             explosionFrames[idx].src = "assets/explosion/frame_" + idx + ".png";
         }
 
-        var difficulty = localStorage.getItem("difficulty");
-        console.log("Difficulty is " + difficulty);
+        var gamemode = localStorage.getItem("gamemode");
+        console.log("Gamemode is " + gamemode);
 
         var indexToPlace = ["ones", "tens", "hundreds", "thousands"];
 
@@ -82,9 +82,7 @@
         var initSpawnMax = 500;
         var spawnMax = initSpawnMax;
         var spawnTimer = 200;
-        var bossCountdown = 10 - difficulty;
-
-        var wrongSequence = 0;
+        var bossCountdown = 10 - gamemode;
 
         // laserFrames is how many frames the laser will be onscreen for
         var laserFrames = 10; // this MUST be > 0
@@ -102,15 +100,11 @@
 
         var explosions = [];
 
-        // this will be used to make the digit identification game less cheatable
-        // for every wrong answer in a row the user will lose a point
-        // this will make the cheat method of typing in each digit of each number
-        // for the digit identification game useless
-        // There will be a grace number of 1 for the digit game, and 2 for other modes
-        var wrongInARow = 0;
+        var wrongTotal = 0;
+        var strikes = 3;
 
         // for the digit identification mode, a prompt is necessary
-        if(difficulty == 0){
+        if(gamemode == 0){
             document.getElementById("prompt").innerHTML = "Enter the digit in the stated place";
         }
 
@@ -121,9 +115,9 @@
         //Generates a random addition problem between min and max. Returns the problem in string form.
         function createMathProblem(min, max) { 
 
-            if(difficulty == 1){
+            if(gamemode == 1){
                 var randomSign = 1;
-            }else if(difficulty == 2){
+            }else if(gamemode == 2){
                 var randomSign = 2
             } else {
                 var randomSign = getRandomNumber(1, 3);
@@ -195,9 +189,7 @@
 
             spawnMax = initSpawnMax;
             spawnTimer = 200;
-            bossCountdown = 10 - difficulty;
-
-            wrongSequence = 0;
+            bossCountdown = 10 - gamemode;
 
             laserFrames = 10; // this MUST be > 0
             laserCountdown = -1;
@@ -214,7 +206,7 @@
 
             explosions = [];
 
-            wrongInARow = 0;
+            wrongTotal= 0;
 
             answerForm.userAnswer.focus();
             
@@ -228,7 +220,7 @@
         //Adds a problem to the array of problems.
         function addProblem() {
             var xSpawn;
-            if(difficulty != 0){
+            if(gamemode != 0){
                 xSpawn = getRandomNumber(50,300); 
             }else{
                 xSpawn = getRandomNumber(50,250);
@@ -257,7 +249,7 @@
                 if(this.object.boss){
                     ctx.drawImage(this.image, this.x - 50, this.y - 50, 100, 100);
                 }else{
-                    if(difficulty != 0){
+                    if(gamemode != 0){
                         ctx.drawImage(this.image, this.x - 25, this.y - 25, 50, 50);
                     }
                     else{
@@ -304,7 +296,7 @@
         function object(x, y) {
             this.x = x;
             this.y = y;
-            if(difficulty != 0){
+            if(gamemode != 0){
                 this.problem = createMathProblem(0, 10);
             }else{
                 this.problem = new digitProblem(getRandomNumber(100, 1000));
@@ -317,23 +309,23 @@
 
             //Checks if it's time to create a boss problem.
             if(bossCountdown <= 0){
-                if(difficulty != 0){
+                if(gamemode != 0){
                     this.problem = createMathProblem(10,20);
                     //this.color = "Yellow";
                     this.font = "bold 24px Courier New";
                     this.boss = true;
-                    bossCountdown = getRandomNumber(5,15) - difficulty;
+                    bossCountdown = getRandomNumber(5,15) - gamemode;
                 }
                 else{
                     this.problem = new digitProblem(getRandomNumber(1000, 10000));
                     this.font = "bold 24px Courier New";
                     this.boss = true;
-                    bossCountdown = getRandomNumber(5,15) - difficulty;
+                    bossCountdown = getRandomNumber(5,15) - gamemode;
                 }
             }
 
             // set answer for an arithmetic problem
-            if(difficulty != 0){
+            if(gamemode != 0){
                 this.answer = solveMathProblem(this.problem);
             }
             // set answer for a digit identification problem
@@ -365,7 +357,7 @@
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
 
-                if(difficulty != 0){
+                if(gamemode != 0){
                     ctx.fillText(this.problem,this.x,this.y);
                 }
                 else{
@@ -449,6 +441,25 @@
                     matheroids[0].updateColor('Aqua');
                 }
             }
+            else{
+                ctx.clearRect(0, 0, myCanvas.width, myCanvas.height);
+
+                // no new position since the game is not playing
+                for(var i = matheroids.length - 1; i >= 0; i--){
+                    matheroids[i].update();
+                }
+
+                // the laser and damage need to continue updating if the player loses because of striking out
+                if(laserCountdown >= 0){
+                    updateLaser();
+                    laserCountdown--;
+                }
+
+                if(damageCountdown >= 0 && laserReflects){
+                    updateDamage();
+                    damageCountdown--;
+                }
+            }
         }
 
         //Updates the printed Score
@@ -481,28 +492,12 @@
                             spawnMax = spawnMax - getRandomNumber(0,20);
                         }
 
-                        wrongInARow = 0;
-
                         return true;
                     }
                     else{
-                        wrongSequence = 0;
-                        wrongInARow++;
-                        // for the digit identification gamemode, penalize consecutive wrong answers
-                        // with a grace number of 1
-                        if(difficulty == 0 && wrongInARow > 1){
-                            score--;
-                            updateScore();
-                        }
-                        // for arithmetic, penalize consecutive wrong answers with a grace number of 2
-                        else if(wrongInARow > 2){
-                            score--;
-                            updateScore();
-                        }
+                        wrongTotal++;
 
-                        // automatic loss if score drops below zero
-                        if(score < 0){
-                            score = 0;
+                        if(wrongTotal >= strikes){
                             youLose();
                         }
 
