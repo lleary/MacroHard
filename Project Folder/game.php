@@ -72,6 +72,21 @@
 
         var indexToPlace = ["ones", "tens", "hundreds", "thousands"];
 
+        
+        // these are variables that should ultimately be retrieved as user data and controlled by the teacher for each user or each classroom. That control will be our version of the "Teacher can add problems" feature. These factors work together to create the overall difficulty of the game.
+        var bossAnswerMin = 20; // mininum answer to boss arithmetic problems, inclusive
+        var bossAnswerMax = 39; // maximum answer to boss arithmetic problems, inclusive
+        var normalAnswerMin = 0; // minimum answer to normal arithmetic problems, inclusive
+        var normalAnswerMax = 19; // maximum answer to normal arithmetic problems, inclusive
+
+        var bossDigitMin = 1000; // minimum answer to boss digit problems, inclusive
+        var bossDigitMax = 9999; // maximum answer to boss digit problems, inclusive
+        var normalDigitMin = 100; // minimum answer to normal digit problems, inclusive
+        var normalDigitMax = 999; // maximum answer to normal digit problems, inclusive
+
+        var accelerationCap = 20; // max value of random acceleration applied with each problem solved
+        var initSpawnMax = 500; // starting spawn interval. Higher = slower start.
+
         var gameInterval;
 
         var matheroids = [];
@@ -79,8 +94,7 @@
         var playing = true;
         var score = 0;
 
-        var initSpawnMax = 500;
-        var spawnMax = initSpawnMax;
+        var spawnIntervalMax = initSpawnMax;
         var spawnTimer = 200;
         var bossCountdown = 10 - gamemode;
 
@@ -113,23 +127,31 @@
         // 2 = subtraction and addition.
 
         //Generates a random addition problem between min and max. Returns the problem in string form.
-        function createMathProblem(min, max) { 
+        function newMathProblem(min, max) { 
+            var sign;
 
             if(gamemode == 1){
-                var randomSign = 1;
+                sign = 1;
             }else if(gamemode == 2){
-                var randomSign = 2
+                sign = 2
             } else {
-                var randomSign = getRandomNumber(1, 3);
+                sign = getRandomNumber(1, 3);
             }
 
             var num1 = getRandomNumber(min, max);
-            var num2 = getRandomNumber(min, num1);
+            var num2 = getRandomNumber(min, max);
 
-            if(randomSign == 1){
-                var problem = num1 +"+"+num2;
-            }else if(randomSign == 2){
-                var problem = num1 +"-"+num2;
+            var problem;
+
+            if(sign == 1){
+                problem = num1 + "+" + num2;
+            }else if(sign == 2){
+                if(num1 > num2){
+                    problem = num1 + "-" + num2;
+                }
+                else{
+                    problem = num2 + "-" + num1;
+                }
             }
 
             return problem;
@@ -138,15 +160,12 @@
         //Solves an addition problem in the form "a+b=". Returns the answer.
         function solveMathProblem(problem){
             var operatorLocation;
-            var equalLocation;
             var operator;
 
             for(var i = 0; i < problem.length; i++){
                 if(problem.charAt(i) == "+"){
                     operatorLocation = i;
                     operator = "+";
-                } else if (problem.charAt(i) == "="){
-                    equalLocation = i;
                 } else if (problem.charAt(i) == "-"){
                     operatorLocation = i;
                     operator = "-";
@@ -154,7 +173,7 @@
             }
 
             var num1 = parseInt(problem.slice(0,operatorLocation));
-            var num2 = parseInt(problem.slice(operatorLocation+1,equalLocation));
+            var num2 = parseInt(problem.slice(operatorLocation+1,problem.length));
 
             if(operator == "+"){
                 var ans = num1+num2;
@@ -187,7 +206,7 @@
             playing = true;
             score = 0;
 
-            spawnMax = initSpawnMax;
+            spawnIntervalMax = initSpawnMax;
             spawnTimer = 200;
             bossCountdown = 10 - gamemode;
 
@@ -297,9 +316,9 @@
             this.x = x;
             this.y = y;
             if(gamemode != 0){
-                this.problem = createMathProblem(0, 10);
+                this.problem = newMathProblem(normalAnswerMin, (normalAnswerMax + 1) / 2);
             }else{
-                this.problem = new digitProblem(getRandomNumber(100, 1000));
+                this.problem = new digitProblem(getRandomNumber(normalDigitMin, normalDigitMax + 1));
             }
 
             this.speed = 1;
@@ -310,14 +329,13 @@
             //Checks if it's time to create a boss problem.
             if(bossCountdown <= 0){
                 if(gamemode != 0){
-                    this.problem = createMathProblem(10,20);
-                    //this.color = "Yellow";
+                    this.problem = newMathProblem(bossAnswerMin / 2, (bossAnswerMax + 1) / 2);
                     this.font = "bold 24px Courier New";
                     this.boss = true;
                     bossCountdown = getRandomNumber(5,15) - gamemode;
                 }
                 else{
-                    this.problem = new digitProblem(getRandomNumber(1000, 10000));
+                    this.problem = new digitProblem(getRandomNumber(bossDigitMin, bossDigitMax + 1));
                     this.font = "bold 24px Courier New";
                     this.boss = true;
                     bossCountdown = getRandomNumber(5,15) - gamemode;
@@ -418,7 +436,7 @@
                 }
 
                 if(spawnTimer <= 0){
-                    spawnTimer = getRandomNumber(15,spawnMax);
+                    spawnTimer = getRandomNumber(15,spawnIntervalMax);
                     addProblem();
                 }
 
@@ -488,8 +506,9 @@
 
                         updateScore();
 
-                        if (spawnMax >= 80){
-                            spawnMax = spawnMax - getRandomNumber(0,20);
+                        // apply a random, limited acceleration to the spawn rate
+                        if (spawnIntervalMax >= 80){
+                            spawnIntervalMax = spawnIntervalMax - getRandomNumber(0,accelerationCap);
                         }
 
                         return true;
