@@ -51,9 +51,9 @@ session_start();
 	var level = <?php echo $_SESSION['level'] ?>; 
 	console.log(level);
 
-	function setDifficulty(difficulty){
-		localStorage.setItem("difficulty", difficulty);
-		console.log("Difficulty set to " + difficulty);
+	function setGamemode(gamemode){
+		localStorage.setItem("gamemode", gamemode);
+		console.log("gamemode set to " + gamemode);
 	}
 
 	function updateLevel(){
@@ -110,28 +110,28 @@ session_start();
 
 	<p style="color:#000000;" id="levelText">You are on level *</p>
 
-	<form onsubmit="setDifficulty(1)" action="./game.php">
+	<form onsubmit="setGamemode(1)" action="./game.php">
 		<button type="submit" id="level1Button" disabled>Play Game (Addition)</button>
 	</form>
-	<form onsubmit="setDifficulty(2)" action="./game.php">
+	<form onsubmit="setGamemode(2)" action="./game.php">
 		<button type="submit" id="level2Button" disabled>Play Game (Subtraction)</button>
 	</form>
-	<form onsubmit="setDifficulty(3)" action="./game.php">
+	<form onsubmit="setGamemode(3)" action="./game.php">
 		<button type="submit" id="level3Button" disabled>Play Game (Addition & Subtraction)</button>
 	</form>
-	<form onsubmit="setDifficulty(4)" action="./game.php">
+	<form onsubmit="setGamemode(4)" action="./game.php">
 		<button type="submit" id="level4Button" disabled>Play Game (Level 4)</button>
 	</form>
-	<form onsubmit="setDifficulty(5)" action="./game.php">
+	<form onsubmit="setGamemode(5)" action="./game.php">
 		<button type="submit" id="level5Button" disabled>Play Game (Level 5)</button>
 	</form>
-	<form onsubmit="setDifficulty(6)" action="./game.php">
+	<form onsubmit="setGamemode(6)" action="./game.php">
 		<button type="submit" id="level6Button" disabled>Play Game (Level 6)</button>
 	</form>
-	<form onsubmit="setDifficulty(7)" action="./game.php">
+	<form onsubmit="setGamemode(7)" action="./game.php">
 		<button type="submit" id="level7Button" disabled>Play Game (Level 7)</button>
 	</form>
-	<form onsubmit="setDifficulty(0)" action="./game.php">
+	<form onsubmit="setGamemode(0)" action="./game.php">
 		<button type="submit" id="level0Button">Play Game (Digit Identification)</button>
 	</form>
 		
