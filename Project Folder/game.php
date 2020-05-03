@@ -12,11 +12,11 @@
     <title>Matheroids</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link rel="stylesheet" type="text/css"href="stylesheet.css">
-    <canvas id="sandbox"></canvas>
+    <canvas id="sandbox" width="400" height="600"></canvas>
     <style>
         canvas {
             border:1px solid #a9a9a9;
-            background-image: url("assets/stars_v2.jpg");
+            background-image: url("assets/earth_v1.jpg");
         }
         body{
             background-color: #44444B;
@@ -31,20 +31,11 @@
 
 <body onload="startGame()">
 
-    <p style="color:white; text-align:center;" id="score">Score: 0<br/></p>
-    <span style="color:white; text-align:center; display:block;" id="prompt"></span>
-    <p></p> <!-- for some reason <br/> doesn't work here -->
-
     <form id="answerForm" onsubmit="shoot(); return false;" autocomplete="off" style="visibility: visible; color:white;">
-        Answer:
-        <input type="text" name="answer"  id="userAnswer" placeholder="answer" autofocus/>
+        <input type="text" name="answer"  id="userAnswer" placeholder="answer" maxlength="2" size="4" autofocus/>
     </form>
 
     <br />
-
-    <div style="text-align: center">
-        <button type="button" onclick="resetGame()">Reset</button>
-    </div>
 
     <form action="./mainMenu.php" >
         <button type="submit">Main menu</button>
@@ -52,9 +43,8 @@
 
     <script type="text/javascript">
         const myCanvas = document.getElementById("sandbox");
-        myCanvas.width = 400;
-        myCanvas.height = 600;
         const ctx = myCanvas.getContext("2d");
+
         var astImage1 = new Image();
         astImage1.src = 'assets/asteroid_2_v2_default.png';
         var astImage2 = new Image();
@@ -101,8 +91,8 @@
         // laserFrames is how many frames the laser will be onscreen for
         var laserFrames = 10; // this MUST be > 0
         var laserCountdown = -1;
-        var laserTargetX;
-        var laserTargetY;
+        var laserTargetX = 200;
+        var laserTargetY = 0;
         var laserReflects = false;
         var laserColor = "#FF0033";
 
@@ -117,14 +107,27 @@
         var wrongTotal = 0;
         var strikes = 3;
 
-        // for the digit identification mode, a prompt is necessary
-        if(gamemode == 0){
-            document.getElementById("prompt").innerHTML = "Enter the digit in the stated place";
-        }
+        // this is used to ensure the focus is properly put on the answerForm when resetting by clicking Play Again in the canvas (otherwise the canvas gets the focus because you clicked on it)
+        var focusCountdown = 1;
 
-        // 0 = digit identification
-        // 1 = addition only.
-        // 2 = subtraction and addition.
+        // gamemodes are as follows: 0: digit identification. 1: additon. 2: subtraction. 3: addition and subtraction
+
+        var mouse = { x: undefined, y: undefined}
+
+        window.addEventListener('mousemove', 
+            function(event){
+                // convert client coordinates to canvas coordinates
+                // this depends on the canvas being centered
+                mouse.x = event.pageX - (window.innerWidth / 2) + 200 + 8;
+                mouse.y = event.pageY - 8;
+        });
+
+        window.addEventListener('mousedown',
+            function(event){
+                if(!playing && mouse.x > 80 && mouse.x < 320 && mouse.y > 350 && mouse.y < 400){
+                    resetGame();
+                }
+        });
 
         //Generates a random addition problem between min and max. Returns the problem in string form.
         function newMathProblem(min, max) { 
@@ -198,6 +201,7 @@
             addProblem();
             document.body.insertBefore(myCanvas, document.body.childNodes[0]);
             gameInterval = setInterval(updateGameArea, 15);
+            updateGameArea();
         }
 
         function resetGame(){
@@ -212,7 +216,7 @@
 
             laserFrames = 10; // this MUST be > 0
             laserCountdown = -1;
-            laserTargetX = 0;
+            laserTargetX = 200;
             laserTargetY = 0;
             laserReflects = false;
             laserColor = "#FF0033";
@@ -227,7 +231,7 @@
 
             wrongTotal= 0;
 
-            answerForm.userAnswer.focus();
+            focusCountdown = 1;
             
             clearInterval(gameInterval);
 
@@ -242,7 +246,7 @@
             if(gamemode != 0){
                 xSpawn = getRandomNumber(50,300); 
             }else{
-                xSpawn = getRandomNumber(50,250);
+                xSpawn = getRandomNumber(100,250);
             }
 
             var myGamePiece = new matheroid(xSpawn, -50);
@@ -332,13 +336,13 @@
                     this.problem = newMathProblem(bossAnswerMin / 2, (bossAnswerMax + 1) / 2);
                     this.font = "bold 24px Courier New";
                     this.boss = true;
-                    bossCountdown = getRandomNumber(5,15) - gamemode;
+                    bossCountdown = getRandomNumber(5,10);
                 }
                 else{
                     this.problem = new digitProblem(getRandomNumber(bossDigitMin, bossDigitMax + 1));
                     this.font = "bold 24px Courier New";
                     this.boss = true;
-                    bossCountdown = getRandomNumber(5,15) - gamemode;
+                    bossCountdown = getRandomNumber(5,10);
                 }
             }
 
@@ -392,9 +396,9 @@
 
             //Checks to see if the equation has hit the bottom.
             this.hitBottom = function() {
-                var bottom = myCanvas.height - 18;
-                if (this.y > bottom) {
+                if (this.y == myCanvas.height - 40) {
                     youLose();
+                    explosions.push(new explosion(this.x,this.y,true));
                 }
             }
 
@@ -422,73 +426,107 @@
             }
         }
 
-        // runs every tick (15ms)
+        // runs every tick (1/60th of a second)
         function updateGameArea() {
-            if (playing == true){
-
-                ctx.clearRect(0, 0, myCanvas.width, myCanvas.height);
-                spawnTimer--;
-
-                // this needs to count down so the 0th problem is drawn last, and is thus on top
-                for(var i = matheroids.length - 1; i >= 0; i--){
-                    matheroids[i].newPosition();
-                    matheroids[i].update();
+            if(focusCountdown >= 0){
+                if(focusCountdown == 0){
+                    answerForm.userAnswer.focus();
                 }
+                focusCountdown--;
+            }
+
+
+            ctx.clearRect(0, 0, myCanvas.width, myCanvas.height);
+
+            if (playing){
+                spawnTimer--;
 
                 if(spawnTimer <= 0){
                     spawnTimer = getRandomNumber(15,spawnIntervalMax);
                     addProblem();
                 }
-
-                if(laserCountdown >= 0){
-                    updateLaser();
-                    laserCountdown--;
-                }
-
-                if(damageCountdown >= 0 && laserReflects){
-                    updateDamage();
-                    damageCountdown--;
-                }
-
-                if(explosions.length > 0){
-                    updateExplosions();
-                }
-
-                if(matheroids.length > 0){
-                    matheroids[0].image = astImage2;
-                    matheroids[0].updateColor('Aqua');
-                }
             }
-            else{
-                ctx.clearRect(0, 0, myCanvas.width, myCanvas.height);
 
-                // no new position since the game is not playing
-                for(var i = matheroids.length - 1; i >= 0; i--){
-                    matheroids[i].update();
-                }
+            // this needs to count down so the 0th problem is drawn last, and is thus on top
+            for(var i = matheroids.length - 1; i >= 0; i--){
+                matheroids[i].newPosition();
+                matheroids[i].update();
+            }
 
-                // the laser and damage need to continue updating if the player loses because of striking out
-                if(laserCountdown >= 0){
-                    updateLaser();
-                    laserCountdown--;
-                }
+            if(spawnTimer <= 0){
+                spawnTimer = getRandomNumber(15,spawnIntervalMax);
+                addProblem();
+            }
 
-                if(damageCountdown >= 0 && laserReflects){
-                    updateDamage();
-                    damageCountdown--;
-                }
+            if(laserCountdown >= 0){
+                updateLaser();
+                laserCountdown--;
+            }
+
+            updateCannon();
+
+            if(damageCountdown >= 0 && laserReflects){
+                updateDamage();
+                damageCountdown--;
+            }
+
+            if(explosions.length > 0){
+                updateExplosions();
+            }
+
+            updateScore();
+
+            if(matheroids.length > 0){
+                matheroids[0].image = astImage2;
+                matheroids[0].updateColor('Aqua');
             }
         }
 
         //Updates the printed Score
         function updateScore(){
-            document.getElementById("score").innerHTML = "Score: "+score;
+            if(playing){
+                ctx.beginPath();
+                ctx.fillStyle = "#FF0000";
+                ctx.font = "bold 46px Impact";
+                ctx.fillText(score,30,35);
+            }
+            else{
+                ctx.beginPath();
+                ctx.fillStyle = "#FF0000";
+                ctx.font = "bold 80px Impact";
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText("Game Over", 200, 225);
+
+                ctx.beginPath();
+                ctx.font = "bold 40px Courier New";
+                ctx.fillText("Final score: " + score, 200, 300);
+
+                if(mouse.x > 80 && mouse.x < 320 && mouse.y > 350 && mouse.y < 400){
+                    ctx.beginPath();
+                    ctx.lineWidth = 1;
+                    ctx.fillStyle = "#FFFFCC";
+                    ctx.rect(80, 350, 240, 50);
+                    ctx.fill();
+                }
+
+                ctx.beginPath();
+                ctx.lineWidth = 5;
+                ctx.strokeStyle = "#FF0000";
+                ctx.rect(80, 350, 240, 50);
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.fillStyle = "#FF0000";
+                ctx.font = "bold 36px Courier New";
+                ctx.fillText("Play Again", 200, 375);
+            }
         }
 
         //Tells the player they lose
         function youLose(){
             playing = false;
-            document.getElementById("score").innerHTML = "Game Over.\n Your final score was: " + score;
+            matheroids.splice(0,1);
         }
 
         //Checks the users given answer.
@@ -539,33 +577,33 @@
             ctx.globalAlpha = 1;
         }
 
-        function explosion(xCoord, yCoord, boss, dead){
+        function explosion(xCoord, yCoord, boss){
             this.x = xCoord;
             this.y = yCoord;
             this.frames = 86;
             this.countdown = 86;
             this.isBoss = boss;
-            if(dead){
-                this.countdown = -1;
+            this.size = 1;
+            if(this.isBoss){
+                this.size = 2;
             }
         }
 
         function updateExplosions(){
             for(var i = 0; i < explosions.length; i++){
                 var tmpIdx = 0;
-                if(!explosions[i].isBoss){
-                    tmpIdx = Math.ceil((explosions[i].frames - explosions[i].countdown) / 2);
-                    
-                    ctx.drawImage(explosionFrames[tmpIdx], explosions[i].x - 320, explosions[i].y - 180, 640, 360);
+                tmpIdx = Math.ceil((explosions[i].frames - explosions[i].countdown) / 2);
 
+                var xPos = explosions[i].x - (320 * explosions[i].size);
+                var yPos = explosions[i].y - (180 * explosions[i].size);
+                var xScale = 640 * explosions[i].size;
+                var yScale = 360 * explosions[i].size;
+                
+                ctx.drawImage(explosionFrames[tmpIdx], xPos, yPos, xScale, yScale);
+
+                if(!explosions[i].isBoss){
                     // extra countdown tick because the small explosions are faster
                     explosions[i].countdown--;
-                }
-                else{
-                    // boss explosions are twice as big and take twice as long to happen
-                    tmpIdx = Math.ceil((explosions[i].frames - explosions[i].countdown) / 2);
-
-                    ctx.drawImage(explosionFrames[tmpIdx], explosions[i].x - 640, explosions[i].y - 320, 1280, 720);
                 }
 
                 explosions[i].countdown--;
@@ -581,16 +619,17 @@
 
             ctx.globalAlpha = laserCountdown / laserFrames;
 
-            ctx.beginPath();
-            ctx.lineWidth = 14;
+            ctx.lineWidth = 10;
             ctx.strokeStyle = laserColor;
+            ctx.beginPath();
             ctx.moveTo(200, 600); // center of the bottom of the canvas
             ctx.lineTo(laserTargetX, laserTargetY + 15);
             // ctx.filter = 'blur(2px)'; // this makes the laser look better but can make the program lag one you get past around 60 points
             ctx.stroke();
 
-            ctx.lineWidth = 7;
+            ctx.lineWidth = 5;
             ctx.strokeStyle = "#FFFFFF"; // always white regardless of laser color
+            ctx.beginPath();
             ctx.moveTo(200, 600); // center of the bottom of the canvas
             ctx.lineTo(laserTargetX, laserTargetY + 15);
             //ctx.filter = 'blur(0px)';
@@ -600,13 +639,13 @@
                 damageX = 200 + ((laserTargetX - 200) / 1.5);
                 damageY = 600;
 
-                ctx.lineWidth = 14;
+                ctx.lineWidth = 10;
                 ctx.strokeStyle = laserColor;
                 ctx.moveTo(laserTargetX, laserTargetY + 15); // center of the bottom of the canvas
                 ctx.lineTo(damageX, damageY);
                 ctx.stroke();
 
-                ctx.lineWidth = 7;
+                ctx.lineWidth = 5;
                 ctx.strokeStyle = "#FFFFFF"; // always white regardless of laser color
                 ctx.moveTo(laserTargetX, laserTargetY + 15); // center of the bottom of the canvas
                 ctx.lineTo(damageX, damageY);
@@ -614,6 +653,50 @@
             }
 
             ctx.globalAlpha = 1;
+        }
+
+        function updateCannon(){
+            var radius = 30;
+
+            ctx.beginPath();
+            ctx.lineWidth = 1;
+            ctx.fillStyle = "#444444"; // some sort of grey
+            ctx.moveTo(200, 600);
+            ctx.arc(200, 610, radius, 0, Math.PI, true);
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.lineWidth = 16;
+            ctx.strokeStyle = "#444444";
+            ctx.moveTo(200, 600);
+
+            var cannonLength = 38;
+
+            var dx = laserTargetX - 200;
+            var dy = 600 - laserTargetY;
+
+            if(dx == 0){
+                ctx.lineTo(200, 600 - cannonLength);
+                ctx.stroke();
+            }
+            else{
+                var theta = Math.atan(dy / dx);
+                //console.log("theta: " + theta);
+
+                var endCannonX = (cannonLength * Math.cos(theta)) + 200;
+                var endCannonY = (cannonLength * Math.sin(theta)) + 600;
+                //console.log("endCannonY = " + endCannonY);
+
+                //ctx.beginPath();
+
+                if(dx < 0){
+                    ctx.lineTo(400 - endCannonX, endCannonY);
+                }
+                else{
+                    ctx.lineTo(endCannonX, 1200 - endCannonY);
+                }
+                ctx.stroke();
+            }
         }
 
         function shoot(){
@@ -630,14 +713,7 @@
             damageCountdown = damageFrames;
 
             if(checkAnswer()){
-                // console.log("pushing new explosion...");
                 explosions.push(new explosion(laserTargetX,laserTargetY,matheroids[0].getBossStatus()));
-                // console.log("new explosion pushed. explosions length = " + explosions.length);
-                // console.log("explosions[0].countdown = " + explosions[0].countdown);
-                // console.log("explosions[0].frames = " + explosions[0].frames);
-                // console.log("explosions[0].isBoss = " + explosions[0].isBoss);
-                // console.log("explosions[0].x = " + explosions[0].x);
-                // console.log("explosions[0].y = " + explosions[0].y);
                 laserReflects = false;
                 matheroids.splice(0, 1);
             }
