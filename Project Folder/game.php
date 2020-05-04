@@ -64,6 +64,28 @@
         var astImage2 = new Image();
         astImage2.src = 'assets/asteroid_2_v2_red.png';
 
+        var clickSound = new Audio("assets/click_v1.mp3");
+
+        var bossExplodeSounds = [];
+        var normalExplodeSounds = [];
+        var laserSounds = [];
+        var damageSounds = [];
+
+        var polyphony = 16;
+
+        // multiple audio objects to support polyphony
+        for(var i = 0; i < polyphony; i++){
+            bossExplodeSounds.push(new Audio("assets/explosion_boss_v2.mp3"));
+            normalExplodeSounds.push(new Audio("assets/explosion_normal_v2.mp3"));
+            laserSounds.push(new Audio("assets/laser_sfx_v2.mp3"));
+            damageSounds.push(new Audio("assets/damage_v1.mp3"));
+        }
+
+        bossExplodeSoundIdx = 0;
+        normalExplodeSoundIdx = 0;
+        laserSoundIdx = 0;
+        damageSoundIdx = 0;
+
         var explosionFrames = [];
 
         for(var idx = 0; idx < 44; idx++){
@@ -139,6 +161,7 @@
         window.addEventListener('mousedown',
             function(event){
                 if(!playing && mouse.x > 80 && mouse.x < 320 && mouse.y > 350 && mouse.y < 400){
+                    clickSound.play();
                     resetGame();
                 }
         });
@@ -475,6 +498,12 @@
                     youLose();
                     updateTop();
                     drawPlayAgainButton();
+                    bossExplodeSounds[bossExplodeSoundIdx].play();
+                    if(bossExplodeSoundIdx >= polyphony - 1){
+                        bossExplodeSoundIdx = 0;
+                    }else{
+                        bossExplodeSoundIdx++;
+                    }
                     explosions.push(new explosion(this.x,this.y,true));
                 }
             }
@@ -789,13 +818,22 @@
 
         function shoot(){
             if(matheroids.length < 1){
-                return;
+                laserTargetX = 200;
+                laserTargetY = 0;
             }
-            // console.log("shooting...");
+            else{
+                laserTargetX = matheroids[0].x;
+                laserTargetY = matheroids[0].y;
+            }
 
-            // set the target coordinates of the laser
-            laserTargetX = matheroids[0].x;
-            laserTargetY = matheroids[0].y;
+            laserSounds[laserSoundIdx].play();
+            if(laserSoundIdx >= polyphony - 1){
+                laserSoundIdx = 0;
+            }
+            else{
+                laserSoundIdx++;
+            }
+
             laserCountdown = laserFrames;
 
             damageCountdown = damageFrames;
@@ -803,10 +841,38 @@
             if(checkAnswer()){
                 explosions.push(new explosion(laserTargetX,laserTargetY,matheroids[0].getBossStatus()));
                 laserReflects = false;
+
+                if(matheroids[0].getBossStatus()){
+                    bossExplodeSounds[bossExplodeSoundIdx].play();
+                    if(bossExplodeSoundIdx >= polyphony - 1){
+                        bossExplodeSoundIdx = 0;
+                    }
+                    else{
+                        bossExplodeSoundIdx++;
+                    }
+                }
+                else{
+                    normalExplodeSounds[normalExplodeSoundIdx].play();
+                    if(normalExplodeSoundIdx >= polyphony - 1){
+                        normalExplodeSoundIdx = 0;
+                    }
+                    else{
+                        normalExplodeSoundIdx++;
+                    }
+                }
+
                 matheroids.splice(0, 1);
             }
             else{
                 laserReflects = true;
+
+                damageSounds[damageSoundIdx].play();
+                if(damageSoundIdx >= polyphony - 1){
+                    damageSoundIdx = 0;
+                }
+                else{
+                    damageSoundIdx++;
+                }
             }
 
             updateTop();
