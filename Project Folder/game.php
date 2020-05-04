@@ -12,12 +12,24 @@
     <title>Matheroids</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link rel="stylesheet" type="text/css"href="stylesheet.css">
-    <canvas id="sandbox" width="400" height="600"></canvas>
+    <div id="stage">
+        <canvas id="top-layer" width="400" height="600"></canvas>
+        <canvas id="mid-layer" width="400" height="600"></canvas>
+    </div>
     <style>
-        canvas {
-            border:1px solid #a9a9a9;
+        #stage{
+            width: 400px;
+            height: 600px;
+            position: relative;
+            border: 1px solid #a9a9a9;
+            margin: auto;
             background-image: url("assets/earth_v1.jpg");
         }
+        canvas {
+            position: absolute;
+        }
+        #top-layer { z-index: 3; }
+        #mid-layer { z-index: 2; }
         body{
             background-color: #44444B;
         }
@@ -42,8 +54,10 @@
     </form>
 
     <script type="text/javascript">
-        const myCanvas = document.getElementById("sandbox");
-        const ctx = myCanvas.getContext("2d");
+        const topCanvas = document.getElementById("top-layer");
+        const midCanvas = document.getElementById("mid-layer");
+        const topCtx = topCanvas.getContext("2d");
+        const midCtx = midCanvas.getContext("2d");
 
         var astImage1 = new Image();
         astImage1.src = 'assets/asteroid_2_v2_default.png';
@@ -199,9 +213,9 @@
 
         function startGame() {
             addProblem();
-            document.body.insertBefore(myCanvas, document.body.childNodes[0]);
-            gameInterval = setInterval(updateGameArea, 15);
             updateGameArea();
+            updateTop();
+            gameInterval = setInterval(updateGameArea, 15);
         }
 
         function resetGame(){
@@ -250,6 +264,7 @@
             }
 
             var myGamePiece = new matheroid(xSpawn, -50);
+            myGamePiece.renderMatheroid();
             matheroids.push(myGamePiece);
             bossCountdown--;
         }
@@ -267,21 +282,97 @@
             this.y = yCoord;
             this.objColor = object.color;
             this.image = astImage1;
+            this.render = document.createElement('canvas');
+            var renCtx = this.render.getContext('2d');
+
+            this.renderMatheroid = function(){
+                renCtx.clearRect(0, 0, this.render.width, this.render.height);
+
+                // normal arithmetic
+                if(gamemode != 0 && !this.object.getBossStatus()){
+                    this.render.width = 50;
+                    this.render.height = 50;
+
+                    //draw asteroid
+                    renCtx.drawImage(this.image,0,0,50,50);
+
+                    //draw arithmetic problem
+                    renCtx.fillStyle = this.object.color;
+                    renCtx.font = this.object.font;
+                    renCtx.textAlign = 'center';
+                    renCtx.textBaseline = 'middle';
+                    renCtx.fillText(this.object.problem,25,25);
+                    console.log("normal problem rendered: " + this.object.problem);
+                }
+                // boss arithmetic
+                else if(gamemode != 0 && this.object.getBossStatus()){
+                    this.render.width = 100;
+                    this.render.height = 100;
+
+                    //draw asteroid
+                    renCtx.drawImage(this.image,0,0,100,100);
+
+                    //draw arithmetic problem
+                    renCtx.fillStyle = this.object.color;
+                    renCtx.font = this.object.font;
+                    renCtx.textAlign = 'center';
+                    renCtx.textBaseline = 'middle';
+                    renCtx.fillText(this.object.problem,50,50);
+                    console.log("boss problem rendered: " + this.object.problem);
+                }
+                else{
+                    // normal digit ID
+                    if(!this.object.getBossStatus()){
+                        this.render.width = 100;
+                        this.render.height = 60;
+
+                        //draw asteroid
+                        renCtx.drawImage(this.image,20,0,60,60);
+
+                        //draw text
+                        renCtx.fillStyle = this.object.color;
+                        renCtx.font = this.object.font;
+                        renCtx.textAlign = 'center';
+                        renCtx.textBaseline = 'middle';
+                        renCtx.fillText(this.object.problem.num, 50, 30 - 8);
+                        renCtx.fillText(this.object.problem.str, 50, 30 + 10);
+                    }
+                    // boss digit ID
+                    else{
+                        this.render.width = 200;
+                        this.render.height = 100;
+
+                        //draw asteroid
+                        renCtx.drawImage(this.image,50,0,100,100);
+
+                        //draw text
+                        renCtx.fillStyle = this.object.color;
+                        renCtx.font = this.object.font;
+                        renCtx.textAlign = 'center';
+                        renCtx.textBaseline = 'middle';
+                        renCtx.fillText(this.object.problem.num, 100, 60 - 12);
+                        renCtx.fillText(this.object.problem.str, 100, 60 + 10);
+                    }
+                }
+            }
 
             this.update = function(){
                 if(this.object.boss){
-                    ctx.drawImage(this.image, this.x - 50, this.y - 50, 100, 100);
-                }else{
                     if(gamemode != 0){
-                        ctx.drawImage(this.image, this.x - 25, this.y - 25, 50, 50);
+                        midCtx.drawImage(this.render, this.x - 50, this.y - 50);
                     }
                     else{
-                        ctx.drawImage(this.image, this.x - 30, this.y - 30, 60, 60);
+                        midCtx.drawImage(this.render, this.x - 100, this.y - 50);
                     }
                 }
-
-                // update the math problem inside
-                this.object.update();
+                else{
+                    if(gamemode != 0){
+                        midCtx.drawImage(this.render, this.x - 25, this.y - 25);
+                    }
+                    else{
+                        midCtx.drawImage(this.render, this.x - 50, this.y - 30);
+                    }
+                }
             }
 
             this.newPosition = function(){
@@ -372,22 +463,6 @@
                 console.log(this.answer);
             }
 
-            //Deletes and redraws the equation at its new location.
-            this.update = function() {
-                ctx.fillStyle = this.color;
-                ctx.font = this.font;
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-
-                if(gamemode != 0){
-                    ctx.fillText(this.problem,this.x,this.y);
-                }
-                else{
-                    ctx.fillText(this.problem.num, this.x, this.y - 8);
-                    ctx.fillText(this.problem.str, this.x, this.y + 10);
-                }
-            }
-
             //Finds the new location for an equation
             this.newPosition = function() {
                 this.y += this.speed;
@@ -396,8 +471,10 @@
 
             //Checks to see if the equation has hit the bottom.
             this.hitBottom = function() {
-                if (this.y == myCanvas.height - 40) {
+                if (this.y == midCanvas.height - 40) {
                     youLose();
+                    updateTop();
+                    drawPlayAgainButton();
                     explosions.push(new explosion(this.x,this.y,true));
                 }
             }
@@ -426,7 +503,13 @@
             }
         }
 
-        // runs every tick (1/60th of a second)
+        function updateTop(){
+            topCtx.clearRect(0, 0, topCanvas.width, topCanvas.height);
+            updateScore();
+            updateCannon();
+        }
+
+        // runs every tick (15ms)
         function updateGameArea() {
             if(focusCountdown >= 0){
                 if(focusCountdown == 0){
@@ -435,17 +518,7 @@
                 focusCountdown--;
             }
 
-
-            ctx.clearRect(0, 0, myCanvas.width, myCanvas.height);
-
-            if (playing){
-                spawnTimer--;
-
-                if(spawnTimer <= 0){
-                    spawnTimer = getRandomNumber(15,spawnIntervalMax);
-                    addProblem();
-                }
-            }
+            midCtx.clearRect(0, 0, midCanvas.width, midCanvas.height);
 
             // this needs to count down so the 0th problem is drawn last, and is thus on top
             for(var i = matheroids.length - 1; i >= 0; i--){
@@ -463,8 +536,6 @@
                 laserCountdown--;
             }
 
-            updateCannon();
-
             if(damageCountdown >= 0 && laserReflects){
                 updateDamage();
                 damageCountdown--;
@@ -474,53 +545,70 @@
                 updateExplosions();
             }
 
-            updateScore();
+            if (playing){
+                spawnTimer--;
 
-            if(matheroids.length > 0){
-                matheroids[0].image = astImage2;
-                matheroids[0].updateColor('Aqua');
+                if(spawnTimer <= 0){
+                    spawnTimer = getRandomNumber(15,spawnIntervalMax);
+                    addProblem();
+                }
+
+                if(matheroids.length > 0){
+                    matheroids[0].image = astImage2;
+                    matheroids[0].updateColor('Aqua');
+                    matheroids[0].renderMatheroid();
+                }
+            }
+            else{
+                if(mouse.x > 80 && mouse.x < 320 && mouse.y > 350 && mouse.y < 400){
+                    highlightPlayAgainButton();
+                }
             }
         }
 
         //Updates the printed Score
         function updateScore(){
             if(playing){
-                ctx.beginPath();
-                ctx.fillStyle = "#FF0000";
-                ctx.font = "bold 46px Impact";
-                ctx.fillText(score,30,35);
+                topCtx.beginPath();
+                topCtx.fillStyle = "#FF0000";
+                topCtx.font = "bold 46px Impact";
+                topCtx.textAlign = 'left';
+                topCtx.textBaseline = 'top';
+                topCtx.fillText(score,10,10);
             }
             else{
-                ctx.beginPath();
-                ctx.fillStyle = "#FF0000";
-                ctx.font = "bold 80px Impact";
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                ctx.fillText("Game Over", 200, 225);
+                topCtx.beginPath();
+                topCtx.fillStyle = "#FF0000";
+                topCtx.font = "bold 80px Impact";
+                topCtx.textAlign = 'center';
+                topCtx.textBaseline = 'middle';
+                topCtx.fillText("Game Over", 200, 225);
 
-                ctx.beginPath();
-                ctx.font = "bold 40px Courier New";
-                ctx.fillText("Final score: " + score, 200, 300);
-
-                if(mouse.x > 80 && mouse.x < 320 && mouse.y > 350 && mouse.y < 400){
-                    ctx.beginPath();
-                    ctx.lineWidth = 1;
-                    ctx.fillStyle = "#FFFFCC";
-                    ctx.rect(80, 350, 240, 50);
-                    ctx.fill();
-                }
-
-                ctx.beginPath();
-                ctx.lineWidth = 5;
-                ctx.strokeStyle = "#FF0000";
-                ctx.rect(80, 350, 240, 50);
-                ctx.stroke();
-
-                ctx.beginPath();
-                ctx.fillStyle = "#FF0000";
-                ctx.font = "bold 36px Courier New";
-                ctx.fillText("Play Again", 200, 375);
+                topCtx.beginPath();
+                topCtx.font = "bold 40px Courier New";
+                topCtx.fillText("Final score: " + score, 200, 300);
             }
+        }
+
+        function highlightPlayAgainButton(){
+            midCtx.beginPath();
+            midCtx.lineWidth = 1;
+            midCtx.fillStyle = "#FFFFCC";
+            midCtx.rect(80, 350, 240, 50);
+            midCtx.fill();
+        }
+
+        function drawPlayAgainButton(){
+            topCtx.beginPath();
+            topCtx.lineWidth = 5;
+            topCtx.strokeStyle = "#FF0000";
+            topCtx.rect(80, 350, 240, 50);
+            topCtx.stroke();
+
+            topCtx.beginPath();
+            topCtx.fillStyle = "#FF0000";
+            topCtx.font = "bold 36px Courier New";
+            topCtx.fillText("Play Again", 200, 375);
         }
 
         //Tells the player they lose
@@ -565,16 +653,16 @@
         }
 
         function updateDamage(){
-            ctx.globalAlpha = damageCountdown / damageFrames;
-            ctx.lineWidth = 30;
-            ctx.strokeStyle = "#FF0000"; // this should always be red, regardless of the laser color
-            ctx.moveTo(damageX, damageY);
-            ctx.beginPath();
+            midCtx.globalAlpha = damageCountdown / damageFrames;
+            midCtx.lineWidth = 30;
+            midCtx.strokeStyle = "#FF0000"; // this should always be red, regardless of the laser color
+            midCtx.moveTo(damageX, damageY);
+            midCtx.beginPath();
             var tmpRadius = 4 * (damageFrames - damageCountdown);
-            ctx.arc(damageX, damageY, tmpRadius, 0, Math.PI, true);
-            ctx.stroke();
+            midCtx.arc(damageX, damageY, tmpRadius, 0, Math.PI, true);
+            midCtx.stroke();
 
-            ctx.globalAlpha = 1;
+            midCtx.globalAlpha = 1;
         }
 
         function explosion(xCoord, yCoord, boss){
@@ -599,7 +687,7 @@
                 var xScale = 640 * explosions[i].size;
                 var yScale = 360 * explosions[i].size;
                 
-                ctx.drawImage(explosionFrames[tmpIdx], xPos, yPos, xScale, yScale);
+                midCtx.drawImage(explosionFrames[tmpIdx], xPos, yPos, xScale, yScale);
 
                 if(!explosions[i].isBoss){
                     // extra countdown tick because the small explosions are faster
@@ -617,58 +705,58 @@
         function updateLaser(){
             // console.log("updating laser. explosions count = " + explosions.length);
 
-            ctx.globalAlpha = laserCountdown / laserFrames;
+            midCtx.globalAlpha = laserCountdown / laserFrames;
 
-            ctx.lineWidth = 10;
-            ctx.strokeStyle = laserColor;
-            ctx.beginPath();
-            ctx.moveTo(200, 600); // center of the bottom of the canvas
-            ctx.lineTo(laserTargetX, laserTargetY + 15);
-            // ctx.filter = 'blur(2px)'; // this makes the laser look better but can make the program lag one you get past around 60 points
-            ctx.stroke();
+            midCtx.lineWidth = 10;
+            midCtx.strokeStyle = laserColor;
+            midCtx.beginPath();
+            midCtx.moveTo(200, 600); // center of the bottom of the canvas
+            midCtx.lineTo(laserTargetX, laserTargetY + 15);
+            // midCtx.filter = 'blur(2px)'; // this makes the laser look better but can make the program lag one you get past around 60 points
+            midCtx.stroke();
 
-            ctx.lineWidth = 5;
-            ctx.strokeStyle = "#FFFFFF"; // always white regardless of laser color
-            ctx.beginPath();
-            ctx.moveTo(200, 600); // center of the bottom of the canvas
-            ctx.lineTo(laserTargetX, laserTargetY + 15);
-            //ctx.filter = 'blur(0px)';
-            ctx.stroke();
+            midCtx.lineWidth = 5;
+            midCtx.strokeStyle = "#FFFFFF"; // always white regardless of laser color
+            midCtx.beginPath();
+            midCtx.moveTo(200, 600); // center of the bottom of the canvas
+            midCtx.lineTo(laserTargetX, laserTargetY + 15);
+            //midCtx.filter = 'blur(0px)';
+            midCtx.stroke();
 
             if(laserReflects){
                 damageX = 200 + ((laserTargetX - 200) / 1.5);
                 damageY = 600;
 
-                ctx.lineWidth = 10;
-                ctx.strokeStyle = laserColor;
-                ctx.moveTo(laserTargetX, laserTargetY + 15); // center of the bottom of the canvas
-                ctx.lineTo(damageX, damageY);
-                ctx.stroke();
+                midCtx.lineWidth = 10;
+                midCtx.strokeStyle = laserColor;
+                midCtx.moveTo(laserTargetX, laserTargetY + 15); // center of the bottom of the canvas
+                midCtx.lineTo(damageX, damageY);
+                midCtx.stroke();
 
-                ctx.lineWidth = 5;
-                ctx.strokeStyle = "#FFFFFF"; // always white regardless of laser color
-                ctx.moveTo(laserTargetX, laserTargetY + 15); // center of the bottom of the canvas
-                ctx.lineTo(damageX, damageY);
-                ctx.stroke();
+                midCtx.lineWidth = 5;
+                midCtx.strokeStyle = "#FFFFFF"; // always white regardless of laser color
+                midCtx.moveTo(laserTargetX, laserTargetY + 15); // center of the bottom of the canvas
+                midCtx.lineTo(damageX, damageY);
+                midCtx.stroke();
             }
 
-            ctx.globalAlpha = 1;
+            midCtx.globalAlpha = 1;
         }
 
         function updateCannon(){
             var radius = 30;
 
-            ctx.beginPath();
-            ctx.lineWidth = 1;
-            ctx.fillStyle = "#444444"; // some sort of grey
-            ctx.moveTo(200, 600);
-            ctx.arc(200, 610, radius, 0, Math.PI, true);
-            ctx.fill();
+            topCtx.beginPath();
+            topCtx.lineWidth = 1;
+            topCtx.fillStyle = "#444444"; // some sort of grey
+            topCtx.moveTo(200, 600);
+            topCtx.arc(200, 610, radius, 0, Math.PI, true);
+            topCtx.fill();
 
-            ctx.beginPath();
-            ctx.lineWidth = 16;
-            ctx.strokeStyle = "#444444";
-            ctx.moveTo(200, 600);
+            topCtx.beginPath();
+            topCtx.lineWidth = 16;
+            topCtx.strokeStyle = "#444444";
+            topCtx.moveTo(200, 600);
 
             var cannonLength = 38;
 
@@ -676,8 +764,8 @@
             var dy = 600 - laserTargetY;
 
             if(dx == 0){
-                ctx.lineTo(200, 600 - cannonLength);
-                ctx.stroke();
+                topCtx.lineTo(200, 600 - cannonLength);
+                topCtx.stroke();
             }
             else{
                 var theta = Math.atan(dy / dx);
@@ -687,15 +775,15 @@
                 var endCannonY = (cannonLength * Math.sin(theta)) + 600;
                 //console.log("endCannonY = " + endCannonY);
 
-                //ctx.beginPath();
+                //topCtx.beginPath();
 
                 if(dx < 0){
-                    ctx.lineTo(400 - endCannonX, endCannonY);
+                    topCtx.lineTo(400 - endCannonX, endCannonY);
                 }
                 else{
-                    ctx.lineTo(endCannonX, 1200 - endCannonY);
+                    topCtx.lineTo(endCannonX, 1200 - endCannonY);
                 }
-                ctx.stroke();
+                topCtx.stroke();
             }
         }
 
@@ -720,6 +808,8 @@
             else{
                 laserReflects = true;
             }
+
+            updateTop();
 
             document.getElementById("userAnswer").value = "";
             // console.log("shooting complete.");
