@@ -75,9 +75,9 @@
 
         // multiple audio objects to support polyphony
         for(var i = 0; i < polyphony; i++){
-            bossExplodeSounds.push(new Audio("assets/explosion_boss_v2.mp3"));
-            normalExplodeSounds.push(new Audio("assets/explosion_normal_v2.mp3"));
-            laserSounds.push(new Audio("assets/laser_sfx_v2.mp3"));
+            bossExplodeSounds.push(new Audio("assets/explosion_boss_v1.mp3"));
+            normalExplodeSounds.push(new Audio("assets/explosion_normal_v1.mp3"));
+            laserSounds.push(new Audio("assets/laser_sfx_v1.mp3"));
             damageSounds.push(new Audio("assets/damage_v1.mp3"));
         }
 
