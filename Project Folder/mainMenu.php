@@ -160,6 +160,18 @@ session_start();
 <?php endif; ?>
 <br />
 
+<div id = "leaderboard" style="border:3px; border-style:solid; border-color: #c238d1; padding: 5px; width: 500px">
+	<h2>LEADERBOARD</h2>
+
+	<ul id="leaderboardList">
+		<?php
+			include 'createLeaderboard.php';
+		?>
+	</ul>
+	
+</div>
+<br />
+
 <div id = "accountSettings" style="border:3px; border-style:solid; border-color: #FF5555; padding: 5px; width: 500px">
 	<h2>ACCOUNT SETTINGS</h2>
 
