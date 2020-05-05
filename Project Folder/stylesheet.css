@@ -30,3 +30,20 @@ canvas{
 	padding: 15px;
 	display:block;
 }
+#leaderboard{
+	color:#c238d1;
+	padding: 15px;
+	display:block;
+}
+#leaderboardList{
+	list-style-type: none;
+}
+#leaderboardLevelList{
+	list-style-type: none;
+}
+#leaderboardSpot{
+	color:#000000;
+}
+#userLeaderboardSpot{
+	color:#ff0027;
+}
