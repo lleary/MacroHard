@@ -156,6 +156,43 @@ session_start();
 				<input type="submit" name="submit_id" id="create" value="Create Account" />
 			</form>
 		</div>
+
+		<br />
+
+		<div style="border:3px; border-style:solid; border-color: #FFD913; padding: 5px; ">
+			<h2>Edit Level</h2>
+			<form action="" method="post" id="form_id">
+
+				<label for="levels">Level:</label>
+				<select id="levels">
+				  <option value="1">1</option>
+				  <option value="2">2</option>
+				  <option value="3">3</option>
+				  <option value="4">4</option>
+				  <option value="3">5</option>
+				  <option value="4">6</option>
+				  <option value="3">7</option>
+				  <option value="4">Digit Identification</option>
+				</select>
+
+				<br />
+
+				<label for="levelUpThreshold">Level Up Threshold:</label>
+				<input type="text" id="levelUpThreshold" placeholder="Threshold" />
+
+				<br />
+
+				<label for="levels">Range:</label>
+				<input type="text" id="rangeMinimum" placeholder="Minimum" />
+				to
+				<input type="text" id="rangeMaximum" placeholder="Maximum" />
+
+				<br />
+
+				<input type="submit" name="submit_id" id="editLevel" value="Submit Edit" />
+			</form>
+		</div>
+
 	</div>
 <?php endif; ?>
 <br />
