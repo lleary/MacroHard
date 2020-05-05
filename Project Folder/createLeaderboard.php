@@ -6,17 +6,17 @@
 
 	$all_user = get_user_info(USERFILE);
 
-	for ($i = 1; $i <= 7; $i+=1) {
+	for ($i = 1; $i <= 7; $i+=1) { 					#For loop creates one sublist for each level i.
 		echo "<li>";
-	   		echo "<h2>Level $i</h2>";
-	   		echo "<ul id='leaderboardLevelList'>";
+	   		echo "<h2>Level $i</h2>";				#Prints the level name at the start of the list.
+	   		echo "<ul id='leaderboardLevelList'>";  #Creates sublist.
 	   		foreach ($all_user as $user) {
 		   		if($user["level"] == $i){
 		   			$firstName = $user["first"];
 		   			if($firstName == $_SESSION["user"]){
-		   				echo "<li id='userLeaderboardSpot'>$firstName</li>";
+		   				echo "<li id='userLeaderboardSpot'>$firstName</li>";	#Prints the users name in the leaderboard with a different id.
 		   			} else{
-		   				echo "<li id='leaderboardSpot'>$firstName</li>";
+		   				echo "<li id='leaderboardSpot'>$firstName</li>";		#Prints the rest of the users as normal.
 		   			}
 		   		}
 		   	}
@@ -25,58 +25,3 @@
 	} 
 
 ?>
-
-
-<!-- An example of a properly formed list !-->
-
-<!--<ul id="leaderboardList">
-		<li>
-			<h2>Level 1</h2>
-			<ul>
-				<li>Person 1</li>
-				<li>Person 2</li>
-			</ul>
-		</li>
-		<li>
-			<h2>Level 2</h2>
-			<ul>
-				<li>Person 1</li>
-				<li>Person 2</li>
-			</ul>
-		</li>
-		<li>
-			<h2>Level 3</h2>
-			<ul>
-				<li>Person 1</li>
-				<li>Person 2</li>
-			</ul>
-		</li>
-		<li>
-			<h2>Level 4</h2>
-			<ul>
-				<li>Person 1</li>
-				<li>Person 2</li>
-			</ul>
-		</li>
-		<li>
-			<h2>Level 5</h2>
-			<ul>
-				<li>Person 1</li>
-				<li>Person 2</li>
-			</ul>
-		</li>
-		<li>
-			<h2>Level 6</h2>
-			<ul>
-				<li>Person 1</li>
-				<li>Person 2</li>
-			</ul>
-		</li>
-		<li>
-			<h2>Level 7</h2>
-			<ul>
-				<li>Person 1</li>
-				<li>Person 2</li>
-			</ul>
-		</li>
-	</ul>!-->

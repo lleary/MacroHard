@@ -165,7 +165,7 @@ session_start();
 
 	<ul id="leaderboardList">
 		<?php
-			include 'createLeaderboard.php';
+			include 'createLeaderboard.php';	#Creates leaderboard by including the code from createLeaderboard.php
 		?>
 	</ul>
 	
