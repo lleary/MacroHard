@@ -41,7 +41,7 @@
     </style>
 </head>
 
-<body onload="startGame()">
+<body>
 
     <form id="answerForm" onsubmit="shoot(); return false;" autocomplete="off" style="visibility: visible; color:white;">
         <input type="text" name="answer"  id="userAnswer" placeholder="answer" maxlength="2" size="4" autofocus/>
@@ -53,25 +53,51 @@
         <button type="submit">Main menu</button>
     </form>
 
+    <script src="howler/dist/howler.js"></script>
     <script type="text/javascript">
         const topCanvas = document.getElementById("top-layer");
         const midCanvas = document.getElementById("mid-layer");
         const topCtx = topCanvas.getContext("2d");
         const midCtx = midCanvas.getContext("2d");
 
+        drawLoadingScreen();
+
+        var gameIsLoaded = false;
+
         var astImage1 = new Image();
         astImage1.src = 'assets/asteroid_2_v2_default.png';
         var astImage2 = new Image();
         astImage2.src = 'assets/asteroid_2_v2_red.png';
+        var musicOnIcon = new Image();
+        musicOnIcon.src = 'assets/music_on_icon.png';
+        var musicOffIcon = new Image();
+        musicOffIcon.src = 'assets/music_off_icon.png';
+        var sfxOnIcon = new Image();
+        sfxOnIcon.src = 'assets/sfx_on_icon.png';
+        var sfxOffIcon = new Image();
+        sfxOffIcon.src = 'assets/sfx_off_icon.png';
 
         var clickSound = new Audio("assets/click_v1.mp3");
+        var loseSound = new Audio("assets/youLose_v1.mp3");
+
+        var music = new Audio("assets/music_full_v1.mp3");
+
+        music.addEventListener("canplaythrough", function(){
+            gameIsLoaded = true;
+            music.volume = 0.4;
+            music.loop = true;
+            clearLoadingScreen();
+            drawPlayButton();
+        });
+
+        var askingToPlayGameForTheFirstTime = false;
 
         var bossExplodeSounds = [];
         var normalExplodeSounds = [];
         var laserSounds = [];
         var damageSounds = [];
 
-        var polyphony = 16;
+        var polyphony = 8;
 
         // multiple audio objects to support polyphony
         for(var i = 0; i < polyphony; i++){
@@ -110,14 +136,14 @@
         var normalDigitMin = 100; // minimum answer to normal digit problems, inclusive
         var normalDigitMax = 999; // maximum answer to normal digit problems, inclusive
 
-        var accelerationCap = 20; // max value of random acceleration applied with each problem solved
-        var initSpawnMax = 500; // starting spawn interval. Higher = slower start.
+        var accelerationCap = 15; // max value of random acceleration applied with each problem solved
+        var initSpawnMax = 400; // starting spawn interval. Higher = slower start.
 
         var gameInterval;
 
         var matheroids = [];
         var problems = [];
-        var playing = true;
+        var playing = false;
         var score = 0;
 
         var spawnIntervalMax = initSpawnMax;
@@ -141,7 +167,7 @@
         var explosions = [];
 
         var wrongTotal = 0;
-        var strikes = 3;
+        var strikes = 5;
 
         // this is used to ensure the focus is properly put on the answerForm when resetting by clicking Play Again in the canvas (otherwise the canvas gets the focus because you clicked on it)
         var focusCountdown = 1;
@@ -156,13 +182,44 @@
                 // this depends on the canvas being centered
                 mouse.x = event.pageX - (window.innerWidth / 2) + 200 + 8;
                 mouse.y = event.pageY - 8;
+
+                if(askingToPlayGameForTheFirstTime && mouse.x > 100 && mouse.x < 300 && mouse.y > 250 && mouse.y < 350){
+                    highlightPlayButton();
+                }
+                else if(askingToPlayGameForTheFirstTime){
+                    unhighlightPlayButton();
+                }
         });
 
         window.addEventListener('mousedown',
             function(event){
-                if(!playing && mouse.x > 80 && mouse.x < 320 && mouse.y > 350 && mouse.y < 400){
+                // detect pressing play
+                if(askingToPlayGameForTheFirstTime && mouse.x > 100 && mouse.x < 300 && mouse.y > 250 && mouse.y < 350){
+                    clickSound.play();
+                    music.play();
+                    clearPlayButton();
+                    askingToPlayGameForTheFirstTime = false;
+                    startGame();
+                }
+
+                // detect pressing play again
+                if(!askingToPlayGameForTheFirstTime && !playing && mouse.x > 80 && mouse.x < 320 && mouse.y > 350 && mouse.y < 400){
                     clickSound.play();
                     resetGame();
+                }
+
+                // detect pressing music toggle
+                if(gameIsLoaded && mouse.x > topCanvas.width - 110 && mouse.x < topCanvas.width - 55 && mouse.y < 60){
+                    toggleMusic();
+                    updateSoundControls();
+                    focusCountdown = 1;
+                }
+
+                // detect pressing sfx toggle
+                if(gameIsLoaded && mouse.x > topCanvas.width - 55 && mouse.x < topCanvas.width && mouse.y < 60){
+                    toggleSfx();
+                    updateSoundControls();
+                    focusCountdown = 1;
                 }
         });
 
@@ -234,7 +291,51 @@
             return num;
         }
 
+        function drawLoadingScreen(){
+            topCtx.fillStyle = "#00FF00";
+            topCtx.font = "bold 36px Courier New";
+            topCtx.textAlign = 'center';
+            topCtx.textBaseline = 'middle';
+            topCtx.fillText("loading...",200,280);
+        }
+
+        function clearLoadingScreen(){
+            topCtx.clearRect(0,0,topCanvas.width,topCanvas.height);
+        }
+
+        function drawPlayButton(){
+            askingToPlayGameForTheFirstTime = true;
+
+            topCtx.fillStyle = "#FF0066";
+            topCtx.font = "bold 48px Courier New";
+            topCtx.textAlign = 'center';
+            topCtx.textBaseline = 'middle';
+            topCtx.fillText("Play",200,300);
+
+            topCtx.strokeStyle = "#FF0066";
+            topCtx.lineWidth = 5;
+            topCtx.rect(100, 250, 200, 100);
+            topCtx.stroke();
+        }
+
+        function clearPlayButton(){
+            topCtx.clearRect(0,0,topCanvas.width,topCanvas.height);
+        }
+
+        function highlightPlayButton(){
+            midCtx.beginPath();
+            midCtx.lineWidth = 1;
+            midCtx.fillStyle = "#FFFFCC";
+            midCtx.rect(100, 250, 200, 100);
+            midCtx.fill();
+        }
+
+        function unhighlightPlayButton(){
+            midCtx.clearRect(0,0,midCanvas.width,midCanvas.height);
+        }
+
         function startGame() {
+            playing = true;
             addProblem();
             updateGameArea();
             updateTop();
@@ -244,7 +345,7 @@
         function resetGame(){
             matheroids = [];
             problems = [];
-            playing = true;
+            playing = true; // true here but not above because the game is already loaded if you're resetting
             score = 0;
 
             spawnIntervalMax = initSpawnMax;
@@ -532,10 +633,12 @@
             }
         }
 
+        // update the top canvas, including the cannon and score
         function updateTop(){
             topCtx.clearRect(0, 0, topCanvas.width, topCanvas.height);
             updateScore();
             updateCannon();
+            updateSoundControls();
         }
 
         // runs every tick (15ms)
@@ -553,11 +656,6 @@
             for(var i = matheroids.length - 1; i >= 0; i--){
                 matheroids[i].newPosition();
                 matheroids[i].update();
-            }
-
-            if(spawnTimer <= 0){
-                spawnTimer = getRandomNumber(15,spawnIntervalMax);
-                addProblem();
             }
 
             if(laserCountdown >= 0){
@@ -619,6 +717,54 @@
             }
         }
 
+        function toggleMusic(){
+            if(music.muted){
+                music.muted = false;
+            }
+            else{
+                music.muted = true;
+            }
+        }
+
+        function toggleSfx(){
+            if(loseSound.muted){
+                loseSound.muted = false;
+                clickSound.muted = false;
+                for(var idx = 0; idx < polyphony; idx++){
+                    bossExplodeSounds[idx].muted = false;
+                    normalExplodeSounds[idx].muted = false;
+                    damageSounds[idx].muted = false;
+                    laserSounds[idx].muted = false;
+                }
+            }
+            else{
+                loseSound.muted = true;
+                clickSound.muted = true;
+                for(var idx = 0; idx < polyphony; idx++){
+                    bossExplodeSounds[idx].muted = true;
+                    normalExplodeSounds[idx].muted = true;
+                    damageSounds[idx].muted = true;
+                    laserSounds[idx].muted = true;
+                }
+            }
+        }
+
+        function updateSoundControls(){
+            topCtx.clearRect(topCanvas.width - 110, 5, 110, 50);
+            if(music.muted){
+                topCtx.drawImage(musicOffIcon, topCanvas.width - 110, 5, 50, 50);
+            }
+            else{
+                topCtx.drawImage(musicOnIcon, topCanvas.width - 110, 5, 50, 50);
+            }
+            if(loseSound.muted){
+                topCtx.drawImage(sfxOffIcon, topCanvas.width - 55, 5, 50, 50);
+            }
+            else{
+                topCtx.drawImage(sfxOnIcon, topCanvas.width - 55, 5, 50, 50);
+            }
+        }
+
         function highlightPlayAgainButton(){
             midCtx.beginPath();
             midCtx.lineWidth = 1;
@@ -642,6 +788,9 @@
 
         //Tells the player they lose
         function youLose(){
+            if(playing){
+                loseSound.play();
+            }
             playing = false;
             matheroids.splice(0,1);
         }
