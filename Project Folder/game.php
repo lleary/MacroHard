@@ -53,7 +53,6 @@
         <button type="submit">Main menu</button>
     </form>
 
-    <script src="howler/dist/howler.js"></script>
     <script type="text/javascript">
         const topCanvas = document.getElementById("top-layer");
         const midCanvas = document.getElementById("mid-layer");
