@@ -16,6 +16,7 @@ session_start();
 	<meta charset="utf-8">
 	<title>Matheroids</title>
 	<link rel="stylesheet" type="text/css"href="stylesheet.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 	<style>
 
 	<?php
@@ -28,6 +29,36 @@ session_start();
 </head>
 <body>
 
+<ul id="navBar">
+	<li id="navBarItem"><a class="active" href="#main" onClick="showMenu('mainMenu')">Main</a></li>
+	<li id="navBarItem"><a href="#leaderboard" onClick="showMenu('leaderboard')">Leaderboard</a></li>
+	<?php if($_SESSION["type"] == "Teacher") : ?>
+		<li id="navBarItem"><a href="#teacherDashboard" onClick="showMenu('teacherDashboard')">Teacher Dashboard</a></li>
+	<?php endif; ?>
+	<li id="navBarItem"><a href="#settings" onClick="showMenu('accountSettings')">Settings</a></li>
+	<li id="navBarItem" style="float:right"><a href="./Logout.php">Logout</a></li>
+</ul>
+
+<script>
+	$(document).ready(function(){
+		$('ul li a').click(function(){
+    		$('li a').removeClass("active");
+   			$(this).addClass("active");
+		});
+	});
+
+	function showMenu(menu){
+		console.log(menu);
+		document.getElementById('mainMenu').style.visibility='hidden';
+		document.getElementById('leaderboard').style.visibility='hidden';
+		document.getElementById('accountSettings').style.visibility='hidden';
+		<?php if($_SESSION["type"] == "Teacher") : ?>
+			document.getElementById('teacherDashboard').style.visibility='hidden';
+		<?php endif; ?>
+		document.getElementById(menu).style.visibility='visible';
+	}
+
+</script>
 
 <?php 
 	echo "<pre>";
@@ -37,16 +68,16 @@ session_start();
 
 ?>
 
-<form action="./Logout.php">
-	<button type="submit">Logout</button></a>
+<!--
+<form action="./Logout.php">							This is unessesary now that logout is included in the navbar.
+	<button type="submit">Logout</button></a>			Todo: Remove
 </form>
+!-->
 
 <br />
-<br />
-
-
 
 <script>
+
 	var level = 1;
 	var level = <?php echo $_SESSION['level'] ?>; 
 	console.log(level);
@@ -66,7 +97,7 @@ session_start();
 
 
 	function increaseLevel(){
-		if(level < 7){
+		if(level < 4){
 			level += 1;
 		}
 
@@ -98,7 +129,7 @@ session_start();
 		for(var i = 0; i < level; i++){
 			document.getElementById(buttons[i]).disabled = false;
 		}
-		for(var j = level; j < 7; j++){
+		for(var j = level; j < 4; j++){
 			document.getElementById(buttons[j]).disabled = true;
 		}
 	}
