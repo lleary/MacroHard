@@ -16,6 +16,7 @@ session_start();
 	<meta charset="utf-8">
 	<title>Matheroids</title>
 	<link rel="stylesheet" type="text/css"href="stylesheet.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 	<style>
 
 	<?php
@@ -28,6 +29,36 @@ session_start();
 </head>
 <body>
 
+<ul id="navBar">
+	<li id="navBarItem"><a class="active" href="#main" onClick="showMenu('mainMenu')">Main</a></li>
+	<li id="navBarItem"><a href="#leaderboard" onClick="showMenu('leaderboard')">Leaderboard</a></li>
+	<?php if($_SESSION["type"] == "Teacher") : ?>
+		<li id="navBarItem"><a href="#teacherDashboard" onClick="showMenu('teacherDashboard')">Teacher Dashboard</a></li>
+	<?php endif; ?>
+	<li id="navBarItem"><a href="#settings" onClick="showMenu('accountSettings')">Settings</a></li>
+	<li id="navBarItem" style="float:right; font-weight: normal;"><a href="./Logout.php">Logout</a></li>
+</ul>
+
+<script>
+	$(document).ready(function(){
+		$('ul li a').click(function(){
+    		$('li a').removeClass("active");
+   			$(this).addClass("active");
+		});
+	});
+
+	function showMenu(menu){
+		console.log(menu);
+		document.getElementById('mainMenu').style.visibility='hidden';
+		document.getElementById('leaderboard').style.visibility='hidden';
+		document.getElementById('accountSettings').style.visibility='hidden';
+		<?php if($_SESSION["type"] == "Teacher") : ?>
+			document.getElementById('teacherDashboard').style.visibility='hidden';
+		<?php endif; ?>
+		document.getElementById(menu).style.visibility='visible';
+	}
+
+</script>
 
 <?php 
 	echo "<pre>";
@@ -37,16 +68,16 @@ session_start();
 
 ?>
 
-<form action="./Logout.php">
-	<button type="submit">Logout</button></a>
+<!--
+<form action="./Logout.php">							This is unessesary now that logout is included in the navbar.
+	<button type="submit">Logout</button></a>			Todo: Remove
 </form>
+!-->
 
 <br />
-<br />
-
-
 
 <script>
+
 	var level = 1;
 	var level = <?php echo $_SESSION['level'] ?>; 
 	console.log(level);
@@ -66,7 +97,7 @@ session_start();
 
 
 	function increaseLevel(){
-		if(level < 7){
+		if(level < 4){
 			level += 1;
 		}
 
@@ -98,7 +129,7 @@ session_start();
 		for(var i = 0; i < level; i++){
 			document.getElementById(buttons[i]).disabled = false;
 		}
-		for(var j = level; j < 7; j++){
+		for(var j = level; j < 4; j++){
 			document.getElementById(buttons[j]).disabled = true;
 		}
 	}
@@ -110,30 +141,19 @@ session_start();
 
 	<p style="color:#000000;" id="levelText">You are on level *</p>
 
+	<form onsubmit="setGamemode(0)" action="./game.php">
+		<button type="submit" id="level1Button">Play Game (Digit Identification)</button>
+	</form>
 	<form onsubmit="setGamemode(1)" action="./game.php">
-		<button type="submit" id="level1Button" disabled>Play Game (Addition)</button>
+		<button type="submit" id="level2Button" disabled>Play Game (Addition)</button>
 	</form>
 	<form onsubmit="setGamemode(2)" action="./game.php">
-		<button type="submit" id="level2Button" disabled>Play Game (Subtraction)</button>
+		<button type="submit" id="level3Button" disabled>Play Game (Subtraction)</button>
 	</form>
 	<form onsubmit="setGamemode(3)" action="./game.php">
-		<button type="submit" id="level3Button" disabled>Play Game (Addition & Subtraction)</button>
+		<button type="submit" id="level4Button" disabled>Play Game (Addition & Subtraction)</button>
 	</form>
-	<form onsubmit="setGamemode(4)" action="./game.php">
-		<button type="submit" id="level4Button" disabled>Play Game (Level 4)</button>
-	</form>
-	<form onsubmit="setGamemode(5)" action="./game.php">
-		<button type="submit" id="level5Button" disabled>Play Game (Level 5)</button>
-	</form>
-	<form onsubmit="setGamemode(6)" action="./game.php">
-		<button type="submit" id="level6Button" disabled>Play Game (Level 6)</button>
-	</form>
-	<form onsubmit="setGamemode(7)" action="./game.php">
-		<button type="submit" id="level7Button" disabled>Play Game (Level 7)</button>
-	</form>
-	<form onsubmit="setGamemode(0)" action="./game.php">
-		<button type="submit" id="level0Button">Play Game (Digit Identification)</button>
-	</form>
+
 		
 </div>
 <br />
@@ -165,14 +185,10 @@ session_start();
 
 				<label for="levels">Level:</label>
 				<select id="levels">
-				  <option value="1">1</option>
-				  <option value="2">2</option>
-				  <option value="3">3</option>
-				  <option value="4">4</option>
-				  <option value="3">5</option>
-				  <option value="4">6</option>
-				  <option value="3">7</option>
-				  <option value="4">Digit Identification</option>
+				  <option value="1">1 (Addition)</option>
+				  <option value="2">2 (Subtraction)</option>
+				  <option value="3">3 (Addition & Subtraction)</option>
+				  <option value="4">4 (Digit Identification)</option>
 				</select>
 
 				<br />
@@ -189,7 +205,7 @@ session_start();
 
 				<br />
 
-				<input type="submit" name="submit_id" id="editLevel" value="Submit Edit" />
+				<input type="submit" name="submit_id" id="editLevel" value="Submit" />
 			</form>
 		</div>
 
