@@ -1,5 +1,5 @@
 body{
-	background-color: #FFFFFF;
+	background-color: #ffffff;
 	font-family:sans-serif;
 	letter-spacing: 0.5px;
 }
@@ -15,12 +15,15 @@ canvas{
 	margin: auto;
 	display: block;
 }
+
+/*Begining of Menus Style*/
 #mainMenu{
 	color:#22D2A0;
 	display:block;
 	padding: 15px;	
 	position:fixed;
 	top:120px;
+	border-radius: 5px;
 }
 #accountSettings{
 	color:#FF5555;
@@ -29,6 +32,7 @@ canvas{
 	position:fixed;
 	top:120px;
 	visibility: hidden;
+	border-radius: 5px;
 }
 #teacherDashboard{
 	color:#FFD913;
@@ -37,6 +41,7 @@ canvas{
 	position:fixed;
 	top:120px;	
 	visibility: hidden;
+	border-radius: 5px;
 }
 #leaderboard{
 	color:#c238d1;
@@ -45,12 +50,17 @@ canvas{
 	position:fixed;
 	top:120px;
 	visibility: hidden;
+	border-radius: 5px;
+
 }
+
+/*Begining of Leaderboard Style*/
 #leaderboardList{
 	list-style-type: none;
 }
 #leaderboardLevelList{
 	list-style-type: none;
+
 }
 #leaderboardSpot{
 	color:#000000;

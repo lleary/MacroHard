@@ -273,10 +273,8 @@
 
             if(operator == "+"){
                 var ans = num1+num2;
-                // console.log(num1+" + "+num2+"="+ans);
             } else if (operator == "-"){
                 var ans = num1-num2;
-                // console.log(num1+" - "+num2+"="+ans);
             }
 
             return ans;
