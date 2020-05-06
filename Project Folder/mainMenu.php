@@ -36,7 +36,7 @@ session_start();
 		<li id="navBarItem"><a href="#teacherDashboard" onClick="showMenu('teacherDashboard')">Teacher Dashboard</a></li>
 	<?php endif; ?>
 	<li id="navBarItem"><a href="#settings" onClick="showMenu('accountSettings')">Settings</a></li>
-	<li id="navBarItem" style="float:right"><a href="./Logout.php">Logout</a></li>
+	<li id="navBarItem" style="float:right; font-weight: normal;"><a href="./Logout.php">Logout</a></li>
 </ul>
 
 <script>
