@@ -110,30 +110,19 @@ session_start();
 
 	<p style="color:#000000;" id="levelText">You are on level *</p>
 
+	<form onsubmit="setGamemode(0)" action="./game.php">
+		<button type="submit" id="level1Button">Play Game (Digit Identification)</button>
+	</form>
 	<form onsubmit="setGamemode(1)" action="./game.php">
-		<button type="submit" id="level1Button" disabled>Play Game (Addition)</button>
+		<button type="submit" id="level2Button" disabled>Play Game (Addition)</button>
 	</form>
 	<form onsubmit="setGamemode(2)" action="./game.php">
-		<button type="submit" id="level2Button" disabled>Play Game (Subtraction)</button>
+		<button type="submit" id="level3Button" disabled>Play Game (Subtraction)</button>
 	</form>
 	<form onsubmit="setGamemode(3)" action="./game.php">
-		<button type="submit" id="level3Button" disabled>Play Game (Addition & Subtraction)</button>
+		<button type="submit" id="level4Button" disabled>Play Game (Addition & Subtraction)</button>
 	</form>
-	<form onsubmit="setGamemode(4)" action="./game.php">
-		<button type="submit" id="level4Button" disabled>Play Game (Level 4)</button>
-	</form>
-	<form onsubmit="setGamemode(5)" action="./game.php">
-		<button type="submit" id="level5Button" disabled>Play Game (Level 5)</button>
-	</form>
-	<form onsubmit="setGamemode(6)" action="./game.php">
-		<button type="submit" id="level6Button" disabled>Play Game (Level 6)</button>
-	</form>
-	<form onsubmit="setGamemode(7)" action="./game.php">
-		<button type="submit" id="level7Button" disabled>Play Game (Level 7)</button>
-	</form>
-	<form onsubmit="setGamemode(0)" action="./game.php">
-		<button type="submit" id="level0Button">Play Game (Digit Identification)</button>
-	</form>
+
 		
 </div>
 <br />
@@ -165,14 +154,10 @@ session_start();
 
 				<label for="levels">Level:</label>
 				<select id="levels">
-				  <option value="1">1</option>
-				  <option value="2">2</option>
-				  <option value="3">3</option>
-				  <option value="4">4</option>
-				  <option value="3">5</option>
-				  <option value="4">6</option>
-				  <option value="3">7</option>
-				  <option value="4">Digit Identification</option>
+				  <option value="1">1 (Addition)</option>
+				  <option value="2">2 (Subtraction)</option>
+				  <option value="3">3 (Addition & Subtraction)</option>
+				  <option value="4">4 (Digit Identification)</option>
 				</select>
 
 				<br />
@@ -189,7 +174,7 @@ session_start();
 
 				<br />
 
-				<input type="submit" name="submit_id" id="editLevel" value="Submit Edit" />
+				<input type="submit" name="submit_id" id="editLevel" value="Submit" />
 			</form>
 		</div>
 

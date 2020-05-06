@@ -1,7 +1,7 @@
 alex cinelli student 0 2
 george orwell student 0 1
 andothy mclovin student 0 2
-jonathan joestar teacher $2y$10$0p2BSyN5.ugS7V6hEFZ8ueEB6B9yS57MJ7VWE6ObgGz3GJUFy.wm6 6 
-David Chiu teacher $2y$10$msFG4SfnsQXvusB3K9vJ9eCbRW/ov9tW6OBK2wooEn70UzyjahBze 7 
+jonathan joestar teacher $2y$10$0p2BSyN5.ugS7V6hEFZ8ueEB6B9yS57MJ7VWE6ObgGz3GJUFy.wm6 3 
+David Chiu teacher $2y$10$msFG4SfnsQXvusB3K9vJ9eCbRW/ov9tW6OBK2wooEn70UzyjahBze 4 
 mister incredible student 0 1
 cheez it student 0 1
