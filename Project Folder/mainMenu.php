@@ -70,26 +70,13 @@ session_start();
 			localStorage.setItem("gamemode", gamemode);
 		}
 
-		//This function updates the level in the database and on screen.
-		function updateLevel(){
-			document.getElementById("levelText").innerHTML = "You are on level "+level;
-			disableLevels();
-			<?php
-				//updateLevel ($_SESSION["user"], $_SESSION["lastname"], $_SESSION["level"]);
-			?>
-		}
+
 
 		//Increases the users level by 1, with a maximum of 4.
 		function increaseLevel(){
 			if(level < 4){
 				level += 1;
 			}
-
-			<?php
-				$_SESSION["level"]++;
-			?>
-			console.log("DEBUG: New level is: "+<?php echo $_SESSION['level'] ?>);
-
 			updateLevel();
 		}
 
@@ -98,19 +85,19 @@ session_start();
 			if(level >1){
 				level -= 1;
 			}
-			<?php
-				$_SESSION["level"]--;
-			?>
 			updateLevel();
 		}
 
 		//Sets the users level to 1.
 		function resetLevel(){
 			level = 1;
-			<?php
-				$_SESSION["level"] = 1;
-			?>
 			updateLevel();
+		}
+
+		//This function updates the level in the database and on screen.
+		function updateLevel(){
+			document.getElementById("levelText").innerHTML = "You are on level "+level;
+			disableLevels();
 		}
 
 		//Disables buttons for levels the user does not have access to yet

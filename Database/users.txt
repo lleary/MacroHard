@@ -5,4 +5,5 @@ jonathan joestar teacher $2y$10$0p2BSyN5.ugS7V6hEFZ8ueEB6B9yS57MJ7VWE6ObgGz3GJUF
 David Chiu teacher $2y$10$msFG4SfnsQXvusB3K9vJ9eCbRW/ov9tW6OBK2wooEn70UzyjahBze 4 
 mister incredible student 0 1
 cheez it student 0 1
-Jack bodine student 0 4
+test ing student 0 1
+test ing2 student 0 1

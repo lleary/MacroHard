@@ -15,5 +15,5 @@
 		save_data(USERFILE, $student_info);
 	}
 
-
+	header("Location: mainMenu.php");
 ?>
