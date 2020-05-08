@@ -1,0 +1,3 @@
+className enabledLeaderboard level1Threshold level1min level1max level2Threshold level2min level2max level3Threshold level3min level3max level4Threshold level4min level4max
+class1 1 15 0 9 15 0 9 15 0 9 15 0 9
+class2 0 15 0 9 15 0 9 15 0 9 15 0 9
