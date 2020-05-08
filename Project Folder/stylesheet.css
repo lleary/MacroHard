@@ -10,10 +10,21 @@ h1{
 	color:#000000;
 	font-family:sans-serif;
 }
-canvas{
-	padding: 0;
-	margin: auto;
-	display: block;
+.asteroid {
+    z-index: 1;
+    background-image: url("assets/asteroid_square_grey_v1.png");
+    background-size: cover;
+    width: 100px;
+    height: 100px;
+    position: relative;
+    animation-name: asteroidAnimation;
+    animation-duration: 10s;
+    animation-timing-function: linear;
+    animation-fill-mode: forwards;
+}
+@keyframes asteroidAnimation {
+    0% {bottom: -10px;}
+    100% {bottom: -610px;}
 }
 #mainMenu{
 	color:#22D2A0;

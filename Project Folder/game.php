@@ -6,7 +6,7 @@
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
     <title>Matheroids</title>
@@ -27,11 +27,15 @@
         }
         canvas {
             position: absolute;
+            padding: 0;
+            margin: auto;
+            display: block;
         }
-        #top-layer { z-index: 3; }
-        #mid-layer { z-index: 2; }
+        #top-layer { z-index: 5; }
+        #mid-layer { z-index: 4; }
         body{
             background-color: #44444B;
+            margin: 0px;
         }
         form {
             text-align: center;
@@ -42,6 +46,7 @@
 </head>
 
 <body>
+    <div id="main" style="position: absolute; left:0px; top:0px"></div>
 
     <form id="answerForm" onsubmit="shoot(); return false;" autocomplete="off" style="visibility: visible; color:white;">
         <input type="text" name="answer"  id="userAnswer" placeholder="answer" maxlength="2" size="4" autofocus/>
@@ -63,10 +68,9 @@
 
         var gameIsLoaded = false;
 
-        var astImage1 = new Image();
-        astImage1.src = 'assets/asteroid_2_v2_default.png';
-        var astImage2 = new Image();
-        astImage2.src = 'assets/asteroid_2_v2_red.png';
+        var greyAsteroidSrc = "url(assets/asteroid_square_grey_v1.png)";
+        var redAsteroidSrc = "url(assets/asteroid_square_red_v2.png)";
+        
         var musicOnIcon = new Image();
         musicOnIcon.src = 'assets/music_on_icon.png';
         var musicOffIcon = new Image();
@@ -141,7 +145,6 @@
         var gameInterval;
 
         var matheroids = [];
-        var problems = [];
         var playing = false;
         var score = 0;
 
@@ -338,12 +341,11 @@
             addProblem();
             updateGameArea();
             updateTop();
-            gameInterval = setInterval(updateGameArea, 15);
+            gameInterval = setInterval(updateGameArea, 1000/60);
         }
 
         function resetGame(){
-            matheroids = [];
-            problems = [];
+            clearAllMatheroids();
             playing = true; // true here but not above because the game is already loaded if you're resetting
             score = 0;
 
@@ -381,13 +383,13 @@
         function addProblem() {
             var xSpawn;
             if(gamemode != 0){
-                xSpawn = getRandomNumber(50,300); 
+                xSpawn = getRandomNumber(50,350);
             }else{
-                xSpawn = getRandomNumber(100,250);
+                xSpawn = getRandomNumber(100,300);
             }
 
-            var myGamePiece = new matheroid(xSpawn, -50);
-            myGamePiece.renderMatheroid();
+            var myGamePiece = new matheroid(xSpawn);
+            //myGamePiece.renderMatheroid();
             matheroids.push(myGamePiece);
             bossCountdown--;
         }
@@ -398,112 +400,103 @@
             this.str = "error: dig_str_uninit";
         }
 
+        function removeMatheroid(index){
+            matheroids[index].div.remove();
+            matheroids.splice(index,1);
+        }
+
+        function clearAllMatheroids(){
+            console.log("clearing all matheroids...");
+            for(var i = 0; i < matheroids.length; i++){
+                console.log("removing matheroid at " + i);
+                removeMatheroid(i);
+            }
+        }
+
         // an object represeting an entire matheroid
-        function matheroid(xCoord, yCoord){
-            this.object = new object(xCoord, yCoord);
+        function matheroid(xCoord){
             this.x = xCoord;
-            this.y = yCoord;
-            this.objColor = object.color;
-            this.image = astImage1;
-            this.render = document.createElement('canvas');
-            var renCtx = this.render.getContext('2d');
+            this.object = new object(xCoord);
+            this.div;
+            this.width;
+            this.height;
 
-            this.renderMatheroid = function(){
-                renCtx.clearRect(0, 0, this.render.width, this.render.height);
-
-                // normal arithmetic
-                if(gamemode != 0 && !this.object.getBossStatus()){
-                    this.render.width = 50;
-                    this.render.height = 50;
-
-                    //draw asteroid
-                    renCtx.drawImage(this.image,0,0,50,50);
-
-                    //draw arithmetic problem
-                    renCtx.fillStyle = this.object.color;
-                    renCtx.font = this.object.font;
-                    renCtx.textAlign = 'center';
-                    renCtx.textBaseline = 'middle';
-                    renCtx.fillText(this.object.problem,25,25);
-                    console.log("normal problem rendered: " + this.object.problem);
-                }
-                // boss arithmetic
-                else if(gamemode != 0 && this.object.getBossStatus()){
-                    this.render.width = 100;
-                    this.render.height = 100;
-
-                    //draw asteroid
-                    renCtx.drawImage(this.image,0,0,100,100);
-
-                    //draw arithmetic problem
-                    renCtx.fillStyle = this.object.color;
-                    renCtx.font = this.object.font;
-                    renCtx.textAlign = 'center';
-                    renCtx.textBaseline = 'middle';
-                    renCtx.fillText(this.object.problem,50,50);
-                    console.log("boss problem rendered: " + this.object.problem);
+            // make a div which will be animated with css
+            this.div = document.createElement("div");
+            // set the size
+            if(this.object.boss){
+                if(gamemode == 0){
+                    this.div.style.width = 200 + "px";
+                    this.div.style.height = 120 + "px";
+                    // set text
+                    this.div.innerHTML = this.object.problem.num + "<br/>" + this.object.problem.str;
                 }
                 else{
-                    // normal digit ID
-                    if(!this.object.getBossStatus()){
-                        this.render.width = 100;
-                        this.render.height = 60;
-
-                        //draw asteroid
-                        renCtx.drawImage(this.image,20,0,60,60);
-
-                        //draw text
-                        renCtx.fillStyle = this.object.color;
-                        renCtx.font = this.object.font;
-                        renCtx.textAlign = 'center';
-                        renCtx.textBaseline = 'middle';
-                        renCtx.fillText(this.object.problem.num, 50, 30 - 8);
-                        renCtx.fillText(this.object.problem.str, 50, 30 + 10);
-                    }
-                    // boss digit ID
-                    else{
-                        this.render.width = 200;
-                        this.render.height = 100;
-
-                        //draw asteroid
-                        renCtx.drawImage(this.image,50,0,100,100);
-
-                        //draw text
-                        renCtx.fillStyle = this.object.color;
-                        renCtx.font = this.object.font;
-                        renCtx.textAlign = 'center';
-                        renCtx.textBaseline = 'middle';
-                        renCtx.fillText(this.object.problem.num, 100, 60 - 12);
-                        renCtx.fillText(this.object.problem.str, 100, 60 + 10);
-                    }
+                    this.div.style.width = this.div.style.height = 120 + "px";
+                    // set text
+                    this.div.innerHTML = "" + this.object.problem;
                 }
+                this.div.style.color = "white";
+                this.div.style.fontSize = "28px";
+                this.div.style.fontFamily = "Courier New";
+                this.div.style.fontWeight = "bold";
             }
-
-            this.update = function(){
-                if(this.object.boss){
-                    if(gamemode != 0){
-                        midCtx.drawImage(this.render, this.x - 50, this.y - 50);
-                    }
-                    else{
-                        midCtx.drawImage(this.render, this.x - 100, this.y - 50);
-                    }
+            else{
+                if(gamemode == 0){
+                    this.div.style.width = 60 + "px";
+                    this.div.style.height = 60 + "px";
+                    // set text
+                    this.div.innerHTML = this.object.problem.num + "<br/>" + this.object.problem.str;
                 }
                 else{
-                    if(gamemode != 0){
-                        midCtx.drawImage(this.render, this.x - 25, this.y - 25);
-                    }
-                    else{
-                        midCtx.drawImage(this.render, this.x - 50, this.y - 30);
-                    }
+                    this.div.style.width = this.div.style.height = 60 + "px";
+                    // set text
+                    this.div.innerHTML = "" + this.object.problem;
                 }
+                this.div.style.color = "white";
+                this.div.style.fontSize = "18px";
+                this.div.style.fontFamily = "Courier New";
+                this.div.style.fontWeight = "bold";
             }
+            // center text vertically
+            this.div.style.display = "flex";
+            this.div.style.justifyContent = "center";
+            this.div.style.alignItems = "center";
 
-            this.newPosition = function(){
-                this.object.newPosition();
-                this.x = this.object.x;
-                this.y = this.object.y;
+            // set width and height in more accessible terms
+            this.width = parseInt(this.div.style.width.slice(0,-2));
+            this.height = parseInt(this.div.style.height.slice(0,-2));
 
-            }
+            // background image
+            this.div.style.backgroundImage = greyAsteroidSrc;
+            this.div.style.backgroundSize = "cover";
+            // append div to main
+            document.getElementById("main").appendChild(this.div);
+            // position style
+            this.div.style.position = "absolute";
+            // position value
+            this.div.style.left = Math.floor(((window.innerWidth - topCanvas.width) / 2) + this.x - (this.width / 2)) + "px";
+            // set class
+            this.div.setAttribute("class", "asteroid");
+            // set what to do if the asteroid hits the bottom (finishes its animation)
+            this.div.addEventListener("animationend", function(){
+                if(playing){
+                    youLose();
+                }
+                bossExplodeSounds[bossExplodeSoundIdx].play();
+                if(bossExplodeSoundIdx >= polyphony - 1){
+                    bossExplodeSoundIdx = 0;
+                }else{
+                    bossExplodeSoundIdx++;
+                }
+                console.log("pushing explosion at " + matheroids[0].x + ", " + matheroids[0].y());
+                explosions.push(new explosion(matheroids[0].x, matheroids[0].y(), true));
+                removeMatheroid(0);
+            });
+
+            this.y = function(){
+                return parseInt(this.div.getBoundingClientRect().top + window.scrollY + (this.width / 2));
+            };
 
             //Returns an integer which is the answer to the problem
             this.getAnswer = function(){
@@ -514,13 +507,9 @@
                 return this.object.problem;
             }
 
-            this.setProblem = function(newProblem){
-                this.object.problem = newProblem;
-            }
-
             //Updates the color of an equation
             this.updateColor = function(newColor){
-                this.object.color = newColor;
+                this.div.style.color = newColor;
             }
 
             //Returns whether or not the problem is a boss.
@@ -530,9 +519,8 @@
         }
 
         // an object representing each problem
-        function object(x, y) {
+        function object(x) {
             this.x = x;
-            this.y = y;
             if(gamemode != 0){
                 this.problem = newMathProblem(normalAnswerMin, (normalAnswerMax + 1) / 2);
             }else{
@@ -586,46 +574,6 @@
                 console.log(this.answer);
             }
 
-            //Finds the new location for an equation
-            this.newPosition = function() {
-                this.y += this.speed;
-                this.hitBottom();    
-            }
-
-            //Checks to see if the equation has hit the bottom.
-            this.hitBottom = function() {
-                if (this.y == midCanvas.height - 40) {
-                    youLose();
-                    updateTop();
-                    drawPlayAgainButton();
-                    bossExplodeSounds[bossExplodeSoundIdx].play();
-                    if(bossExplodeSoundIdx >= polyphony - 1){
-                        bossExplodeSoundIdx = 0;
-                    }else{
-                        bossExplodeSoundIdx++;
-                    }
-                    explosions.push(new explosion(this.x,this.y,true));
-                }
-            }
-
-            //Returns an integer which is the answer to the problem
-            this.getAnswer = function(){
-                return this.answer;
-            }
-
-            this.getProblem = function(){
-                return this.problem;
-            }
-
-            this.setProblem = function(newProblem){
-                this.problem = newProblem;
-            }
-
-            //Updates the color of an equation
-            this.updateColor = function(newColor){
-                this.color = newColor;
-            }
-
             //Returns whether or not the problem is a boss.
             this.getBossStatus = function(){
                 return this.boss;
@@ -651,12 +599,6 @@
 
             midCtx.clearRect(0, 0, midCanvas.width, midCanvas.height);
 
-            // this needs to count down so the 0th problem is drawn last, and is thus on top
-            for(var i = matheroids.length - 1; i >= 0; i--){
-                matheroids[i].newPosition();
-                matheroids[i].update();
-            }
-
             if(laserCountdown >= 0){
                 updateLaser();
                 laserCountdown--;
@@ -680,9 +622,14 @@
                 }
 
                 if(matheroids.length > 0){
-                    matheroids[0].image = astImage2;
+                    matheroids[0].div.style.backgroundImage = redAsteroidSrc;
                     matheroids[0].updateColor('Aqua');
-                    matheroids[0].renderMatheroid();
+                    // put the current asteroid on top
+                    matheroids[0].div.style.zIndex = "3";
+                    // put the asteroid on deck above the ones before it
+                    if(matheroids.length > 1){
+                        matheroids[1].div.style.zIndex = "2";
+                    }
                 }
             }
             else{
@@ -773,16 +720,21 @@
         }
 
         function drawPlayAgainButton(){
+            console.log("drawPlayAgainButton has been called");
+            console.log("beginning path...")
             topCtx.beginPath();
             topCtx.lineWidth = 5;
             topCtx.strokeStyle = "#FF0000";
             topCtx.rect(80, 350, 240, 50);
             topCtx.stroke();
+            console.log("rectangle stroked");
 
+            console.log("beginning path...")
             topCtx.beginPath();
             topCtx.fillStyle = "#FF0000";
             topCtx.font = "bold 36px Courier New";
             topCtx.fillText("Play Again", 200, 375);
+            console.log("text filled");
         }
 
         //Tells the player they lose
@@ -791,7 +743,9 @@
                 loseSound.play();
             }
             playing = false;
-            matheroids.splice(0,1);
+            updateTop();
+            console.log("top updated, drawing play again button..");
+            drawPlayAgainButton();
         }
 
         //Checks the users given answer.
@@ -971,7 +925,8 @@
             }
             else{
                 laserTargetX = matheroids[0].x;
-                laserTargetY = matheroids[0].y;
+                laserTargetY = matheroids[0].y();
+                console.log("x: " + laserTargetX + ", y: " + laserTargetY);
             }
 
             laserSounds[laserSoundIdx].play();
@@ -1009,7 +964,7 @@
                     }
                 }
 
-                matheroids.splice(0, 1);
+                removeMatheroid(0);
             }
             else{
                 laserReflects = true;
@@ -1026,7 +981,6 @@
             updateTop();
 
             document.getElementById("userAnswer").value = "";
-            // console.log("shooting complete.");
         }
 
     </script>
