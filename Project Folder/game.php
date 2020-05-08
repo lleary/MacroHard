@@ -422,10 +422,10 @@
             // set the size
             if(this.object.boss){
                 if(gamemode == 0){
-                    this.div.style.width = 200 + "px";
+                    this.div.style.width = 120 + "px";
                     this.div.style.height = 120 + "px";
                     // set text
-                    this.div.innerHTML = this.object.problem.num + "<br/>" + this.object.problem.str;
+                    this.div.innerHTML = "<p style=\"text-align:center;\">" + this.object.problem.num + "<br/>" + this.object.problem.str + "</p>";
                 }
                 else{
                     this.div.style.width = this.div.style.height = 120 + "px";
@@ -439,10 +439,10 @@
             }
             else{
                 if(gamemode == 0){
-                    this.div.style.width = 60 + "px";
-                    this.div.style.height = 60 + "px";
+                    this.div.style.width = 70 + "px";
+                    this.div.style.height = 70 + "px";
                     // set text
-                    this.div.innerHTML = this.object.problem.num + "<br/>" + this.object.problem.str;
+                    this.div.innerHTML = "<p style=\"text-align:center;\">" + this.object.problem.num + "<br/>" + this.object.problem.str + "</p>";
                 }
                 else{
                     this.div.style.width = this.div.style.height = 60 + "px";
@@ -454,10 +454,10 @@
                 this.div.style.fontFamily = "Courier New";
                 this.div.style.fontWeight = "bold";
             }
-            // center text vertically
-            this.div.style.display = "flex";
-            this.div.style.justifyContent = "center";
-            this.div.style.alignItems = "center";
+            // // center text vertically
+            // this.div.style.display = "flex";
+            // this.div.style.justifyContent = "center";
+            // this.div.style.alignItems = "center";
 
             // set width and height in more accessible terms
             this.width = parseInt(this.div.style.width.slice(0,-2));

@@ -11,6 +11,9 @@ h1{
 	font-family:sans-serif;
 }
 .asteroid {
+	display: flex;
+	align-items: center;
+	justify-content: center;
     z-index: 1;
     background-image: url("assets/asteroid_square_grey_v1.png");
     background-size: cover;
