@@ -123,7 +123,6 @@
         }
 
         var gamemode = localStorage.getItem("gamemode");
-        console.log("Gamemode is " + gamemode);
 
         var indexToPlace = ["ones", "tens", "hundreds", "thousands"];
 
@@ -404,10 +403,9 @@
         }
 
         function clearAllMatheroids(){
-            console.log("clearing all matheroids...");
-            for(var i = 0; i < matheroids.length; i++){
-                console.log("removing matheroid at " + i);
-                removeMatheroid(i);
+            var initialLength = matheroids.length;
+            for(var i = 0; i < initialLength; i++){
+                removeMatheroid(0);
             }
         }
 
@@ -487,7 +485,6 @@
                 }else{
                     bossExplodeSoundIdx++;
                 }
-                console.log("pushing explosion at " + matheroids[0].x + ", " + matheroids[0].y());
                 explosions.push(new explosion(matheroids[0].x, matheroids[0].y(), true));
                 removeMatheroid(0);
             });
@@ -569,7 +566,6 @@
                 rnd = getRandomNumber(0,numStr.length);
                 this.answer = placeValues[rnd];
                 this.problem.str = indexToPlace[rnd];
-                console.log(this.answer);
             }
 
             //Returns whether or not the problem is a boss.
@@ -718,31 +714,23 @@
         }
 
         function drawPlayAgainButton(){
-            console.log("drawPlayAgainButton has been called");
-            console.log("beginning path...")
             topCtx.beginPath();
             topCtx.lineWidth = 5;
             topCtx.strokeStyle = "#FF0000";
             topCtx.rect(80, 350, 240, 50);
             topCtx.stroke();
-            console.log("rectangle stroked");
 
-            console.log("beginning path...")
             topCtx.beginPath();
             topCtx.fillStyle = "#FF0000";
             topCtx.font = "bold 36px Courier New";
             topCtx.fillText("Play Again", 200, 375);
-            console.log("text filled");
         }
 
         //Tells the player they lose
         function youLose(){
-            if(playing){
-                loseSound.play();
-            }
+            loseSound.play();
             playing = false;
             updateTop();
-            console.log("top updated, drawing play again button..");
             drawPlayAgainButton();
         }
 
@@ -832,8 +820,6 @@
         }
 
         function updateLaser(){
-            // console.log("updating laser. explosions count = " + explosions.length);
-
             midCtx.globalAlpha = laserCountdown / laserFrames;
 
             midCtx.lineWidth = 10;
@@ -898,13 +884,9 @@
             }
             else{
                 var theta = Math.atan(dy / dx);
-                //console.log("theta: " + theta);
 
                 var endCannonX = (cannonLength * Math.cos(theta)) + 200;
                 var endCannonY = (cannonLength * Math.sin(theta)) + 600;
-                //console.log("endCannonY = " + endCannonY);
-
-                //topCtx.beginPath();
 
                 if(dx < 0){
                     topCtx.lineTo(400 - endCannonX, endCannonY);
@@ -924,7 +906,6 @@
             else{
                 laserTargetX = matheroids[0].x;
                 laserTargetY = matheroids[0].y();
-                console.log("x: " + laserTargetX + ", y: " + laserTargetY);
             }
 
             laserSounds[laserSoundIdx].play();
