@@ -157,7 +157,7 @@
 
         var spawnIntervalMax = initSpawnMax;
         var spawnTimer = 200;
-        var bossCountdown = 10 - gamemode;
+        var bossCountdown = 10;
 
         // laserFrames is how many frames the laser will be onscreen for
         var laserFrames = 10; // this MUST be > 0
@@ -356,7 +356,7 @@
 
             spawnIntervalMax = initSpawnMax;
             spawnTimer = 200;
-            bossCountdown = 10 - gamemode;
+            bossCountdown = 10;
 
             laserFrames = 10; // this MUST be > 0
             laserCountdown = -1;
