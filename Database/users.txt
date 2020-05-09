@@ -6,4 +6,4 @@ David Chiu teacher $2y$10$msFG4SfnsQXvusB3K9vJ9eCbRW/ov9tW6OBK2wooEn70UzyjahBze 
 mister incredible student 0 1 class2 0 0 0 0
 cheez it student 0 1 class2 0 0 0 0
 test3 ing student 0 1 class2 0 0 0 0
-test ing2 student 0 1 class2 0 0 0 0
+test ing2 student 0 1 class2 0 3 0 0
