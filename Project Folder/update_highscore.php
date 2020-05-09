@@ -1,6 +1,4 @@
 <?php
-	session_start();
-
 	require_once 'files.php';
 	require_once 'config.php';
 
@@ -9,7 +7,7 @@
 
 	$level = 0;
 	$score = 0;
-	updateFileScore($level, $score);
+	//updateFileScore($level, $score);
 
 	function updateFileScore($level, $score){
 		$myfile = fopen(USERFILE, "r+") or die("Failed to create files");
