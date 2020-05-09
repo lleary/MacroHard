@@ -233,19 +233,21 @@ session_start();
 	<div id = "accountSettings" style="border:3px; border-style:solid; border-color: #FF5555; padding: 5px; width: 500px">
 		<h2>ACCOUNT SETTINGS</h2>
 
-		<form onsubmit="resetLevel(); return false;">
-			<button>Reset Level</button>
-		</form>
+		<?php if($_SESSION["type"] == "Teacher") : ?>
+			<form onsubmit="resetLevel(); return false;">
+				<button>Reset Level</button>
+			</form>
 
-		<form onsubmit="increaseLevel(); return false;">
-			<button>Increase Level</button>
-		</form>
+			<form onsubmit="increaseLevel(); return false;">
+				<button>Increase Level</button>
+			</form>
 
-		<form onsubmit="decreaseLevel(); return false;">
-			<button>Decrease Level</button>
-		</form>
+			<form onsubmit="decreaseLevel(); return false;">
+				<button>Decrease Level</button>
+			</form>
 
-		<br />
+			<br/>
+		<?php endif; ?>
 
 		<div style="border:3px; border-style:solid; border-color: #FF5555; padding: 5px; ">
 			<h2>Change Name</h2>
