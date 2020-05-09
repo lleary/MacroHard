@@ -4,7 +4,7 @@
       die();
    }
 
-    include 'update_highscore.php';
+    //include 'update_highscore.php';
 ?>
 
 <!DOCTYPE html>
@@ -14,6 +14,7 @@
     <title>Matheroids</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link rel="stylesheet" type="text/css"href="stylesheet.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
     <div id="stage">
         <canvas id="top-layer" width="400" height="600"></canvas>
         <canvas id="mid-layer" width="400" height="600"></canvas>
@@ -751,6 +752,27 @@
             playing = false;
             updateTop();
             drawPlayAgainButton();
+
+            var correctGamemode = parseInt(gamemode) + 1;
+            var scoreString = ""+score;
+            var gamemodeString = ""+correctGamemode;
+
+            jQuery.ajax({
+                type: "POST",
+                url: 'update_highscore.php',
+                dataType: 'json',
+                data: {functionname: 'updateFileScore', arguments: [gamemodeString, scoreString]},
+
+                success: function (obj, textstatus) {
+                              if( !('error' in obj) ) {
+                                  yourVariable = obj.result;
+                              }
+                              else {
+                                  console.log(obj.error);
+                              }
+                        }
+            });
+            
         }
 
         //Checks the users given answer.

@@ -1,13 +1,36 @@
 <?php
+	session_start();
 	require_once 'files.php';
 	require_once 'config.php';
+	header('Content-Type: application/json');
+
+
+	if( !isset($_POST['functionname']) ) { $aResult['error'] = 'No function name!'; }
+
+    if( !isset($_POST['arguments']) ) { $aResult['error'] = 'No function arguments!'; }
+
+    if( !isset($aResult['error']) ) {
+
+        switch($_POST['functionname']) {
+            case 'updateFileScore':
+               if( !is_array($_POST['arguments']) || (count($_POST['arguments']) < 2) ) {
+                   $aResult['error'] = 'Error in arguments!';
+               }
+               else {
+                   $aResult['result'] = updateFileScore(floatval($_POST['arguments'][0]), floatval($_POST['arguments'][1]));
+               }
+               break;
+
+            default:
+               $aResult['error'] = 'Not found function '.$_POST['functionname'].'!';
+               break;
+        }
+
+    }
 
 	extract($_POST);
 	$all_user = get_user_info(USERFILE);
 
-	$level = 0;
-	$score = 0;
-	//updateFileScore($level, $score);
 
 	function updateFileScore($level, $score){
 		$myfile = fopen(USERFILE, "r+") or die("Failed to create files");
@@ -79,5 +102,4 @@
 		fclose($myfile);
 	}
 
-	//header("Location: mainMenu.php");
 ?>
