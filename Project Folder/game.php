@@ -70,6 +70,11 @@
 
         var greyAsteroidSrc = "url(assets/asteroid_square_grey_v1.png)";
         var redAsteroidSrc = "url(assets/asteroid_square_red_v2.png)";
+
+        var fullHeart = new Image();
+        fullHeart.src = 'assets/minecraft_heart_full_v1.png';
+        var emptyHeart = new Image();
+        emptyHeart.src = 'assets/minecraft_heart_empty_v1.png';
         
         var musicOnIcon = new Image();
         musicOnIcon.src = 'assets/music_on_icon.png';
@@ -580,6 +585,7 @@
             updateScore();
             updateCannon();
             updateSoundControls();
+            updateHealth();
         }
 
         // runs every tick (15ms)
@@ -654,6 +660,17 @@
                 topCtx.beginPath();
                 topCtx.font = "bold 40px Courier New";
                 topCtx.fillText("Final score: " + score, 200, 300);
+            }
+        }
+
+        function updateHealth(){
+            for(var i = 0; i < strikes; i++){
+                if(playing && i < strikes - wrongTotal){
+                    topCtx.drawImage(fullHeart, (i * 18), 580, 20, 20);
+                }
+                else{
+                    topCtx.drawImage(emptyHeart, (i * 18), 580, 20, 20);
+                }
             }
         }
 
@@ -758,10 +775,6 @@
                     }
                     else{
                         wrongTotal++;
-
-                        if(wrongTotal >= strikes){
-                            youLose();
-                        }
 
                         return false;
                     }
@@ -946,6 +959,10 @@
                 removeMatheroid(0);
             }
             else{
+                if(wrongTotal >= strikes){
+                    youLose();
+                }
+
                 laserReflects = true;
 
                 damageSounds[damageSoundIdx].play();
@@ -957,7 +974,9 @@
                 }
             }
 
-            updateTop();
+            if(playing){
+                updateTop();
+            }
 
             document.getElementById("userAnswer").value = "";
         }
