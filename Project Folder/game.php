@@ -759,10 +759,6 @@
                     else{
                         wrongTotal++;
 
-                        if(wrongTotal >= strikes){
-                            youLose();
-                        }
-
                         return false;
                     }
                 }
@@ -946,6 +942,10 @@
                 removeMatheroid(0);
             }
             else{
+                if(wrongTotal >= strikes){
+                    youLose();
+                }
+
                 laserReflects = true;
 
                 damageSounds[damageSoundIdx].play();
@@ -957,7 +957,9 @@
                 }
             }
 
-            updateTop();
+            if(playing){
+                updateTop();
+            }
 
             document.getElementById("userAnswer").value = "";
         }
