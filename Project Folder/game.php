@@ -644,6 +644,7 @@
 
         //Updates the printed Score
         function updateScore(){
+            // draw the score
             if(playing){
                 topCtx.beginPath();
                 topCtx.fillStyle = "#FF0000";
@@ -664,6 +665,27 @@
                 topCtx.font = "bold 40px Courier New";
                 topCtx.fillText("Final score: " + score, 200, 300);
             }
+
+            // update the database
+            var correctGamemode = parseInt(gamemode) + 1;
+            var scoreString = ""+score;
+            var gamemodeString = ""+correctGamemode;
+
+            jQuery.ajax({
+                type: "POST",
+                url: 'update_highscore.php',
+                dataType: 'json',
+                data: {functionname: 'updateFileScore', arguments: [gamemodeString, scoreString]},
+
+                success: function (obj, textstatus) {
+                              if( !('error' in obj) ) {
+                                  yourVariable = obj.result;
+                              }
+                              else {
+                                  console.log(obj.error);
+                              }
+                        }
+            });
         }
 
         function updateHealth(){
@@ -752,26 +774,6 @@
             playing = false;
             updateTop();
             drawPlayAgainButton();
-
-            var correctGamemode = parseInt(gamemode) + 1;
-            var scoreString = ""+score;
-            var gamemodeString = ""+correctGamemode;
-
-            jQuery.ajax({
-                type: "POST",
-                url: 'update_highscore.php',
-                dataType: 'json',
-                data: {functionname: 'updateFileScore', arguments: [gamemodeString, scoreString]},
-
-                success: function (obj, textstatus) {
-                              if( !('error' in obj) ) {
-                                  yourVariable = obj.result;
-                              }
-                              else {
-                                  console.log(obj.error);
-                              }
-                        }
-            });
             
         }
 
