@@ -102,5 +102,4 @@
 		fclose($myfile);
 	}
 
-	//header("Location: mainMenu.php");
 ?>
