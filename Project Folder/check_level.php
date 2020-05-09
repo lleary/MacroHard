@@ -9,7 +9,7 @@ $re = checkLevel($_SESSION["user"], $_SESSION['lastname']);
 $_SESSION['level'] = $re;
 
 #this function reads the user level from the database. As of release 3. Userlevels are determined by each student's highscores.
-function checkLevelOld ($firstname, $lastname){
+/*function checkLevelOld ($firstname, $lastname){
 	$all_user = get_user_info(USERFILE);
 
 	foreach ($all_user as $user) {
@@ -19,7 +19,7 @@ function checkLevelOld ($firstname, $lastname){
 		}
 	}
 	return 0;
-}
+}*/
 
 function checkLevel ($firstname, $lastname){
 	$all_user = get_user_info(USERFILE);
