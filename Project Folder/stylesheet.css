@@ -67,6 +67,23 @@ h1{
 	border-radius: 5px;
 
 }
+#gradebook{
+	color:#3fb7d9;
+	padding: 15px;
+	display:block;
+	position:fixed;
+	top:120px;
+	visibility: hidden;
+	border-radius: 5px;
+
+}
+#gradebookTable{
+	width:100%;
+
+}
+table#gradebookTable tr:nth-child(even) {
+ background-color: #f0f0f0;
+}
 
 /*Begining of Leaderboard Style*/
 #leaderboardList{

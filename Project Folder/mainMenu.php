@@ -29,6 +29,7 @@ session_start();
 		<li id="navBarItem"><a href="#leaderboard" onClick="showMenu('leaderboard')">Leaderboard</a></li>
 		<?php if($_SESSION["type"] == "Teacher") : ?>		<!-- Only shows teacher dashboard tab if a teacher is signed in !-->
 			<li id="navBarItem"><a href="#teacherDashboard" onClick="showMenu('teacherDashboard')">Teacher Dashboard</a></li>
+			<li id="navBarItem"><a href="#gradebook" onClick="showMenu('gradebook')">Gradebook</a></li>
 		<?php endif; ?>
 		<li id="navBarItem"><a href="#settings" onClick="showMenu('accountSettings')">Settings</a></li>
 		<li id="navBarItem" style="float:right;"><a href="./Logout.php">Logout</a></li>
@@ -50,6 +51,7 @@ session_start();
 			document.getElementById('accountSettings').style.visibility='hidden';
 			<?php if($_SESSION["type"] == "Teacher") : ?>									//Only disables the teacher dashboard if a teacher is signed in. 
 				document.getElementById('teacherDashboard').style.visibility='hidden';
+				document.getElementById('gradebook').style.visibility='hidden';
 			<?php endif; ?>
 			document.getElementById(menu).style.visibility='visible';
 		}
@@ -191,6 +193,27 @@ session_start();
 			</div>
 
 		</div>
+
+		<div id="gradebook" style="border:3px; border-style:solid; border-color: #3fb7d9; padding: 5px; width: 700px">
+			<h2>GRADEBOOK</h2>
+			<table id="gradebookTable">
+				<tr>
+			    	<th>Firstname</th>
+			    	<th>Lastname</th> 
+			    	<th>Level 1</th>
+			    	<th>Level 2</th>
+			    	<th>Level 3</th>
+			    	<th>Level 4</th>
+				</tr>
+
+				<?php
+					include 'createGradebook.php';	#Creates Gradebook by including the code from createGradebook.php
+				?>
+			</table>
+
+		</div>
+
+
 	<?php endif; ?>
 	<br />
 
