@@ -97,7 +97,10 @@
 				}
 			}
 		}
-		fwrite($myfile, $str) or die("Could not write to file");
+
+		if($_SESSION["class"] != 'teacher'){
+			fwrite($myfile, $str) or die("Could not write to file");
+		}
 
 		fclose($myfile);
 	}
