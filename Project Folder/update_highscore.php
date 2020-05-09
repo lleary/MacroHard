@@ -9,58 +9,73 @@
 
 	$level = 0;
 	$score = 0;
-	//updateHighScore('1', '10000');
 	updateFileScore($level, $score);
 
-	function checkForNewHighScore($level, $score){
-		foreach ($all_user as $user) { 
+	function updateFileScore($level, $score){
+		$myfile = fopen(USERFILE, "r+") or die("Failed to create files");
+		$str = "";
+		$all_user = get_user_info(USERFILE);
+		foreach ($all_user as $user) {
 			$firstName = $user["first"];
-			if($firstName == $_SESSION["user"]){
-				$level1score = $user["level1Score"];
-				$level2score = $user["level2Score"];
-				$level3score = $user["level3Score"];
-				$level4score = $user["level4Score"];
+			$signedIn = $_SESSION["user"];
+			for($i = 1; $i <= 10; $i+=1){
+				if($i==1){
+					$value = $user["first"];
+				}else if($i==2){
+					$value = $user["last"];
+				}else if($i==3){
+					$value = $user["class"];
+				}else if($i==4){
+					$value = $user["password"];
+				}else if($i==5){
+					$value = $user["level"];
+				}else if($i==6){
+					$value = $user["enrolledClass"];
+				}else if($i==7){
+					$value = $user["level1Score"];
+					if($firstName == $signedIn){
+						if($level == '1'){
+							if($score >= $value){
+								$value = $score;
+							}
+						}
+					}
+				}else if($i==8){
+					$value = $user["level2Score"];
+					if($firstName == $signedIn){
+						if($level == '2'){
+							if($score >= $value){
+								$value = $score;
+							}
+						}
+					}
+				}else if($i==9){
+					$value = $user["level3Score"];
+					if($firstName == $signedIn){
+						if($level == '3'){
+							if($score >= $value){
+								$value = $score;
+							}
+						}
+					}
+				}else if($i==10){
+					$value = $user["level4Score"];
+					if($firstName == $signedIn){
+						if($level == '4'){
+							if($score >= $value){
+								$value = $score;
+							}
+						}
+					}
+				}
 
-				if($level == 1 && $score >= $level1score){
-					updateHighScore($level, $score);
-				}else if($level == 2  && $score >= $level2score){
-					updateHighScore($level, $score);
-				}else if($level == 3  && $score >= $level3score){
-					updateHighScore($level, $score);
-				}else if($level == 4  && $score >= $level4score){
-					updateHighScore($level, $score);
+				if($i != 10){
+					$str .= $value." ";
+				}else{
+					$str .= $value;
 				}
 			}
 		}
-	}
-
-	function updateHighScore($level, $score){
-
-		if ($level == 1){ 
-			$student_info = array($_SESSION['user'], $_SESSION['lastname'], "student", "0", "1", "0", $score, "0", "0", "0");
-		}else if($level == 2){
-			$student_info = array($_SESSION['user'], $_SESSION['lastname'], "student", "0", "1", "0", "0", $score, "0", "0");
-		}else if($level == 3){
-			$student_info = array($_SESSION['user'], $_SESSION['lastname'], "student", "0", "1", "0", "0", "0", $score, "0");
-		}else if($level == 4){
-			$student_info = array($_SESSION['user'], $_SESSION['lastname'], "student", "0", "1", "0", "0", "0", "0", $score);
-		}
-
-		//update_file(USERFILE, $student_info);
-	}
-
-	function updateFileScore($level, $score){
-		$myfile = fopen(USERFILE, "w") or die("Failed to create files");
-		$str = "";
-		foreach ($data as $key => $value) {
-				//echo " ";
-				//echo "$data";
-				//echo "$key";
-				//echo "$value";
-				$str .= join(" ", $value);
-
-		}
-
 		fwrite($myfile, $str) or die("Could not write to file");
 
 		fclose($myfile);
