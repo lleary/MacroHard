@@ -3,6 +3,8 @@
       header("location: welcome.php");
       die();
    }
+
+    include 'update_highscore.php';
 ?>
 
 <!DOCTYPE html>
