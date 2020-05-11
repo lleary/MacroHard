@@ -6,7 +6,7 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<title>Login</title>
+	<title>Matheroids</title>
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 	<style><?php include 'stylesheet.css'; ?></style>
 </head>
@@ -22,7 +22,7 @@
 				<input type="submit" class="teacherlogin" value="TEACHER LOGIN">
 			</form>
 			<br>
-			<form action="create_teacher.php" method="post" id="form_id">
+			<form action="new_teacher_form.php" method="post" id="form_id">
 				<input type="submit" class="createteacher" value="CREATE TEACHER ACCOUNT">
 			</form>
 
