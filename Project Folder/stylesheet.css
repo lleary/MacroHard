@@ -30,6 +30,61 @@ h1{
     100% {bottom: -590px;}
 }
 
+/*Welcome page buttons*/
+
+.studentlogin {
+	display: block;
+	height: 400px;
+	width: 95%;
+	background-color: #512DA8;
+	border: 2px solid #512DA8;
+	color: white;
+	padding: 15px 32px;
+	font-size: 28px;
+	text-align: center;
+	border-radius: 5px;
+	transition-duration: 0.4s;
+}
+.studentlogin:hover {
+	background-color: #DFDFDF;
+	border: 2px solid #512DA8;
+	color: black;
+}
+.teacherlogin {
+	display: block;
+	border: none;
+	background-color: #7E57C2;
+	border: 2px solid #7E57C2;
+	color: white;
+	padding: 15px 32px;
+	font-size: 20px;
+	text-align: center;
+	border-radius: 5px;
+	transition-duration: 1.5s;
+}
+.teacherlogin:hover {
+	background-color: white;
+	border: 2px solid #7E57C2;
+	color: black;
+}
+.createteacher {
+	display: block;
+	border: none;
+	background-color: #7E57C2;
+	border: 2px solid #7E57C2;
+	color: white;
+	padding: 15px 32px;
+	font-size: 20px;
+	text-align: center;
+	border-radius: 5px;
+	transition-duration: 0.4s;
+}
+.createteacher:hover {
+	background-color: white;
+	border: 2px solid #7E57C2;
+	color: black;
+}
+
 /*Begining of Menus Style*/
 #mainMenu{
 	color:#22D2A0;

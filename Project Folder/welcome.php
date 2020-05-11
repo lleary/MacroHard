@@ -13,13 +13,19 @@
 
 <body>
 		<center>
-			<form action="login_redirect.php" method="post" id="form_id" style="border:2px; border-style:solid; border-color: black; padding: 5px; width: 500px; height: 200px">
-				<h2>Welcome to Matheroids!</h2>
-				I am a:<br>
-				<input type="radio" name="login_type" value="student"> Student<br>
-				<input type="radio" name="login_type" value="teacher"> Teacher<br><br>
-				<input type="submit" name="submit_id" id="continue" value="Continue" />
+			<br><br><h2>Welcome to Matheroids!</h2><br><br>
+			<form action="student_login.php" method="post" id="form_id">
+				<input type="submit" class="studentlogin" value="STUDENT LOGIN">
 			</form>
+			<br><br><br><br>
+			<form action="teacher_login.php" method="post" id="form_id">
+				<input type="submit" class="teacherlogin" value="TEACHER LOGIN">
+			</form>
+			<br>
+			<form action="create_teacher.php" method="post" id="form_id">
+				<input type="submit" class="createteacher" value="CREATE TEACHER ACCOUNT">
+			</form>
+
 		</center>
 </body>
 
