@@ -1,3 +1,4 @@
 className enabledLeaderboard bossDigitMin bossDigitMax normalDigitMin normalDigitMax
 class1 1 20 39 0 19
 class2 1 20 39 0 19
+class3 1 20 39 0 19
