@@ -40,7 +40,7 @@
 					$level+=1;	
 				}
 
-				if($user["class"] == 'teacher'){
+				if($user["type"] == 'teacher'){
 					$level = 4;
 				}
 			}

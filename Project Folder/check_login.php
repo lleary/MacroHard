@@ -60,10 +60,10 @@ function checkLogin ($firstname, $lastname, $pw){
 		$userLastName = $user["last"];
 
 		if($userFirstName==$firstname && $userLastName==$lastname){
-			if($user["class"]=="student") {
+			if($user["type"]=="student") {
 				return 1;
 			}
-			elseif($user["class"]=="teacher"){
+			elseif($user["type"]=="teacher"){
 				if(password_verify($pw, $user["password"])) {
 					return 2;
 				}

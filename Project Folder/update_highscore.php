@@ -45,7 +45,7 @@
 				}else if($i==2){
 					$value = $user["last"];
 				}else if($i==3){
-					$value = $user["class"];
+					$value = $user["type"];
 				}else if($i==4){
 					$value = $user["password"];
 				}else if($i==5){
@@ -100,7 +100,7 @@
 			}
 		}
 
-		if($_SESSION["class"] != 'teacher'){
+		if($_SESSION["type"] != 'teacher'){
 			fwrite($myfile, $str) or die("Could not write to file");
 		}
 

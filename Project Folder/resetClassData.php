@@ -86,7 +86,7 @@
 			}
 		}
 
-		if($_SESSION["class"] != 'teacher'){
+		if($_SESSION["type"] != 'teacher'){
 			fwrite($myfile, $str) or die("Could not write to file");
 		}
 

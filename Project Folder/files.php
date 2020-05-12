@@ -1,6 +1,6 @@
 <?php 
 	/******File Handling*******/
-	$key_arr = array("first", "last", "class", "password", "level", "enrolledClass", "level1Score", "level2Score", "level3Score" ,"level4Score", "endMarker");
+	$key_arr = array("first", "last", "type", "password", "level", "enrolledClass", "level1Score", "level2Score", "level3Score" ,"level4Score", "endMarker");
 
 	$key_arr_class = array("className", "enabledLeaderboard", "bossAnswerMin", "bossAnswerMax", "normalAnswerMin", "normalAnswerMax", "threshold", "endMarker");
 	

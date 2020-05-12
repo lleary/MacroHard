@@ -12,7 +12,7 @@
 	$userClass = findClass($userFirstName,$userLastName);
 
 	foreach ($all_user as $user) { 	
-		if($user["class"] == 'student'){			#Doesn't include teachers, eventually will only include students in a class.
+		if($user["type"] == 'student'){			#Doesn't include teachers, eventually will only include students in a class.
 			if($user["enrolledClass"] == $userClass){			
 				echo "<tr>";
 				for ($i = 1; $i <= 6; $i+=1){
