@@ -90,7 +90,7 @@ h1{
 	color:#22D2A0;
 	display:block;
 	padding: 15px;	
-	position:fixed;
+	position:absolute;
 	top:120px;
 	border-radius: 5px;
 }
@@ -98,7 +98,7 @@ h1{
 	color:#FF5555;
 	padding: 15px;
 	display:block;
-	position:fixed;
+	position:absolute;
 	top:120px;
 	visibility: hidden;
 	border-radius: 5px;
@@ -107,8 +107,8 @@ h1{
 	color:#FFD913;
 	padding: 15px;
 	display:block;
-	position:fixed;
-	top:120px;	
+	position: absolute;
+	top:120px;
 	visibility: hidden;
 	border-radius: 5px;
 }
@@ -116,7 +116,7 @@ h1{
 	color:#c238d1;
 	padding: 15px;
 	display:block;
-	position:fixed;
+	position:absolute;
 	top:120px;
 	visibility: hidden;
 	border-radius: 5px;
@@ -126,7 +126,7 @@ h1{
 	color:#3fb7d9;
 	padding: 15px;
 	display:block;
-	position:fixed;
+	position:absolute;
 	top:120px;
 	visibility: hidden;
 	border-radius: 5px;
