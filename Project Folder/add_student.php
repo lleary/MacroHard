@@ -10,7 +10,7 @@
 	echo "Student ".$firstname." ".$lastname." added";
 
 	function createStudentAccount($firstname, $lastname){
-		$student_info = array($firstname, $lastname, "student", "0", "1", "0", "0", "0", "0", "0", "test");
+		$student_info = array($firstname, $lastname, "student", "0", "1", "0", "0", "0", "0", "0", "#");
 
 		save_data(USERFILE, $student_info);
 	}

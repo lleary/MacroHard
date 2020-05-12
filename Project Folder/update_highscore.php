@@ -89,7 +89,7 @@
 						}
 					}
 				}else if($i==11){
-					$value = $user["test"];
+					$value = $user["endMarker"];
 				}
 
 				if($i != 11){
