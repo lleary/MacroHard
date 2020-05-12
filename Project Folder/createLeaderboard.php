@@ -24,6 +24,11 @@
    		echo "</li>";
 	} */
 
+	$userFirstName = $_SESSION['user'];
+	$userLastName = $_SESSION['lastname'];
+
+	$userClass = findClass($userFirstName,$userLastName);
+
 	for ($i = 1; $i <= 4; $i+=1) { 					#For loop creates one sublist for each level i.
 		echo "<li>";
 	   		echo "<h2>Level $i</h2>";				#Prints the level name at the start of the list.
@@ -39,37 +44,39 @@
 
 	   		foreach ($all_user as $user) {
 		   		if($user["class"] == 'student'){
+		   			if($user["enrolledClass"] == $userClass){
 
-		   			$firstName = $user["first"];
+			   			$firstName = $user["first"];
 
-		   			if($i == 1){
-		   				$score = $user["level1Score"];
-		   			} else if($i == 2){
-		   				$score = $user["level2Score"];
-		   			} else if($i == 3){
-		   				$score = $user["level3Score"];
-		   			} else if($i == 4){
-		   				$score = $user["level4Score"];
-		   			}
+			   			if($i == 1){
+			   				$score = $user["level1Score"];
+			   			} else if($i == 2){
+			   				$score = $user["level2Score"];
+			   			} else if($i == 3){
+			   				$score = $user["level3Score"];
+			   			} else if($i == 4){
+			   				$score = $user["level4Score"];
+			   			}
 
-		   			if($score >= $firstPlaceScore && $score != 0){
-		   				$thirdPlaceName = $secondPlaceName;
-		   				$thirdPlaceScore = $secondPlaceScore;
-		   				$secondPlaceName = $firstPlaceName;
-		   				$secondPlaceScore = $firstPlaceScore;
+			   			if($score >= $firstPlaceScore && $score != 0){
+			   				$thirdPlaceName = $secondPlaceName;
+			   				$thirdPlaceScore = $secondPlaceScore;
+			   				$secondPlaceName = $firstPlaceName;
+			   				$secondPlaceScore = $firstPlaceScore;
 
-		   				$firstPlaceName = $firstName;
-		   				$firstPlaceScore = $score;
-		   			} else if ($score >= $secondPlaceScore && $score != 0){
-		   				$thirdPlaceName = $secondPlaceName;
-		   				$thirdPlaceScore = $secondPlaceScore;
+			   				$firstPlaceName = $firstName;
+			   				$firstPlaceScore = $score;
+			   			} else if ($score >= $secondPlaceScore && $score != 0){
+			   				$thirdPlaceName = $secondPlaceName;
+			   				$thirdPlaceScore = $secondPlaceScore;
 
-		   				$secondPlaceName = $firstName;
-		   				$secondPlaceScore = $score;
-		   			} else if ($score >= $thirdPlaceScore && $score != 0){
-		   				$thirdPlaceName = $firstName;
-		   				$thirdPlaceScore = $score;
-		   			}
+			   				$secondPlaceName = $firstName;
+			   				$secondPlaceScore = $score;
+			   			} else if ($score >= $thirdPlaceScore && $score != 0){
+			   				$thirdPlaceName = $firstName;
+			   				$thirdPlaceScore = $score;
+			   			}
+			   		}
 		   		}
 		   	}
 
