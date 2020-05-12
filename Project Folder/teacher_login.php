@@ -12,7 +12,7 @@
 </head>
 <body>
 		<center>
-		<div style="border:3px; border-style:solid; border-color: #7E57C2; border-radius: 5px; padding: 5px; width: 500px; height: 235px">
+		<div style="border:3px; border-style:solid; border-color: #7E57C2; border-radius: 5px; padding: 5px; width: 500px; height: 265px">
 			<form action="check_login.php" method="post" id="form_id">
 				<h2>Teacher Login</h2>
 				First Name:
@@ -22,6 +22,10 @@
 				Password:
 				<input type="Password" name="pw" id="pw" placeholder="Password" /><br/><br/>
 				<input type="submit" name="submit_id" id="login" value="Login" /><br/>
+			</form>
+			<form action="welcome.php" method="post">
+				<br/>
+				<input type="submit" name="cancel" id="cancel" value="Cancel"/>
 			</form>
 		</div>
 </center>
