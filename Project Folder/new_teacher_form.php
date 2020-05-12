@@ -10,9 +10,9 @@
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 	<style><?php include 'stylesheet.css'; ?></style>
 </head>
-<body>
-	<center>
-		<div style="border:3px; border-style:solid; border-color: #7E57C2; border-radius: 5px; padding: 5px; width: 500px; height: 350px">
+<body class="loginBody">
+	<center class="flex-container">
+		<div style="border:3px; border-style:solid; border-color: #7E57C2; border-radius: 5px; padding: 5px; width: 500px; height: 350px; color:white;">
 			<form action="create_teacher.php" method="post" id="form_id">
 				<h2>New Teacher Account</h2>
 				First Name:

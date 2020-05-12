@@ -11,9 +11,9 @@
 	<style><?php include 'stylesheet.css'; ?></style>
 </head>
 
-<body>
-	<center>
-		<div style="border:3px; border-style:solid; border-color: #512DA8; border-radius: 5px; padding: 5px; width: 500px; height: 225px">
+<body class="loginBody">
+	<center class="flex-container">
+		<div style="border:3px; border-style:solid; border-color: #512DA8; border-radius: 5px; padding: 5px; width: 500px; height: 225px; color:white;">
 			<form action="check_login.php" method="post" id="form_id">
 				<h2>Student Login</h2>
 				First Name:
