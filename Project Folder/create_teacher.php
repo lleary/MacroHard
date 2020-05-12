@@ -13,7 +13,7 @@
 		// must not be a teacher account that already exists
 		$all_users = get_user_info(USERFILE);
 		foreach($all_users as $user){
-			if(($user["first"] === $firstname || $user["last"] === $lastname) && $user["class"] == "teacher"){
+			if($user["first"] === $firstname && $user["last"] === $lastname && $user["type"] == "teacher"){
 				inputError();
 			}
 		}
