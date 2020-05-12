@@ -12,7 +12,7 @@ extract($_POST);
 
 
 
-$re = checkLogin(strtolower($firstname), strtolower($lastname), $pw);
+$re = checkLogin($firstname, $lastname, $pw);
 
 if($re===1){ // Student correct login
 	/*Redirect browser to student menu TODO*/
@@ -56,8 +56,8 @@ function checkLogin ($firstname, $lastname, $pw){
 	$all_user = get_user_info(USERFILE);
 
 	foreach ($all_user as $user) {
-		$userFirstName = strtolower($user["first"]);
-		$userLastName = strtolower($user["last"]);
+		$userFirstName = $user["first"];
+		$userLastName = $user["last"];
 
 		if($userFirstName==$firstname && $userLastName==$lastname){
 			if($user["class"]=="student") {
