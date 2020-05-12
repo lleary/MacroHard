@@ -7,9 +7,12 @@ require_once 'files.php';
 require_once 'config.php';
 echo "<pre>";
 
+$pw = 'null';
 extract($_POST);
 
-$re = checkLogin($firstname, $lastname, $pw);
+
+
+$re = checkLogin(strtolower($firstname), strtolower($lastname), $pw);
 
 if($re===1){ // Student correct login
 	/*Redirect browser to student menu TODO*/
@@ -53,7 +56,10 @@ function checkLogin ($firstname, $lastname, $pw){
 	$all_user = get_user_info(USERFILE);
 
 	foreach ($all_user as $user) {
-		if($user["first"]==$firstname && $user["last"]==$lastname){
+		$userFirstName = strtolower($user["first"]);
+		$userLastName = strtolower($user["last"]);
+
+		if($userFirstName==$firstname && $userLastName==$lastname){
 			if($user["class"]=="student") {
 				return 1;
 			}
