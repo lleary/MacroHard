@@ -7,3 +7,4 @@ mister incredible student 0 1 class2 0 0 0 0
 cheez it student 0 1 class2 0 0 0 0
 test3 ing student 0 1 class2 0 0 0 0
 test ing2 student 0 1 class2 0 0 0 0
+Lymphocytic Pleocytosis teacher $2y$10$F1tdHPAQbYw8d5f5j42o3ugsOqYt4OiCp906mF7d/DMt9pfKFgRb. 4 class3 0 0 0 0
