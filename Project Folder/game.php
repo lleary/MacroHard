@@ -171,12 +171,24 @@
         var bossCountdown = 10;
 
         // laserFrames is how many frames the laser will be onscreen for
-        var laserFrames = 10; // this MUST be > 0
+        const laserFrames = 12; // number of frames in the laser's fade
+        const laserFramesBrightNum = 3; // number of frames before the laser starts to fade
         var laserCountdown = -1;
         var laserTargetX = 200;
         var laserTargetY = 0;
         var laserReflects = false;
-        var laserColor = "#FF0033";
+        // default red laser for digit ID
+        var laserColor = "#FF0000";
+        if(gamemode == 1){
+            // yellow laser for addition
+            laserColor = "#FFFF00"
+        }else if(gamemode == 2){
+            // green laser for subtraction
+            laserColor = "#00FF00";
+        }else if(gamemode == 3){
+            // fuschia laser for addition+subtraction
+            laserColor = "#FF00FF";
+        }
 
         var damageFrames = 25;
         var damageCountdown = -1;
@@ -369,7 +381,6 @@
             spawnTimer = 200;
             bossCountdown = 10;
 
-            laserFrames = 10; // this MUST be > 0
             laserCountdown = -1;
             laserTargetX = 200;
             laserTargetY = 0;
@@ -870,35 +881,40 @@
         }
 
         function updateLaser(){
-            midCtx.globalAlpha = laserCountdown / laserFrames;
+            if(laserCountdown > laserFrames){
+                midCtx.globalAlpha = 1;
+            }
+            else{
+                midCtx.globalAlpha = laserCountdown / laserFrames;
+            }
 
-            midCtx.lineWidth = 10;
+            var laserWidth = 10; // must be even number
+
+            midCtx.lineWidth = laserWidth;
             midCtx.strokeStyle = laserColor;
             midCtx.beginPath();
             midCtx.moveTo(200, 600); // center of the bottom of the canvas
             midCtx.lineTo(laserTargetX, laserTargetY + 15);
-            // midCtx.filter = 'blur(2px)'; // this makes the laser look better but can make the program lag one you get past around 60 points
             midCtx.stroke();
 
-            midCtx.lineWidth = 5;
+            midCtx.lineWidth = (laserWidth / 2) + 1;
             midCtx.strokeStyle = "#FFFFFF"; // always white regardless of laser color
             midCtx.beginPath();
             midCtx.moveTo(200, 600); // center of the bottom of the canvas
             midCtx.lineTo(laserTargetX, laserTargetY + 15);
-            //midCtx.filter = 'blur(0px)';
             midCtx.stroke();
 
             if(laserReflects){
                 damageX = 200 + ((laserTargetX - 200) / 1.5);
                 damageY = 600;
 
-                midCtx.lineWidth = 10;
+                midCtx.lineWidth = laserWidth;
                 midCtx.strokeStyle = laserColor;
                 midCtx.moveTo(laserTargetX, laserTargetY + 15); // center of the bottom of the canvas
                 midCtx.lineTo(damageX, damageY);
                 midCtx.stroke();
 
-                midCtx.lineWidth = 5;
+                midCtx.lineWidth = (laserWidth / 2) + 1;
                 midCtx.strokeStyle = "#FFFFFF"; // always white regardless of laser color
                 midCtx.moveTo(laserTargetX, laserTargetY + 15); // center of the bottom of the canvas
                 midCtx.lineTo(damageX, damageY);
@@ -966,7 +982,7 @@
                 laserSoundIdx++;
             }
 
-            laserCountdown = laserFrames;
+            laserCountdown = laserFrames + laserFramesBrightNum;
 
             damageCountdown = damageFrames;
 
