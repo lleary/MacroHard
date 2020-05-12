@@ -72,8 +72,6 @@ session_start();
 			localStorage.setItem("gamemode", gamemode);
 		}
 
-
-
 		//Increases the users level by 1, with a maximum of 4.
 		function increaseLevel(){
 			if(level < 4){
@@ -162,32 +160,32 @@ session_start();
 			<!-- This is the form for teachers to edit the details of a level. !-->
 			<!-- It is NOT functional. It will edit the details by class but classes aren't implemented yet. !-->
 			<div style="border:3px; border-style:solid; border-color: #FFD913; padding: 5px; ">
-				<h2>Edit Level</h2>
-				<form action="" method="post" id="form_id">
+				<h2>Edit Range</h2>
+				<form action="saveClassData.php" method="post" id="form_id">
 
-					<label for="levels">Level:</label>
-					<select id="levels">
-					  <option value="1">1 (Addition)</option>
-					  <option value="2">2 (Subtraction)</option>
-					  <option value="3">3 (Addition & Subtraction)</option>
-					  <option value="4">4 (Digit Identification)</option>
-					</select>
-
-					<br />
+					<!--<br />
 
 					<label for="levelUpThreshold">Level Up Threshold:</label>
-					<input type="text" id="levelUpThreshold" placeholder="Threshold" />
+					<input type="text" name="levelUpThreshold" id="levelUpThreshold" placeholder="Threshold" /> !-->
+
+					<label for="levels">Normal Range:</label>
+					<input type="text" name="normalAnswerMin" id="normalAnswerMin" placeholder="Minimum" />
+					to
+					<input type="text" name="normalAnswerMax" id="normalAnswerMax" placeholder="Maximum" />
 
 					<br />
 
-					<label for="levels">Range:</label>
-					<input type="text" id="rangeMinimum" placeholder="Minimum" />
+					<label for="levels">Boss Range:</label>
+					<input type="text" name="bossAnswerMin" id="bossAnswerMin" placeholder="Minimum" />
 					to
-					<input type="text" id="rangeMaximum" placeholder="Maximum" />
+					<input type="text" name="bossAnswerMax" id="bossAnswerMax" placeholder="Maximum" />
 
 					<br />
 
 					<input type="submit" name="submit_id" id="editLevel" value="Submit" />
+				</form>
+
+				<form action="resetClassData.php" method="post" id="form_id">
 					<input type="submit" name="submit_id" id="resetLevel" value="Reset to Default" />
 				</form>
 			</div>

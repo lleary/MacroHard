@@ -149,6 +149,17 @@
         var accelerationCap = 15; // max value of random acceleration applied with each problem solved
         var initSpawnMax = 400; // starting spawn interval. Higher = slower start.
 
+        <?php include 'readClassData.php'; ?>
+        var bossAnswerMin = <?php echo $bossAnswerMin ?>; 
+        var bossAnswerMax = <?php echo $bossAnswerMax ?>;
+        var normalAnswerMin = <?php echo $normalAnswerMin ?>;
+        var normalAnswerMax = <?php echo $normalAnswerMax ?>;
+
+        console.log("Game Setting bossAnswerMin: "+bossAnswerMin);
+        console.log("Game Setting bossAnswerMax: "+bossAnswerMax);
+        console.log("Game Setting normalAnswerMin: "+normalAnswerMin);
+        console.log("Game Setting normalAnswerMax: "+normalAnswerMax);
+
         var gameInterval;
 
         var matheroids = [];
