@@ -38,7 +38,7 @@ h1{
 	align-items: center;
 }
 .welcomeBody{
-	background-image: url("assets/welcome_background_1.jpg");
+	background-image: url("assets/welcome_background_1.jpg"); /* source: Kai Pilger, pexels.com Artists website: kaipilger.myportfolio.com */
 	background-size: contain;
 	color: white;
 	font-size: 48px;
