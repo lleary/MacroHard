@@ -43,9 +43,12 @@
 		while($line=fgets($myfile)){
 			//Convert to array by " " 
 			$res = explode(" ", $line);
+			if(count($res) < count($key_arr)){
+				continue;
+			}
 			$new_res = [];
 			//Replace keys in $res
-			for($i = 0; $i<count($key_arr); $i++){
+			for($i = 0; $i < count($res); $i++){
 				$new_res[$key_arr[$i]] = $res[$i];
 			}
 
