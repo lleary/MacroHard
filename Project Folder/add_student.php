@@ -1,5 +1,4 @@
 <?php
-	
 	require_once 'files.php';
 	require_once 'config.php';
 	echo "<pre>";
