@@ -149,10 +149,10 @@ session_start();
 				<h2>Create Student Accounts</h2>
 				<form action="add_student.php" method="post" id="form_id">
 					Students First Name:
-					<input type="text" name="username" id="username" placeholder="First Name" />
+					<input type="text" name="firstname" id="firstname" placeholder="First Name" />
 					<br/><br/>
 					Students Last Name:
-					<input type="text" name="password" id="password" placeholder="Last Name" /><br/><br/>
+					<input type="text" name="lastname" id="lastname" placeholder="Last Name" /><br/><br/>
 					<input type="submit" name="submit_id" id="create" value="Create Account" />
 				</form>
 			</div>
