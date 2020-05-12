@@ -6,6 +6,7 @@ session_start();
       die();
    }
 
+    include 'findClassFunction.php';
 	include 'check_level.php';
 	include 'update_level.php';
 ?>
@@ -36,6 +37,8 @@ session_start();
 	</ul>
 
 	<script>
+		var threshold = <?php echo $_SESSION['level'] ?>;
+		console.log("Threshold is :" +threshold);
 
 		$(document).ready(function(){				//Only runs after the document is loaded.
 			$('ul li a').click(function(){			//This fuction changed the class of the current menu tab to active.
@@ -158,7 +161,6 @@ session_start();
 			<br />
 
 			<!-- This is the form for teachers to edit the details of a level. !-->
-			<!-- It is NOT functional. It will edit the details by class but classes aren't implemented yet. !-->
 			<div style="border:3px; border-style:solid; border-color: #FFD913; padding: 5px; ">
 				<h2>Edit Range</h2>
 				<form action="saveClassData.php" method="post" id="form_id">
@@ -188,6 +190,24 @@ session_start();
 				<form action="resetClassData.php" method="post" id="form_id">
 					<input type="submit" name="submit_id" id="resetLevel" value="Reset to Default" />
 				</form>
+			</div>
+
+			<br />
+
+			<div style="border:3px; border-style:solid; border-color: #FFD913; padding: 5px; ">
+				<h2>Edit Level-Up Threshold</h2>
+					<form action="update_levelup_threshold.php" method="post" id="form_id">
+
+
+					<label for="levelUpThreshold">Level Up Threshold:</label>
+					<input type="text" name="levelUpThreshold" id="levelUpThreshold" placeholder="Threshold" />
+
+
+					<br />
+
+					<input type="submit" name="submit_id" id="editThreshold" value="Submit" />
+				</form>
+
 			</div>
 
 		</div>
