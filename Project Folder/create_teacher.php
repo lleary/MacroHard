@@ -25,7 +25,7 @@
 		if(strpos($class, ' ') !== false){ inputError(); }
 
 		if($cPassword === $password && $firstname != '' && $lastname != '' && $password != '' && $class != ''){
-			$teacher_info = array($firstname, $lastname, "teacher", password_hash($password, PASSWORD_DEFAULT), "4", $class, "0", "0", "0", "0");
+			$teacher_info = array($firstname, $lastname, "teacher", password_hash($password, PASSWORD_DEFAULT), "4", $class, "0", "0", "0", "0", "test");
 
 			save_data(USERFILE, $teacher_info);
 

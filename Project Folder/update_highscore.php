@@ -39,7 +39,7 @@
 		foreach ($all_user as $user) {
 			$firstName = $user["first"];
 			$signedIn = $_SESSION["user"];
-			for($i = 1; $i <= 10; $i+=1){
+			for($i = 1; $i <= 11; $i+=1){
 				if($i==1){
 					$value = $user["first"];
 				}else if($i==2){
@@ -88,9 +88,11 @@
 							}
 						}
 					}
+				}else if($i==11){
+					$value = $user["test"];
 				}
 
-				if($i != 10){
+				if($i != 11){
 					$str .= $value." ";
 				}else{
 					$str .= $value;
