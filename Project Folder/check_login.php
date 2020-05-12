@@ -24,6 +24,7 @@ elseif($re===2){ // Teacher correct login
 	$_SESSION['user'] = $firstname;
 	$_SESSION['lastname'] = $lastname;
 	$_SESSION['type'] = "Teacher";
+	$_SESSION['class'] = $class;
 	header("Location: mainMenu.php");
 }
 elseif($re===3){ // Teacher incorrect password

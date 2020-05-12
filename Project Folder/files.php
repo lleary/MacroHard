@@ -1,6 +1,8 @@
 <?php 
 	/******File Handling*******/
 	$key_arr = array("first", "last", "class", "password", "level", "enrolledClass", "level1Score", "level2Score", "level3Score" ,"level4Score");
+
+	$key_arr_class = array("className", "enabledLeaderboard", "bossAnswerMin", "bossAnswerMax", "normalAnswerMin", "normalAnswerMax");
 	
 
 	/*Write $data to $filename*/
@@ -45,6 +47,31 @@
 			//Replace keys in $res
 			for($i = 0; $i<count($key_arr); $i++){
 				$new_res[$key_arr[$i]] = $res[$i];
+			}
+
+			$info_arr[$res[0]] = $new_res;
+			//Destory local variable $new_res
+			unset($new_res);
+			unset($res);
+		}
+
+		fclose($myfile);
+		return $info_arr;
+	}
+
+	function get_class_info($filename){
+		global $key_arr_class;
+
+		$myfile = fopen($filename, "r") or die("File does not exist");
+
+		/*could use fread()*/
+		while($line=fgets($myfile)){
+			//Convert to array by " " 
+			$res = explode(" ", $line);
+			$new_res = [];
+			//Replace keys in $res
+			for($i = 0; $i<count($key_arr_class); $i++){
+				$new_res[$key_arr_class[$i]] = $res[$i];
 			}
 
 			$info_arr[$res[0]] = $new_res;
