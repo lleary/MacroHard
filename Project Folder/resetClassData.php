@@ -33,7 +33,7 @@
 
 			$className = $class["className"];
 
-			for($i = 1; $i <= 6; $i+=1){
+			for($i = 1; $i <= 8; $i+=1){
 				if($i==1){
 					$value = $class["className"];
 				}else if($i==2){
@@ -70,9 +70,15 @@
 						$value = 19;
 					}
 
+				}else if($i==7){
+					$value = $class["threshold"];
+
+				}else if($i==7){
+					$value = $class["endMarker"];
+
 				}
 
-				if($i != 6){
+				if($i != 8){
 					$str .= $value." ";
 				}else{
 					$str .= $value;
