@@ -11,9 +11,10 @@
 	<style><?php include 'stylesheet.css'; ?></style>
 </head>
 
-<body>
+<body class="welcomeBody">
+	<!--background image free to use from pexels.com, by Kai Pilger: kaipilger.myportfolio.com-->
 		<center>
-			<br><br><h2>Welcome to Matheroids!</h2><br><br>
+			<br/><h2>Welcome to Matheroids!</h2><br/>
 			<form action="student_login.php" method="post" id="form_id">
 				<input type="submit" class="studentlogin" value="STUDENT LOGIN">
 			</form>

@@ -30,23 +30,43 @@ h1{
     100% {bottom: -590px;}
 }
 
+
+.flex-container{
+	height: 100vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.welcomeBody{
+	background-image: url("assets/welcome_background_1.jpg");
+	background-size: contain;
+	color: white;
+	font-size: 48px;
+	line-height: 50px;
+}
+
+.loginBody{
+	background-image: url("assets/welcome_background_1.jpg");
+	background-size: cover;
+}
+
 /*Welcome page buttons*/
 
 .studentlogin {
 	display: block;
-	height: 200px;
-	width: 500px;
+	height: 300px;
+	width: 600px;
 	background-color: #512DA8;
 	border: 2px solid #512DA8;
 	color: white;
 	padding: 15px 32px;
-	font-size: 28px;
+	font-size: 32px;
 	text-align: center;
 	border-radius: 5px;
-	transition-duration: 0.4s;
+	transition-duration: 0.3s;
 }
 .studentlogin:hover {
-	background-color: #DFDFDF;
+	background-color: white;
 	border: 2px solid #512DA8;
 	color: black;
 }
@@ -60,7 +80,7 @@ h1{
 	font-size: 20px;
 	text-align: center;
 	border-radius: 5px;
-	transition-duration: 1.5s;
+	transition-duration: 0.4s;
 }
 .teacherlogin:hover {
 	background-color: white;
