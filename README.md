@@ -15,7 +15,7 @@ By MacroHard
 - ~~Level System~~
 
 # Release 3
-- Add Problem Option for Teachers
+- ~~Add Problem Option for Teachers~~
 - ~~Leaderboard~~
 - ~~Identifying Digit Game~~
 
