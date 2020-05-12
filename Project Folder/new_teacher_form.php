@@ -11,8 +11,8 @@
 	<style><?php include 'stylesheet.css'; ?></style>
 </head>
 <body>
-		<center>
-		<div style="border:3px; border-style:solid; border-color: #7E57C2; border-radius: 5px; padding: 5px; width: 500px; height: 275px">
+	<center>
+		<div style="border:3px; border-style:solid; border-color: #7E57C2; border-radius: 5px; padding: 5px; width: 500px; height: 300px">
 			<form action="create_teacher.php" method="post" id="form_id">
 				<h2>New Teacher Account</h2>
 				First Name:
@@ -20,7 +20,9 @@
 				Last Name:
 				<input type="text" name="lastname" id="lastname" placeholder="Last Name" /><br/><br/>
 				Password:
-				<input type="text" name="password" id="password" placeholder="Password" /><br/><br/>
+				<input type="password" name="password" id="password" placeholder="Password" /><br/><br/>
+				Confirm Password:
+				<input type="password" name="cPassword" id="cPassword" placeholder="Confirm Password" /><br/><br/>
 				Class number:
 				<input type="text" name="class" id="class" placeholder="Class name"/><br/><br/>
 				<input type="submit" name="submit_id" id="login" value="Create" /><br/>
