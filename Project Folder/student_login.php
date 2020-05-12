@@ -13,7 +13,7 @@
 
 <body>
 	<center>
-		<div style="border:3px; border-style:solid; border-color: #512DA8; border-radius: 5px; padding: 5px; width: 500px; height: 200px">
+		<div style="border:3px; border-style:solid; border-color: #512DA8; border-radius: 5px; padding: 5px; width: 500px; height: 225px">
 			<form action="check_login.php" method="post" id="form_id">
 				<h2>Student Login</h2>
 				First Name:
@@ -21,6 +21,10 @@
 				Last Name:
 				<input type="text" name="lastname" id="lastname" placeholder="Last Name" /><br/><br/>
 				<input type="submit" name="submit_id" id="login" value="Login" />
+			</form>
+			<form action="welcome.php" method="post">
+				<br/>
+				<input type="submit" name="cancel" id="cancel" value="Cancel"/>
 			</form>
 		</div>
 	</center>

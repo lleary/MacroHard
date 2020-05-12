@@ -12,7 +12,7 @@
 </head>
 <body>
 	<center>
-		<div style="border:3px; border-style:solid; border-color: #7E57C2; border-radius: 5px; padding: 5px; width: 500px; height: 300px">
+		<div style="border:3px; border-style:solid; border-color: #7E57C2; border-radius: 5px; padding: 5px; width: 500px; height: 350px">
 			<form action="create_teacher.php" method="post" id="form_id">
 				<h2>New Teacher Account</h2>
 				First Name:
@@ -25,9 +25,13 @@
 				<input type="password" name="cPassword" id="cPassword" placeholder="Confirm Password" /><br/><br/>
 				Class number:
 				<input type="text" name="class" id="class" placeholder="Class name"/><br/><br/>
-				<input type="submit" name="submit_id" id="login" value="Create" /><br/>
+				<input type="submit" name="submit_id" id="login" value="Create"/>
+			</form>
+			<form action="welcome.php" method="post">
+				<br/>
+				<input type="submit" name="cancel" id="cancel" value="Cancel"/>
 			</form>
 		</div>
-</center>
+	</center>
 </body>
 </html>

@@ -10,10 +10,10 @@
 	echo "Teacher ".$firstname." ".$lastname." added";
 
 	function createTeacherAccount($firstname, $lastname, $password, $cPassword, $class){
-		// must not be an account that already exists
+		// must not be a teacher account that already exists
 		$all_users = get_user_info(USERFILE);
 		foreach($all_users as $user){
-			if($user["first"] === $firstname || $user["last"] === $lastname){
+			if(($user["first"] === $firstname || $user["last"] === $lastname) && $user["class"] == "teacher"){
 				inputError();
 			}
 		}
