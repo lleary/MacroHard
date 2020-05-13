@@ -28,6 +28,8 @@ elseif($re===2){ // Teacher correct login
 	$_SESSION['lastname'] = strtolower($lastname);
 	$_SESSION['type'] = "Teacher";
 	$_SESSION['class'] = $class;
+	$_SESSION['accountError'] = null;
+	$_SESSION['accountSuccess'] = null;
 	header("Location: mainMenu.php");
 }
 elseif($re===3){ // Teacher incorrect password
