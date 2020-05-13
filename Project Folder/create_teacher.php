@@ -4,6 +4,8 @@
 	require_once 'config.php';
 	echo "<pre>";
 
+	session_start();
+
 	extract($_POST);
 
 	createTeacherAccount($firstname, $lastname, $password, $cPassword, $class);
