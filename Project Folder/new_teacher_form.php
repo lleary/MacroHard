@@ -11,14 +11,6 @@
 	<style><?php include 'stylesheet.css'; ?></style>
 </head>
 <body class="loginBody">
-	<center>
-		<?php if(isset($_SESSION["accountError"])) : ?>
-			<p style="color:red"><?php echo $_SESSION["accountError"] ?></p>
-		<?php endif; ?>
-		<?php if(isset($_SESSION["accountSuccess"])) : ?>
-			<p style="color:green"><?php echo $_SESSION["accountSuccess"] ?></p>
-		<?php endif; ?>
-	</center>
 	<center class="flex-container">
 		<div style="border:3px; border-style:solid; border-color: #7E57C2; border-radius: 5px; padding: 5px; width: 500px; height: 350px; color:white;">
 			<form action="create_teacher.php" method="post" id="form_id">
@@ -34,12 +26,13 @@
 				<br/>
 				<input type="submit" name="cancel" id="cancel" value="Cancel"/>
 			</form>
+			<br/>
+			<br/>
+			<?php if(isset($_SESSION["accountError"])) : ?>
+				<p style="color:orange"><?php echo $_SESSION["accountError"] ?></p>
+			<?php endif; ?>
+			<!--success message is not necessary since success will result in redirecting to the teacher login page-->
 		</div>
 	</center>
-	<script>
-		var errorStr = <?php echo $_SESSION['accountError'] ?>;
-		var successStr = <?php echo $_SESSION['accountSuccess'] ?>;
-		console.log("errorStr: " + errorStr ", successStr: " + successStr);
-	</script>
 </body>
 </html>
