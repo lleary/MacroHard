@@ -266,6 +266,13 @@ session_start();
 	<div id = "accountSettings" style="border:3px; border-style:solid; border-color: #FF5555; padding: 5px; width: 500px">
 		<h2>ACCOUNT SETTINGS</h2>
 
+		<?php 
+			$enrolledClassFirstNameCheck = $_SESSION['user'];
+			$enrolledClassLastNameCheck = $_SESSION['lastname'];
+			$enrolledClass = findClass($enrolledClassFirstNameCheck, $enrolledClassLastNameCheck);
+		?>
+		<p style="color:black">You are enrolled in <?php echo "$enrolledClass" ?>.</p>
+
 		<?php if($_SESSION["type"] == "Teacher") : ?>
 			<form onsubmit="resetLevel(); return false;">
 				<button>Reset Level</button>
