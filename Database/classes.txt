@@ -2,3 +2,4 @@ className enabledLeaderboard bossDigitMin bossDigitMax normalDigitMin normalDigi
 class1 1 20 39 0 19 15 #
 class2 1 20 39 0 19 20 #
 class3 1 20 39 0 19 15 #
+TMSB 1 20 39 0 19 15 #
