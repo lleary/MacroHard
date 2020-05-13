@@ -22,7 +22,7 @@ session_start();
 	<style><?php include 'stylesheet.css'; ?></style>
 </head>
 
-<body>
+<body onload="checkForValidInput()">
 
 	<!-- Navigation Bar !-->
 	<ul id="navBar">
@@ -37,6 +37,15 @@ session_start();
 	</ul>
 
 	<script>
+		function checkForValidInput(){
+			<?php if(isset($_SESSION["accountError"])) : ?>
+				showMenu('teacherDashboard');
+			<?php endif; ?>
+			<?php if(isset($_SESSION["accountSuccess"])) : ?>
+				showMenu('teacherDashboard');
+			<?php endif; ?>
+		}
+
 		var threshold = <?php echo $_SESSION['level'] ?>;
 		console.log("Threshold is :" +threshold);
 
@@ -148,7 +157,7 @@ session_start();
 			<h2>TEACHER DASHBOARD</h2>
 			<div style="border:3px; border-style:solid; border-color: #FFD913; padding: 5px; ">
 				<h2>Create Student Accounts</h2>
-				<form action="add_student.php" method="post" id="form_id">
+				<form action="add_student.php" method="post" id="add_student">
 					Students First Name:
 					<input type="text" name="firstname" id="firstname" placeholder="First Name" />
 					<br/><br/>
@@ -156,6 +165,12 @@ session_start();
 					<input type="text" name="lastname" id="lastname" placeholder="Last Name" /><br/><br/>
 					<input type="submit" name="submit_id" id="create" value="Create Account" />
 				</form>
+				<?php if(isset($_SESSION["accountError"])) : ?>
+					<p style="color:red"><?php echo $_SESSION["accountError"] ?></p>
+				<?php endif; ?>
+				<?php if(isset($_SESSION["accountSuccess"])) : ?>
+					<p style="color:green"><?php echo $_SESSION["accountSuccess"] ?></p>
+				<?php endif; ?>
 			</div>
 
 			<br />

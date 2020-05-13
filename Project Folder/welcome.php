@@ -1,5 +1,7 @@
 <?php
 	session_start();
+	$_SESSION['accountError'] = null;
+	$_SESSION['accountSuccess'] = null;
 ?>
 
 <!DOCTYPE html>
