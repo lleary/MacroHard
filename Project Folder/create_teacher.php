@@ -29,7 +29,7 @@
 		if(strpos($class, ' ') !== false){ inputError("inputs must not contain spaces"); }
 
 		if($cPassword === $password && $firstname != '' && $lastname != '' && $password != '' && $class != ''){
-			$teacher_info = array($firstname, $lastname, "teacher", password_hash($password, PASSWORD_DEFAULT), "4", $class, "0", "0", "0", "0", "#");
+			$teacher_info = array(strtolower($firstname), strtolower($lastname), "teacher", password_hash($password, PASSWORD_DEFAULT), "4", $class, "0", "0", "0", "0", "#");
 
 			save_data(USERFILE, $teacher_info);
 			$_SESSION["accountSuccess"] = "account successfully created";

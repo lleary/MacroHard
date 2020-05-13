@@ -46,7 +46,7 @@
 		   		if($user["type"] == 'student'){
 		   			if($user["enrolledClass"] == $userClass){
 
-			   			$firstName = $user["first"];
+			   			$firstName = ucfirst($user["first"]);
 
 			   			if($i == 1){
 			   				$score = $user["level1Score"];

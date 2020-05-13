@@ -33,7 +33,7 @@
 
 		// inputs must not be empty
 		if($firstname != '' && $lastname != ''){
-			$student_info = array($firstname, $lastname, "student", "0", "1", $class, "0", "0", "0", "0", "#");
+			$student_info = array(strtolower($firstname), strtolower($lastname), "student", "0", "1", $class, "0", "0", "0", "0", "#");
 			save_data(USERFILE, $student_info);
 			$_SESSION["accountSuccess"] = "student successfully created";
 			$_SESSION["accountError"] = null;

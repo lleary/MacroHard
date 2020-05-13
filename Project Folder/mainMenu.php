@@ -70,7 +70,7 @@ session_start();
 
 	</script>
 
-	<?php echo "<h1>Welcome to Matheroids, ".$_SESSION["user"]."</h1>"; ?>
+	<?php echo "<h1>Welcome to Matheroids, ".ucfirst($_SESSION["user"])."</h1>"; ?>
 
 	<br />
 
@@ -284,12 +284,12 @@ session_start();
 
 		<div style="border:3px; border-style:solid; border-color: #FF5555; padding: 5px; ">
 			<h2>Change Name</h2>
-			<form action="add_student.php" method="post" id="form_id">
+			<form action="change_name.php" method="post" id="form_id">
 				New First Name:
-				<input type="text" name="username" id="username" placeholder="First Name" />
+				<input type="text" name="newFirstName" id="newFirstName" placeholder="First Name" />
 				<br/><br/>
 				New Last Name:
-				<input type="text" name="password" id="password" placeholder="Last Name" /><br/><br/>
+				<input type="text" name="newLastName" id="newLastName" placeholder="Last Name" /><br/><br/>
 				<input type="submit" name="submit_id" id="create" value="Change Name" />
 			</form>
 		</div>
