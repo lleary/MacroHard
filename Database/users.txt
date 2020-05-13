@@ -19,5 +19,5 @@ Miss Frizzle teacher $2y$10$uxgIxYQWhLZbbaJOaAO1VuDujHOL2DCQ5j4RDVw2HB5LiGstZ6XN
 Wanda Li student 0 1 TMSB 0 0 0 0 #
 Phoebe Terese student 0 1 TMSB 0 0 0 0 #
 Arnold Perlstein student 0 1 TMSB 0 0 0 0 #
-Liz Lizard student 0 1 TMSB 0 0 0 0 #
+Liz Lizard student 0 1 TMSB 67 68 73 58 #
 Ralphie Tenneli student 0 1 TMSB 0 0 0 0 #
