@@ -73,7 +73,7 @@
 				}else if($i==7){
 					$value = $class["threshold"];
 
-				}else if($i==7){
+				}else if($i==8){
 					$value = $class["endMarker"];
 
 				}
