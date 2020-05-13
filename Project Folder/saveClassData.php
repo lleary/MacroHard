@@ -21,70 +21,84 @@
 	}
 
 	function updateClassData($bossAnswerMin, $bossAnswerMax, $normalAnswerMin, $normalAnswerMax){
-		$myfile = fopen(CLASSFILE, "r+") or die("Failed to create files");
-		$str = "";
-		$all_classes = get_class_info(CLASSFILE); //Reads data from classes.txt
+		if($bossAnswerMin != '' && $bossAnswerMax != '' && $normalAnswerMin != '' && $normalAnswerMax != ''){
+			$_SESSION["accountError"] = null;
+			$_SESSION["accountSuccess"] = "Successfully changed class information.";
+			$myfile = fopen(CLASSFILE, "r+") or die("Failed to create files");
+			$str = "";
+			$all_classes = get_class_info(CLASSFILE); //Reads data from classes.txt
 
-		$userFirstName = $_SESSION['user'];
-		$userLastName = $_SESSION['lastname'];
-		$userClass = findClass($userFirstName,$userLastName);
+			$userFirstName = $_SESSION['user'];
+			$userLastName = $_SESSION['lastname'];
+			$userClass = findClass($userFirstName,$userLastName);
 
-		foreach ($all_classes as $class) {
+			foreach ($all_classes as $class) {
 
-			$className = $class["className"];
+				$className = $class["className"];
 
-			for($i = 1; $i <= 8; $i+=1){
-				if($i==1){
-					$value = $class["className"];
-				}else if($i==2){
-					$value = $class["enabledLeaderboard"];
-				}else if($i==3){
-					$value = $class["bossAnswerMin"];
+				for($i = 1; $i <= 8; $i+=1){
+					if($i==1){
+						$value = $class["className"];
+					}else if($i==2){
+						$value = $class["enabledLeaderboard"];
+					}else if($i==3){
+						$value = $class["bossAnswerMin"];
 
-					if($className == $userClass){
-						$value = $bossAnswerMin;
+						if($className == $userClass){
+							$value = $bossAnswerMin;
+						}
+
+					}else if($i==4){
+						$value = $class["bossAnswerMax"];
+
+						if($className == $userClass){
+							$value = $bossAnswerMax;
+						}
+
+					}else if($i==5){
+						$value = $class["normalAnswerMin"];
+
+						if($className == $userClass){
+							$value = $normalAnswerMin;
+						}
+
+					}else if($i==6){
+						$value = $class["normalAnswerMax"];
+
+						if($className == $userClass){
+							$value = $normalAnswerMax;
+						}
+
+					}else if($i==7){
+						$value = $class["threshold"];
+
+					}else if($i==8){
+						$value = $class["endMarker"];
+
 					}
 
-				}else if($i==4){
-					$value = $class["bossAnswerMax"];
-
-					if($className == $userClass){
-						$value = $bossAnswerMax;
+					if($i != 8){
+						$str .= $value." ";
+					}else{
+						$str .= $value;
 					}
-
-				}else if($i==5){
-					$value = $class["normalAnswerMin"];
-
-					if($className == $userClass){
-						$value = $normalAnswerMin;
-					}
-
-				}else if($i==6){
-					$value = $class["normalAnswerMax"];
-
-					if($className == $userClass){
-						$value = $normalAnswerMax;
-					}
-
-				}else if($i==7){
-					$value = $class["threshold"];
-
-				}else if($i==8){
-					$value = $class["endMarker"];
-
-				}
-
-				if($i != 8){
-					$str .= $value." ";
-				}else{
-					$str .= $value;
 				}
 			}
+
+			fwrite($myfile, $str) or die("Could not write to file");
+
+			fclose($myfile);
+		}else{
+			inputError("All fields must be filled.");
 		}
+	}
 
-		fwrite($myfile, $str) or die("Could not write to file");
-
-		fclose($myfile);
+	function inputError($errormessage){
+		$_SESSION["accountSuccess"] = null;
+		$_SESSION["accountError"] = $errormessage;
+		// we should add something to this function to inform the user what went wrong
+		header("Location: mainMenu.php");
+		exit;
 	}
 
 	header("Location: mainMenu.php");

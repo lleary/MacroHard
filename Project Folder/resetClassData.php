@@ -21,6 +21,9 @@
 	}
 
 	function resetClassData(){
+		$_SESSION["accountSuccess"] = "Successfully reset class data to default.";
+		$_SESSION["accountError"] = null;
+
 		$myfile = fopen(CLASSFILE, "r+") or die("Failed to create files");
 		$str = "";
 		$all_classes = get_class_info(CLASSFILE); //Reads data from classes.txt
