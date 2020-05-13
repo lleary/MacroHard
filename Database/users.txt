@@ -16,7 +16,8 @@ Green Colorman student 0 1 class2 43 21 12 0 #
 Yellow Colorman student 0 1 class2 20 13 0 0 #
 lymph node student 0 1 class3 0 0 0 0 #
 Miss Frizzle teacher $2y$10$uxgIxYQWhLZbbaJOaAO1VuDujHOL2DCQ5j4RDVw2HB5LiGstZ6XNC 4 TMSB 0 0 0 0 #
-Wanda Li student 0 1 TMSB 0 0 0 0 #
+<<<<<<< HEAD
+Wanda Li student 0 1 TMSB 62 78 70 68 #
 Phoebe Terese student 0 1 TMSB 59 35 20 0 #
 Arnold Perlstein student 0 1 TMSB 0 0 0 0 #
 Liz Lizard student 0 1 TMSB 67 68 73 58 #
