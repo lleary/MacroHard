@@ -18,10 +18,10 @@
 				for ($i = 1; $i <= 6; $i+=1){
 						echo "<td>";
 						if($i == 1){						#I am not entirely sure if I can just do echo "$user[$i]" so there are a bunch of if statements.
-							$firstName = $user["first"];
+							$firstName = ucfirst($user["first"]);
 							echo "$firstName";
 						}else if($i == 2){
-							$lastName = $user["last"];
+							$lastName = ucfirst($user["last"]);
 							echo "$lastName";
 						}else if($i == 3){
 							$level1score = $user["level1Score"];

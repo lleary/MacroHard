@@ -16,16 +16,16 @@ $re = checkLogin($firstname, $lastname, $pw);
 
 if($re===1){ // Student correct login
 	/*Redirect browser to student menu TODO*/
-	$_SESSION['user'] = $firstname;
-	$_SESSION['lastname'] = $lastname;
+	$_SESSION['user'] = strtolower($firstname);
+	$_SESSION['lastname'] = strtolower($lastname);
 	$_SESSION['type'] = "Student";
 	header("Location: mainMenu.php");
 
 }
 elseif($re===2){ // Teacher correct login
 	/*Redirect browser to teacher menu TODO*/
-	$_SESSION['user'] = $firstname;
-	$_SESSION['lastname'] = $lastname;
+	$_SESSION['user'] = strtolower($firstname);
+	$_SESSION['lastname'] = strtolower($lastname);
 	$_SESSION['type'] = "Teacher";
 	$_SESSION['class'] = $class;
 	header("Location: mainMenu.php");
@@ -59,7 +59,7 @@ function checkLogin ($firstname, $lastname, $pw){
 		$userFirstName = $user["first"];
 		$userLastName = $user["last"];
 
-		if($userFirstName==$firstname && $userLastName==$lastname){
+		if(strtolower($userFirstName)==strtolower($firstname) && strtolower($userLastName)==strtolower($lastname)){
 			if($user["type"]=="student") {
 				return 1;
 			}
