@@ -22,7 +22,7 @@
 
 		// if the student already exists in the class, thats invalid
 		foreach($user_info as $user){
-			if($user["first"] === $firstname && $user["last"] === $lastname && $user["enrolledClass"] === $class){
+			if($user["first"] === strtolower($firstname) && $user["last"] === strtolower($lastname) && $user["enrolledClass"] === $class){
 				inputError("student already exists");
 			}
 		}

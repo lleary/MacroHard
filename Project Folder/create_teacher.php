@@ -15,7 +15,7 @@
 		// must not be a teacher account that already exists
 		$all_users = get_user_info(USERFILE);
 		foreach($all_users as $user){
-			if($user["first"] === $firstname && $user["last"] === $lastname && $user["type"] == "teacher"){
+			if($user["first"] === strtolower($firstname) && $user["last"] === strtolower($lastname) && $user["type"] == "teacher"){
 				inputError("user exists already");
 			}
 			if($user["enrolledClass"] === $class){

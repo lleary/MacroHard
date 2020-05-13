@@ -216,14 +216,23 @@ session_start();
 				<h2>Edit Level-Up Threshold</h2>
 					<form action="update_levelup_threshold.php" method="post" id="form_id">
 
-
 					<label for="levelUpThreshold">Level Up Threshold:</label>
 					<input type="text" name="levelUpThreshold" id="levelUpThreshold" placeholder="Threshold" />
-
 
 					<br />
 
 					<input type="submit" name="submit_id" id="editThreshold" value="Submit" />
+				</form>
+
+			</div>
+
+			<br />
+
+			<div style="border:3px; border-style:solid; border-color: #FFD913; padding: 5px; ">
+				<h2>Toggle leaderboard</h2>
+					<form action="toggleLeaderboard.php" method="post" id="form_id">
+
+					<input type="submit" name="submit_id" id="editThreshold" value="Toggle" />
 				</form>
 
 			</div>

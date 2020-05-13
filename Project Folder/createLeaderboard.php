@@ -29,70 +29,90 @@
 
 	$userClass = findClass($userFirstName,$userLastName);
 
-	for ($i = 1; $i <= 4; $i+=1) { 					#For loop creates one sublist for each level i.
-		echo "<li>";
-	   		echo "<h2>Level $i</h2>";				#Prints the level name at the start of the list.
-	   		echo "<ul id='leaderboardLevelList'>";  #Creates sublist.
+	if(checkIfEnabled($userClass)){
+		for ($i = 1; $i <= 4; $i+=1) { 					#For loop creates one sublist for each level i.
+			echo "<li>";
+		   		echo "<h2>Level $i</h2>";				#Prints the level name at the start of the list.
+		   		echo "<ul id='leaderboardLevelList'>";  #Creates sublist.
 
-	   		$firstPlaceName = '';
-	   		$secondPlaceName = '';
-	   		$thirdPlaceName = '';
+		   		$firstPlaceName = '';
+		   		$secondPlaceName = '';
+		   		$thirdPlaceName = '';
 
-	   		$firstPlaceScore = 0;
-	   		$secondPlaceScore = 0;
-	   		$thirdPlaceScore = 0;
+		   		$firstPlaceScore = 0;
+		   		$secondPlaceScore = 0;
+		   		$thirdPlaceScore = 0;
 
-	   		foreach ($all_user as $user) {
-		   		if($user["type"] == 'student'){
-		   			if($user["enrolledClass"] == $userClass){
+		   		foreach ($all_user as $user) {
+			   		if($user["type"] == 'student'){
+			   			if($user["enrolledClass"] == $userClass){
 
-			   			$firstName = ucfirst($user["first"]);
+				   			$firstName = ucfirst($user["first"]);
 
-			   			if($i == 1){
-			   				$score = $user["level1Score"];
-			   			} else if($i == 2){
-			   				$score = $user["level2Score"];
-			   			} else if($i == 3){
-			   				$score = $user["level3Score"];
-			   			} else if($i == 4){
-			   				$score = $user["level4Score"];
-			   			}
+				   			if($i == 1){
+				   				$score = $user["level1Score"];
+				   			} else if($i == 2){
+				   				$score = $user["level2Score"];
+				   			} else if($i == 3){
+				   				$score = $user["level3Score"];
+				   			} else if($i == 4){
+				   				$score = $user["level4Score"];
+				   			}
 
-			   			if($score >= $firstPlaceScore && $score != 0){
-			   				$thirdPlaceName = $secondPlaceName;
-			   				$thirdPlaceScore = $secondPlaceScore;
-			   				$secondPlaceName = $firstPlaceName;
-			   				$secondPlaceScore = $firstPlaceScore;
+				   			if($score >= $firstPlaceScore && $score != 0){
+				   				$thirdPlaceName = $secondPlaceName;
+				   				$thirdPlaceScore = $secondPlaceScore;
+				   				$secondPlaceName = $firstPlaceName;
+				   				$secondPlaceScore = $firstPlaceScore;
 
-			   				$firstPlaceName = $firstName;
-			   				$firstPlaceScore = $score;
-			   			} else if ($score >= $secondPlaceScore && $score != 0){
-			   				$thirdPlaceName = $secondPlaceName;
-			   				$thirdPlaceScore = $secondPlaceScore;
+				   				$firstPlaceName = $firstName;
+				   				$firstPlaceScore = $score;
+				   			} else if ($score >= $secondPlaceScore && $score != 0){
+				   				$thirdPlaceName = $secondPlaceName;
+				   				$thirdPlaceScore = $secondPlaceScore;
 
-			   				$secondPlaceName = $firstName;
-			   				$secondPlaceScore = $score;
-			   			} else if ($score >= $thirdPlaceScore && $score != 0){
-			   				$thirdPlaceName = $firstName;
-			   				$thirdPlaceScore = $score;
-			   			}
+				   				$secondPlaceName = $firstName;
+				   				$secondPlaceScore = $score;
+				   			} else if ($score >= $thirdPlaceScore && $score != 0){
+				   				$thirdPlaceName = $firstName;
+				   				$thirdPlaceScore = $score;
+				   			}
+				   		}
 			   		}
-		   		}
-		   	}
+			   	}
 
-		   	if($firstPlaceName != ''){
-		   		echo "<li id='LeaderboardSpot'>$firstPlaceName: $firstPlaceScore</li>";
-		   	}
-		   	if($secondPlaceName != ''){
-		   		echo "<li id='LeaderboardSpot'>$secondPlaceName: $secondPlaceScore</li>";
-		    }
-		   	if($thirdPlaceName != ''){
-		   		echo "<li id='LeaderboardSpot'>$thirdPlaceName: $thirdPlaceScore</li>";
+			   	if($firstPlaceName != ''){
+			   		echo "<li id='LeaderboardSpot'>$firstPlaceName: $firstPlaceScore</li>";
+			   	}
+			   	if($secondPlaceName != ''){
+			   		echo "<li id='LeaderboardSpot'>$secondPlaceName: $secondPlaceScore</li>";
+			    }
+			   	if($thirdPlaceName != ''){
+			   		echo "<li id='LeaderboardSpot'>$thirdPlaceName: $thirdPlaceScore</li>";
+				}
+
+
+		   		echo "</ul>";
+	   		echo "</li>";
+		} 
+	} else{
+		echo "<p>Your class has diabled the leaderboard.</p>";
+	}
+
+	function checkIfEnabled($userClass){
+		$all_classes = get_class_info(CLASSFILE); //Reads data from classes.txt
+		foreach ($all_classes as $class) {
+
+			$userClassName = $class["className"];
+
+			if($userClass == $userClassName){
+				if($class["enabledLeaderboard"] == 1){
+					return true;
+				}else{
+					return false;
+				}
 			}
-
-
-	   		echo "</ul>";
-   		echo "</li>";
-	} 
+		}
+	}
 
 ?>
