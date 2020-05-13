@@ -4,7 +4,7 @@ george orwell student 0 3 class1 5 0 0 0 #
 andothy mclovin student 0 2 class1 17 222 17 17 #
 david chiu teacher $2y$10$msFG4SfnsQXvusB3K9vJ9eCbRW/ov9tW6OBK2wooEn70UzyjahBze 4 class2 5 13 2 4 #
 mister incredible student 0 1 class1 0 0 0 0 #
-cheez it student 0 1 class1 0 0 0 0 #
+cheez it student 0 1 class1 16 0 0 0 #
 test3 ing student 0 1 class1 3 2 4 1 #
 test ing2 student 0 1 class1 0 0 0 0 #
 lymphocytic pleocytosis teacher $2y$10$F1tdHPAQbYw8d5f5j42o3ugsOqYt4OiCp906mF7d/DMt9pfKFgRb. 4 class3 0 0 0 0 #
@@ -21,5 +21,4 @@ phoebe terese student 0 1 TMSB 59 60 66 55 #
 arnold perlstein student 0 1 TMSB 62 20 15 1 #
 liz lizard student 0 1 TMSB 67 68 73 58 #
 ralphie tenneli student 0 1 TMSB 0 0 0 0 #
-sigrun bodine teacher $2y$10$h.JCuJENh7bwRYb7bw9F4ev./SzWgoXL.QETJ0WDlIX4VHT3TPdZy 4 Math280 0 0 0 0 #
 xi chen teacher $2y$10$ovsB7s/DmWhTSss6KZN9.OZ/GVkvINBcdJzY9zLcs0.yx.SivaSwu 4 Software 0 0 0 0 ####

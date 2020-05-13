@@ -21,6 +21,9 @@
 	}
 
 	function resetClassData(){
+		$_SESSION["accountSuccess"] = "Successfully reset class data to default.";
+		$_SESSION["accountError"] = null;
+
 		$myfile = fopen(CLASSFILE, "r+") or die("Failed to create files");
 		$str = "";
 		$all_classes = get_class_info(CLASSFILE); //Reads data from classes.txt
@@ -73,7 +76,7 @@
 				}else if($i==7){
 					$value = $class["threshold"];
 
-				}else if($i==7){
+				}else if($i==8){
 					$value = $class["endMarker"];
 
 				}

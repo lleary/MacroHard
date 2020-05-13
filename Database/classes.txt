@@ -1,6 +1,6 @@
 className enabledLeaderboard bossDigitMin bossDigitMax normalDigitMin normalDigitMax threshold #
 class1 1 20 39 0 19 15 #
-class2 1 20 39 0 19 20 #
+class2 1 20 39 0 19 40 #
 class3 1 20 39 0 19 15 #
 TMSB 1 20 39 0 19 15 #
-Software 1 20 39 0 19 15 #
+Software 1 20 39 0 19 15 #5#

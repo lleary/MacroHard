@@ -155,6 +155,14 @@ session_start();
 	<?php if($_SESSION["type"] == "Teacher") : ?>	<!-- Only draws teacher dashboard if a teacher is signed in. !-->
 		<div id="teacherDashboard" style="border:3px; border-style:solid; border-color: #FFD913; padding: 5px; width: 500px">
 			<h2>TEACHER DASHBOARD</h2>
+
+			<?php if(isset($_SESSION["accountError"])) : ?>
+				<p style="color:red"><?php echo $_SESSION["accountError"] ?></p>
+			<?php endif; ?>
+			<?php if(isset($_SESSION["accountSuccess"])) : ?>
+				<p style="color:green"><?php echo $_SESSION["accountSuccess"] ?></p>
+			<?php endif; ?>
+
 			<div style="border:3px; border-style:solid; border-color: #FFD913; padding: 5px; ">
 				<h2>Create Student Accounts</h2>
 				<form action="add_student.php" method="post" id="add_student">
@@ -165,12 +173,7 @@ session_start();
 					<input type="text" name="lastname" id="lastname" placeholder="Last Name" /><br/><br/>
 					<input type="submit" name="submit_id" id="create" value="Create Account" />
 				</form>
-				<?php if(isset($_SESSION["accountError"])) : ?>
-					<p style="color:red"><?php echo $_SESSION["accountError"] ?></p>
-				<?php endif; ?>
-				<?php if(isset($_SESSION["accountSuccess"])) : ?>
-					<p style="color:green"><?php echo $_SESSION["accountSuccess"] ?></p>
-				<?php endif; ?>
+				
 			</div>
 
 			<br />
@@ -265,6 +268,13 @@ session_start();
 
 	<div id = "accountSettings" style="border:3px; border-style:solid; border-color: #FF5555; padding: 5px; width: 500px">
 		<h2>ACCOUNT SETTINGS</h2>
+
+		<?php 
+			$enrolledClassFirstNameCheck = $_SESSION['user'];
+			$enrolledClassLastNameCheck = $_SESSION['lastname'];
+			$enrolledClass = findClass($enrolledClassFirstNameCheck, $enrolledClassLastNameCheck);
+		?>
+		<p style="color:black">You are enrolled in <?php echo "$enrolledClass" ?>.</p>
 
 		<?php if($_SESSION["type"] == "Teacher") : ?>
 			<form onsubmit="resetLevel(); return false;">
