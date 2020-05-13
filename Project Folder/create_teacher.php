@@ -32,6 +32,7 @@
 			save_data(USERFILE, $teacher_info);
 			$_SESSION["accountSuccess"] = "account successfully created";
 			$_SESSION["accountError"] = null;
+			createClass($class);
 			header("Location: teacher_login.php");
 		}
 		else{
@@ -45,5 +46,10 @@
 		// we should add something to this function to inform the user what went wrong
 		header("Location: new_teacher_form.php");
 		exit;
+	}
+
+	function createClass($newClassName){
+		$class_info = array($newClassName, "1", "20", "39", "0", "19", "15", "#");
+		save_data(CLASSFILE, $class_info);
 	}
 ?>
