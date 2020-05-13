@@ -21,3 +21,5 @@ Phoebe Terese student 0 1 TMSB 0 0 0 0 #
 Arnold Perlstein student 0 1 TMSB 0 0 0 0 #
 Liz Lizard student 0 1 TMSB 67 68 73 58 #
 Ralphie Tenneli student 0 1 TMSB 0 0 0 0 #
+Sigrun Bodine teacher $2y$10$h.JCuJENh7bwRYb7bw9F4ev./SzWgoXL.QETJ0WDlIX4VHT3TPdZy 4 Math280 0 0 0 0 #
+Xi Chen teacher $2y$10$ovsB7s/DmWhTSss6KZN9.OZ/GVkvINBcdJzY9zLcs0.yx.SivaSwu 4 Software 0 0 0 0 #
