@@ -20,5 +20,6 @@ wanda li student 0 1 TMSB 62 78 70 68 #
 phoebe terese student 0 1 TMSB 59 60 66 55 #
 arnold perlstein student 0 1 TMSB 62 20 15 1 #
 liz lizard student 0 1 TMSB 67 68 73 58 #
-ralphie tenneli student 0 1 TMSB 0 0 0 0 #
+ralphie tenneli student 0 1 TMSB 89 283 120 192 #
 xi chen teacher $2y$10$ovsB7s/DmWhTSss6KZN9.OZ/GVkvINBcdJzY9zLcs0.yx.SivaSwu 4 Software 0 0 0 0 ####
+yo checkit student 0 1 class2 2 0 0 0 #
